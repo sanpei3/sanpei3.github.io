@@ -19,8 +19,9 @@ var pref =  ["愛知県", "北海道", "大阪府", "東京都"];
 pref.forEach(function(t) {
      data.addColumn('number', t);
      data.addColumn({type:'string', role:'style'});
+     data.addColumn({type:'boolean',role:'certainty'});
 });
-data.addRows([[0, 97, '', 95, '', 92, '', 96, ''], [1, 102, '', 98, '', 102, '', 90, 'stroke-width: 0;'], [2, 109, '', 105, '', 106, '', 90, 'stroke-width: 0;'], [3, 112, '', 108, '', 108, '', 90, 'stroke-width: 0;'], [4, 119, '', 115, '', 112, '', 90, 'stroke-width: 0;'], [5, 119, '', 125, '', 90, 'stroke-width: 0;', 90, 'stroke-width: 0;'], [6, 121, '', 134, '', 90, 'stroke-width: 0;', 90, 'stroke-width: 0;'], [7, 90, 'stroke-width: 0;', 141, '', 90, 'stroke-width: 0;', 90, 'stroke-width: 0;'], [8, 90, 'stroke-width: 0;', 145, '', 90, 'stroke-width: 0;', 90, 'stroke-width: 0;'], [9, 90, 'stroke-width: 0;', 149, '', 90, 'stroke-width: 0;', 90, 'stroke-width: 0;']]);
+data.addRows([[0, 97, '', true, 95, '', true, 92, '', true, 96, '', true], [1, 102, '', true, 98, '', true, 102, '', true, 90, 'stroke-width: 0;', true], [2, 109, '', true, 105, '', true, 106, '', true, 90, 'stroke-width: 0;', true], [3, 112, '', true, 108, '', true, 108, '', true, 90, 'stroke-width: 0;', true], [4, 119, '', true, 115, '', true, 112, '', true, 90, 'stroke-width: 0;', true], [5, 119, '', true, 125, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [6, 121, '', true, 134, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [7, 90, 'stroke-width: 0;', true, 141, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [8, 90, 'stroke-width: 0;', true, 145, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [9, 90, 'stroke-width: 0;', true, 149, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true]]);
       var options = {
 //        title: 'cumulative number of cases, by number of days since 90th case'
         title: '受診都道府県毎の90番目のケースからの日数による累積ケース数',
@@ -46,7 +47,7 @@ colors: ["Red", "Blue", "Green", "Black"]
     }
    </script>
 <dl>
-(最終更新日時: 2020-03-17 21:30:03 +0900)
+(最終更新日時: 2020-03-17 21:53:12 +0900)
 <form>
 別のケース数を元にしたグラフに移る:
 <select onChange="top.location.href=value">
@@ -66,6 +67,16 @@ colors: ["Red", "Blue", "Green", "Black"]
 番目のケースへ
 </form>
 <dl>
+<form>
+33%日次増加グラフ:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-20-33.html"  >あり</option>
+  <option value="covid19jp-20.html"  >なし</option>
+</select>
+番目のケースへ
+</form>
+<dl>
 
 <li> 本グラフの作成には<a href="https://www.ft.com/">Financial Times</a>作成の世界各国に対するグラフを参考にしました。
 <li> グラフ作成に利用しているデータソースは、<a href="https://gis.jag-japan.com/covid19jp/">ジャッグジャパン株式会社提供 COVID-19.csv</a>を利用しています。
@@ -73,9 +84,8 @@ colors: ["Red", "Blue", "Green", "Black"]
 
 <dl>
 TODO
-<li>33%の日時増加線を追加する
 <li>英語版のページを作る
-<li>各都道府県の対数グラフでの線形近似線を追加する
+<li>各都道府県の対数グラフでの近似線を追加する
 </html>
 
 

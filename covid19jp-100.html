@@ -19,8 +19,9 @@ var pref =  ["愛知県", "北海道", "大阪府"];
 pref.forEach(function(t) {
      data.addColumn('number', t);
      data.addColumn({type:'string', role:'style'});
+     data.addColumn({type:'boolean',role:'certainty'});
 });
-data.addRows([[0, 102, '', 105, '', 102, ''], [1, 109, '', 108, '', 106, ''], [2, 112, '', 115, '', 108, ''], [3, 119, '', 125, '', 112, ''], [4, 119, '', 134, '', 100, 'stroke-width: 0;'], [5, 121, '', 141, '', 100, 'stroke-width: 0;'], [6, 100, 'stroke-width: 0;', 145, '', 100, 'stroke-width: 0;'], [7, 100, 'stroke-width: 0;', 149, '', 100, 'stroke-width: 0;']]);
+data.addRows([[0, 102, '', true, 105, '', true, 102, '', true], [1, 109, '', true, 108, '', true, 106, '', true], [2, 112, '', true, 115, '', true, 108, '', true], [3, 119, '', true, 125, '', true, 112, '', true], [4, 119, '', true, 134, '', true, 100, 'stroke-width: 0;', true], [5, 121, '', true, 141, '', true, 100, 'stroke-width: 0;', true], [6, 100, 'stroke-width: 0;', true, 145, '', true, 100, 'stroke-width: 0;', true], [7, 100, 'stroke-width: 0;', true, 149, '', true, 100, 'stroke-width: 0;', true]]);
       var options = {
 //        title: 'cumulative number of cases, by number of days since 100th case'
         title: '受診都道府県毎の100番目のケースからの日数による累積ケース数',
@@ -46,7 +47,7 @@ colors: ["Red", "Blue", "Green"]
     }
    </script>
 <dl>
-(最終更新日時: 2020-03-17 21:30:03 +0900)
+(最終更新日時: 2020-03-17 21:53:13 +0900)
 <form>
 別のケース数を元にしたグラフに移る:
 <select onChange="top.location.href=value">
@@ -66,6 +67,16 @@ colors: ["Red", "Blue", "Green"]
 番目のケースへ
 </form>
 <dl>
+<form>
+33%日次増加グラフ:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-20-33.html"  >あり</option>
+  <option value="covid19jp-20.html"  >なし</option>
+</select>
+番目のケースへ
+</form>
+<dl>
 
 <li> 本グラフの作成には<a href="https://www.ft.com/">Financial Times</a>作成の世界各国に対するグラフを参考にしました。
 <li> グラフ作成に利用しているデータソースは、<a href="https://gis.jag-japan.com/covid19jp/">ジャッグジャパン株式会社提供 COVID-19.csv</a>を利用しています。
@@ -73,9 +84,8 @@ colors: ["Red", "Blue", "Green"]
 
 <dl>
 TODO
-<li>33%の日時増加線を追加する
 <li>英語版のページを作る
-<li>各都道府県の対数グラフでの線形近似線を追加する
+<li>各都道府県の対数グラフでの近似線を追加する
 </html>
 
 

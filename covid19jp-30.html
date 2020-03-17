@@ -19,8 +19,9 @@ var pref =  ["愛知県", "北海道", "大阪府", "東京都", "千葉県", "�
 pref.forEach(function(t) {
      data.addColumn('number', t);
      data.addColumn({type:'string', role:'style'});
+     data.addColumn({type:'boolean',role:'certainty'});
 });
-data.addRows([[0, 32, '', 33, '', 31, '', 31, '', 30, '', 32, '', 37, ''], [1, 32, '', 36, '', 41, '', 31, '', 30, 'stroke-width: 0;', 37, '', 45, ''], [2, 41, '', 51, '', 55, '', 32, '', 30, 'stroke-width: 0;', 38, '', 55, ''], [3, 50, '', 63, '', 55, '', 36, '', 30, 'stroke-width: 0;', 38, '', 66, ''], [4, 58, '', 67, '', 73, '', 44, '', 30, 'stroke-width: 0;', 38, '', 77, ''], [5, 63, '', 69, '', 80, '', 49, '', 30, 'stroke-width: 0;', 40, '', 81, ''], [6, 70, '', 74, '', 89, '', 55, '', 30, 'stroke-width: 0;', 43, '', 84, ''], [7, 80, '', 76, '', 92, '', 55, '', 30, 'stroke-width: 0;', 46, '', 30, 'stroke-width: 0;'], [8, 85, '', 80, '', 102, '', 55, '', 30, 'stroke-width: 0;', 47, '', 30, 'stroke-width: 0;'], [9, 97, '', 80, '', 106, '', 58, '', 30, 'stroke-width: 0;', 48, '', 30, 'stroke-width: 0;'], [10, 102, '', 87, '', 108, '', 64, '', 30, 'stroke-width: 0;', 52, '', 30, 'stroke-width: 0;'], [11, 109, '', 95, '', 112, '', 66, '', 30, 'stroke-width: 0;', 52, '', 30, 'stroke-width: 0;'], [12, 112, '', 98, '', 30, 'stroke-width: 0;', 69, '', 30, 'stroke-width: 0;', 56, '', 30, 'stroke-width: 0;'], [13, 119, '', 105, '', 30, 'stroke-width: 0;', 79, '', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;'], [14, 119, '', 108, '', 30, 'stroke-width: 0;', 84, '', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;'], [15, 121, '', 115, '', 30, 'stroke-width: 0;', 84, '', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;'], [16, 30, 'stroke-width: 0;', 125, '', 30, 'stroke-width: 0;', 96, '', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;'], [17, 30, 'stroke-width: 0;', 134, '', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;'], [18, 30, 'stroke-width: 0;', 141, '', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;'], [19, 30, 'stroke-width: 0;', 145, '', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;'], [20, 30, 'stroke-width: 0;', 149, '', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;', 30, 'stroke-width: 0;']]);
+data.addRows([[0, 32, '', true, 33, '', true, 31, '', true, 31, '', true, 30, '', true, 32, '', true, 37, '', true], [1, 32, '', true, 36, '', true, 41, '', true, 31, '', true, 30, 'stroke-width: 0;', true, 37, '', true, 45, '', true], [2, 41, '', true, 51, '', true, 55, '', true, 32, '', true, 30, 'stroke-width: 0;', true, 38, '', true, 55, '', true], [3, 50, '', true, 63, '', true, 55, '', true, 36, '', true, 30, 'stroke-width: 0;', true, 38, '', true, 66, '', true], [4, 58, '', true, 67, '', true, 73, '', true, 44, '', true, 30, 'stroke-width: 0;', true, 38, '', true, 77, '', true], [5, 63, '', true, 69, '', true, 80, '', true, 49, '', true, 30, 'stroke-width: 0;', true, 40, '', true, 81, '', true], [6, 70, '', true, 74, '', true, 89, '', true, 55, '', true, 30, 'stroke-width: 0;', true, 43, '', true, 84, '', true], [7, 80, '', true, 76, '', true, 92, '', true, 55, '', true, 30, 'stroke-width: 0;', true, 46, '', true, 30, 'stroke-width: 0;', true], [8, 85, '', true, 80, '', true, 102, '', true, 55, '', true, 30, 'stroke-width: 0;', true, 47, '', true, 30, 'stroke-width: 0;', true], [9, 97, '', true, 80, '', true, 106, '', true, 58, '', true, 30, 'stroke-width: 0;', true, 48, '', true, 30, 'stroke-width: 0;', true], [10, 102, '', true, 87, '', true, 108, '', true, 64, '', true, 30, 'stroke-width: 0;', true, 52, '', true, 30, 'stroke-width: 0;', true], [11, 109, '', true, 95, '', true, 112, '', true, 66, '', true, 30, 'stroke-width: 0;', true, 52, '', true, 30, 'stroke-width: 0;', true], [12, 112, '', true, 98, '', true, 30, 'stroke-width: 0;', true, 69, '', true, 30, 'stroke-width: 0;', true, 56, '', true, 30, 'stroke-width: 0;', true], [13, 119, '', true, 105, '', true, 30, 'stroke-width: 0;', true, 79, '', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true], [14, 119, '', true, 108, '', true, 30, 'stroke-width: 0;', true, 84, '', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true], [15, 121, '', true, 115, '', true, 30, 'stroke-width: 0;', true, 84, '', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true], [16, 30, 'stroke-width: 0;', true, 125, '', true, 30, 'stroke-width: 0;', true, 96, '', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true], [17, 30, 'stroke-width: 0;', true, 134, '', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true], [18, 30, 'stroke-width: 0;', true, 141, '', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true], [19, 30, 'stroke-width: 0;', true, 145, '', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true], [20, 30, 'stroke-width: 0;', true, 149, '', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true, 30, 'stroke-width: 0;', true]]);
       var options = {
 //        title: 'cumulative number of cases, by number of days since 30th case'
         title: '受診都道府県毎の30番目のケースからの日数による累積ケース数',
@@ -46,7 +47,7 @@ colors: ["Red", "Blue", "Green", "Black", "Cyan", "Orange", "Purple"]
     }
    </script>
 <dl>
-(最終更新日時: 2020-03-17 21:30:02 +0900)
+(最終更新日時: 2020-03-17 21:53:11 +0900)
 <form>
 別のケース数を元にしたグラフに移る:
 <select onChange="top.location.href=value">
@@ -66,6 +67,16 @@ colors: ["Red", "Blue", "Green", "Black", "Cyan", "Orange", "Purple"]
 番目のケースへ
 </form>
 <dl>
+<form>
+33%日次増加グラフ:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-20-33.html"  >あり</option>
+  <option value="covid19jp-20.html"  >なし</option>
+</select>
+番目のケースへ
+</form>
+<dl>
 
 <li> 本グラフの作成には<a href="https://www.ft.com/">Financial Times</a>作成の世界各国に対するグラフを参考にしました。
 <li> グラフ作成に利用しているデータソースは、<a href="https://gis.jag-japan.com/covid19jp/">ジャッグジャパン株式会社提供 COVID-19.csv</a>を利用しています。
@@ -73,9 +84,8 @@ colors: ["Red", "Blue", "Green", "Black", "Cyan", "Orange", "Purple"]
 
 <dl>
 TODO
-<li>33%の日時増加線を追加する
 <li>英語版のページを作る
-<li>各都道府県の対数グラフでの線形近似線を追加する
+<li>各都道府県の対数グラフでの近似線を追加する
 </html>
 
 
