@@ -1,0 +1,91 @@
+<head>
+</head>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
+
+  <div id="chart_div"></div>
+    <script type="text/javascript">
+
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawLineColors);
+
+function drawLineColors() {
+
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'X');	
+var pref =  ["33% DAILY INCREASE", "愛知県", "北海道", "大阪府", "東京都", "神奈川県", "兵庫県"];
+pref.forEach(function(t) {
+     data.addColumn('number', t);
+     data.addColumn({type:'string', role:'style'});
+     data.addColumn({type:'boolean',role:'certainty'});
+});
+data.addRows([[0, 50, '', false, 50, '', true, 51, '', true, 55, '', true, 55, '', true, 52, '', true, 55, '', true], [1, 66.5, '', false, 58, '', true, 63, '', true, 55, '', true, 55, '', true, 52, '', true, 66, '', true], [2, 88.44500000000001, '', false, 63, '', true, 67, '', true, 73, '', true, 55, '', true, 56, '', true, 77, '', true], [3, 117.63185000000001, '', false, 70, '', true, 69, '', true, 80, '', true, 58, '', true, 50, 'stroke-width: 0;', true, 81, '', true], [4, 156.45036050000002, '', false, 80, '', true, 74, '', true, 89, '', true, 64, '', true, 50, 'stroke-width: 0;', true, 84, '', true], [5, 208.07897946500003, '', false, 85, '', true, 76, '', true, 92, '', true, 66, '', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true], [6, 276.74504268845004, '', false, 97, '', true, 80, '', true, 102, '', true, 69, '', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true], [7, 368.07090677563855, '', false, 102, '', true, 80, '', true, 106, '', true, 79, '', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true], [8, 489.5343060115993, '', false, 109, '', true, 87, '', true, 108, '', true, 84, '', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true], [9, 651.0806269954271, '', false, 112, '', true, 95, '', true, 112, '', true, 84, '', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true], [10, 865.9372339039181, '', false, 119, '', true, 98, '', true, 50, 'stroke-width: 0;', true, 96, '', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true], [11, 1151.6965210922112, '', false, 119, '', true, 105, '', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true], [12, 1531.756373052641, '', false, 121, '', true, 108, '', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true], [13, 2037.2359761600128, '', false, 50, 'stroke-width: 0;', true, 115, '', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true], [14, 2709.523848292817, '', false, 50, 'stroke-width: 0;', true, 125, '', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true], [15, 3603.666718229447, '', false, 50, 'stroke-width: 0;', true, 134, '', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true], [16, 4792.876735245164, '', false, 50, 'stroke-width: 0;', true, 141, '', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true], [17, 6374.526057876069, '', false, 50, 'stroke-width: 0;', true, 145, '', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true], [18, 8478.119656975172, '', false, 50, 'stroke-width: 0;', true, 149, '', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true, 50, 'stroke-width: 0;', true]]);
+      var options = {
+//        title: 'cumulative number of cases, by number of days since 50th case'
+        title: '受診都道府県毎の50番目のケースからの日数による累積ケース数',
+        width: 700,
+        height: 700,
+
+        hAxis: {
+//          title: 'Number of days since 50th case',
+	    title: '50番目のケースからの日数',
+        },
+        vAxis: {
+//          title: 'Cumulative number of cases',
+	    title: '累積件数',
+	  logScale: true
+        },
+colors: ["LightGray", "Red", "Blue", "Green", "Black", "Cyan", "Orange"]
+       };
+
+      var chart = new           google.visualization.LineChart(document.getElementById('chart_div'));
+//      google.visualization.events.addListener(chart, 'select', selectHandler);
+
+      chart.draw(data, options);
+    }
+   </script>
+<dl>
+(最終更新日時: 2020-03-17 21:53:12 +0900)
+<form>
+別のケース数を元にしたグラフに移る:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-1-33.html"  >1</option>
+  <option value="covid19jp-10-33.html" >10</option>
+  <option value="covid19jp-20-33.html" >20</option>
+  <option value="covid19jp-30-33.html" >30</option>
+  <option value="covid19jp-40-33.html" >40</option>
+  <option value="covid19jp-50-33.html" selected>50</option>
+  <option value="covid19jp-60-33.html" >60</option>
+  <option value="covid19jp-70-33.html" >70</option>
+  <option value="covid19jp-80-33.html" >80</option>
+  <option value="covid19jp-90-33.html" >90</option>
+  <option value="covid19jp-100-33.html" >100</option>
+</select>
+番目のケースへ
+</form>
+<dl>
+<form>
+33%日次増加グラフ:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-20-33.html"  >あり</option>
+  <option value="covid19jp-20.html"  >なし</option>
+</select>
+番目のケースへ
+</form>
+<dl>
+
+<li> 本グラフの作成には<a href="https://www.ft.com/">Financial Times</a>作成の世界各国に対するグラフを参考にしました。
+<li> グラフ作成に利用しているデータソースは、<a href="https://gis.jag-japan.com/covid19jp/">ジャッグジャパン株式会社提供 COVID-19.csv</a>を利用しています。
+<li> 本ページの作成Ruby Scriptは<a href="https://github.com/sanpei3/covid19jp">GitHub</a>で公開しています。
+
+<dl>
+TODO
+<li>英語版のページを作る
+<li>各都道府県の対数グラフでの近似線を追加する
+</html>
+
+

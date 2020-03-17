@@ -1,0 +1,91 @@
+<head>
+</head>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
+
+  <div id="chart_div"></div>
+    <script type="text/javascript">
+
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawLineColors);
+
+function drawLineColors() {
+
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'X');	
+var pref =  ["33% DAILY INCREASE", "愛知県", "北海道", "大阪府", "東京都", "千葉県", "神奈川県", "新潟県", "兵庫県", "埼玉県"];
+pref.forEach(function(t) {
+     data.addColumn('number', t);
+     data.addColumn({type:'string', role:'style'});
+     data.addColumn({type:'boolean',role:'certainty'});
+});
+data.addRows([[0, 20, '', false, 20, '', true, 25, '', true, 31, '', true, 20, '', true, 20, '', true, 22, '', true, 21, '', true, 25, '', true, 22, '', true], [1, 26.6, '', false, 25, '', true, 29, '', true, 41, '', true, 20, '', true, 23, '', true, 27, '', true, 20, 'stroke-width: 0;', true, 37, '', true, 24, '', true], [2, 35.37800000000001, '', false, 27, '', true, 33, '', true, 55, '', true, 23, '', true, 23, '', true, 28, '', true, 20, 'stroke-width: 0;', true, 45, '', true, 24, '', true], [3, 47.052740000000014, '', false, 28, '', true, 36, '', true, 55, '', true, 23, '', true, 25, '', true, 28, '', true, 20, 'stroke-width: 0;', true, 55, '', true, 24, '', true], [4, 62.58014420000002, '', false, 29, '', true, 51, '', true, 73, '', true, 26, '', true, 28, '', true, 32, '', true, 20, 'stroke-width: 0;', true, 66, '', true, 25, '', true], [5, 83.23159178600004, '', false, 32, '', true, 63, '', true, 80, '', true, 27, '', true, 30, '', true, 37, '', true, 20, 'stroke-width: 0;', true, 77, '', true, 20, 'stroke-width: 0;', true], [6, 110.69801707538005, '', false, 32, '', true, 67, '', true, 89, '', true, 28, '', true, 20, 'stroke-width: 0;', true, 38, '', true, 20, 'stroke-width: 0;', true, 81, '', true, 20, 'stroke-width: 0;', true], [7, 147.22836271025548, '', false, 41, '', true, 69, '', true, 92, '', true, 29, '', true, 20, 'stroke-width: 0;', true, 38, '', true, 20, 'stroke-width: 0;', true, 84, '', true, 20, 'stroke-width: 0;', true], [8, 195.8137224046398, '', false, 50, '', true, 74, '', true, 102, '', true, 31, '', true, 20, 'stroke-width: 0;', true, 38, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [9, 260.43225079817097, '', false, 58, '', true, 76, '', true, 106, '', true, 31, '', true, 20, 'stroke-width: 0;', true, 40, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [10, 346.37489356156743, '', false, 63, '', true, 80, '', true, 108, '', true, 32, '', true, 20, 'stroke-width: 0;', true, 43, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [11, 460.6786084368847, '', false, 70, '', true, 80, '', true, 112, '', true, 36, '', true, 20, 'stroke-width: 0;', true, 46, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [12, 612.7025492210566, '', false, 80, '', true, 87, '', true, 20, 'stroke-width: 0;', true, 44, '', true, 20, 'stroke-width: 0;', true, 47, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [13, 814.8943904640054, '', false, 85, '', true, 95, '', true, 20, 'stroke-width: 0;', true, 49, '', true, 20, 'stroke-width: 0;', true, 48, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [14, 1083.8095393171272, '', false, 97, '', true, 98, '', true, 20, 'stroke-width: 0;', true, 55, '', true, 20, 'stroke-width: 0;', true, 52, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [15, 1441.4666872917794, '', false, 102, '', true, 105, '', true, 20, 'stroke-width: 0;', true, 55, '', true, 20, 'stroke-width: 0;', true, 52, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [16, 1917.1506940980667, '', false, 109, '', true, 108, '', true, 20, 'stroke-width: 0;', true, 55, '', true, 20, 'stroke-width: 0;', true, 56, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [17, 2549.810423150429, '', false, 112, '', true, 115, '', true, 20, 'stroke-width: 0;', true, 58, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [18, 3391.2478627900705, '', false, 119, '', true, 125, '', true, 20, 'stroke-width: 0;', true, 64, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [19, 4510.359657510794, '', false, 119, '', true, 134, '', true, 20, 'stroke-width: 0;', true, 66, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [20, 5998.778344489357, '', false, 121, '', true, 141, '', true, 20, 'stroke-width: 0;', true, 69, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [21, 7978.375198170845, '', false, 20, 'stroke-width: 0;', true, 145, '', true, 20, 'stroke-width: 0;', true, 79, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [22, 10611.239013567223, '', false, 20, 'stroke-width: 0;', true, 149, '', true, 20, 'stroke-width: 0;', true, 84, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [23, 14112.947888044408, '', false, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 84, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [24, 18770.220691099064, '', false, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 96, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true]]);
+      var options = {
+//        title: 'cumulative number of cases, by number of days since 20th case'
+        title: '受診都道府県毎の20番目のケースからの日数による累積ケース数',
+        width: 700,
+        height: 700,
+
+        hAxis: {
+//          title: 'Number of days since 20th case',
+	    title: '20番目のケースからの日数',
+        },
+        vAxis: {
+//          title: 'Cumulative number of cases',
+	    title: '累積件数',
+	  logScale: true
+        },
+colors: ["LightGray", "Red", "Blue", "Green", "Black", "Cyan", "Orange", "Purple", "Red", "Blue"]
+       };
+
+      var chart = new           google.visualization.LineChart(document.getElementById('chart_div'));
+//      google.visualization.events.addListener(chart, 'select', selectHandler);
+
+      chart.draw(data, options);
+    }
+   </script>
+<dl>
+(最終更新日時: 2020-03-17 21:53:11 +0900)
+<form>
+別のケース数を元にしたグラフに移る:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-1-33.html"  >1</option>
+  <option value="covid19jp-10-33.html" >10</option>
+  <option value="covid19jp-20-33.html" selected>20</option>
+  <option value="covid19jp-30-33.html" >30</option>
+  <option value="covid19jp-40-33.html" >40</option>
+  <option value="covid19jp-50-33.html" >50</option>
+  <option value="covid19jp-60-33.html" >60</option>
+  <option value="covid19jp-70-33.html" >70</option>
+  <option value="covid19jp-80-33.html" >80</option>
+  <option value="covid19jp-90-33.html" >90</option>
+  <option value="covid19jp-100-33.html" >100</option>
+</select>
+番目のケースへ
+</form>
+<dl>
+<form>
+33%日次増加グラフ:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-20-33.html"  >あり</option>
+  <option value="covid19jp-20.html"  >なし</option>
+</select>
+番目のケースへ
+</form>
+<dl>
+
+<li> 本グラフの作成には<a href="https://www.ft.com/">Financial Times</a>作成の世界各国に対するグラフを参考にしました。
+<li> グラフ作成に利用しているデータソースは、<a href="https://gis.jag-japan.com/covid19jp/">ジャッグジャパン株式会社提供 COVID-19.csv</a>を利用しています。
+<li> 本ページの作成Ruby Scriptは<a href="https://github.com/sanpei3/covid19jp">GitHub</a>で公開しています。
+
+<dl>
+TODO
+<li>英語版のページを作る
+<li>各都道府県の対数グラフでの近似線を追加する
+</html>
+
+
