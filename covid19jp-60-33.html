@@ -2,8 +2,11 @@
 <meta http-equiv="Refresh" content="1800">
 <meta charSet="utf-8"/>
 <title>
-受診都道府県毎の60番目のケースからの日数による累積ケース数
+新型コロナウイルス受診都道府県毎の60番目のケースからの日数による累積ケース数
 </title>
+<p style="text-align: right">
+&lt;JA |
+<a href="covid19jp-60-33-en.html">EN</a>&gt;<p>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
@@ -27,17 +30,13 @@ pref.forEach(function(t) {
 });
 data.addRows([[0, 60, '', false, 63, '', true, 63, '', true, 73, '', true, 64, '', true, 66, '', true], [1, 79.80000000000001, '', false, 70, '', true, 67, '', true, 80, '', true, 66, '', true, 77, '', true], [2, 106.13400000000001, '', false, 80, '', true, 69, '', true, 89, '', true, 69, '', true, 81, '', true], [3, 141.15822000000003, '', false, 85, '', true, 74, '', true, 92, '', true, 79, '', true, 85, '', true], [4, 187.74043260000005, '', false, 97, '', true, 76, '', true, 102, '', true, 84, '', true, 60, 'stroke-width: 0;', true], [5, 249.69477535800007, '', false, 102, '', true, 80, '', true, 106, '', true, 84, '', true, 60, 'stroke-width: 0;', true], [6, 332.0940512261401, '', false, 109, '', true, 80, '', true, 108, '', true, 96, '', true, 60, 'stroke-width: 0;', true], [7, 441.68508813076636, '', false, 112, '', true, 87, '', true, 112, '', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true], [8, 587.4411672139192, '', false, 119, '', true, 95, '', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true], [9, 781.2967523945126, '', false, 119, '', true, 98, '', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true], [10, 1039.1246806847018, '', false, 121, '', true, 105, '', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true], [11, 1382.0358253106535, '', false, 123, '', true, 108, '', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true], [12, 1838.1076476631692, '', false, 124, '', true, 115, '', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true], [13, 2444.683171392015, '', false, 60, 'stroke-width: 0;', true, 125, '', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true], [14, 3251.42861795138, '', false, 60, 'stroke-width: 0;', true, 134, '', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true], [15, 4324.400061875336, '', false, 60, 'stroke-width: 0;', true, 141, '', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true], [16, 5751.452082294198, '', false, 60, 'stroke-width: 0;', true, 145, '', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true], [17, 7649.431269451284, '', false, 60, 'stroke-width: 0;', true, 149, '', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true], [18, 10173.743588370207, '', false, 60, 'stroke-width: 0;', true, 149, '', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true], [19, 13531.078972532376, '', false, 60, 'stroke-width: 0;', true, 151, '', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true, 60, 'stroke-width: 0;', true]]);
       var options = {
-//        title: 'cumulative number of cases, by number of days since 60th case'
-        title: '受診都道府県毎の60番目のケースからの日数による累積ケース数',
+        title: '新型コロナウイルス受診都道府県毎の60番目のケースからの日数による累積ケース数',
         width: 700,
         height: 700,
-
         hAxis: {
-//          title: 'Number of days since 60th case',
 	    title: '60番目のケースからの日数',
         },
         vAxis: {
-//          title: 'Cumulative number of cases',
 	    title: '累積件数',
 	  logScale: true
         },
@@ -51,7 +50,7 @@ colors: ["LightGray", "Red", "Blue", "Green", "Black", "Cyan"]
     }
    </script>
 <dl>
-(最終更新日時: 2020-03-18 18:39:57 +0900)
+(最終更新日時: 2020-03-18 19:57:14 +0900)
 <form>
 別のケース数を元にしたグラフに移る:
 <select onChange="top.location.href=value">

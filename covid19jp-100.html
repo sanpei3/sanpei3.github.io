@@ -2,8 +2,11 @@
 <meta http-equiv="Refresh" content="1800">
 <meta charSet="utf-8"/>
 <title>
-受診都道府県毎の100番目のケースからの日数による累積ケース数
+新型コロナウイルス受診都道府県毎の100番目のケースからの日数による累積ケース数
 </title>
+<p style="text-align: right">
+&lt;JA |
+<a href="covid19jp-100-33-en.html">EN</a>&gt;<p>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
@@ -27,17 +30,13 @@ pref.forEach(function(t) {
 });
 data.addRows([[0, 102, '', true, 105, '', true, 102, '', true], [1, 109, '', true, 108, '', true, 106, '', true], [2, 112, '', true, 115, '', true, 108, '', true], [3, 119, '', true, 125, '', true, 112, '', true], [4, 119, '', true, 134, '', true, 100, 'stroke-width: 0;', true], [5, 121, '', true, 141, '', true, 100, 'stroke-width: 0;', true], [6, 123, '', true, 145, '', true, 100, 'stroke-width: 0;', true], [7, 124, '', true, 149, '', true, 100, 'stroke-width: 0;', true], [8, 100, 'stroke-width: 0;', true, 149, '', true, 100, 'stroke-width: 0;', true], [9, 100, 'stroke-width: 0;', true, 151, '', true, 100, 'stroke-width: 0;', true]]);
       var options = {
-//        title: 'cumulative number of cases, by number of days since 100th case'
-        title: '受診都道府県毎の100番目のケースからの日数による累積ケース数',
+        title: '新型コロナウイルス受診都道府県毎の100番目のケースからの日数による累積ケース数',
         width: 700,
         height: 700,
-
         hAxis: {
-//          title: 'Number of days since 100th case',
 	    title: '100番目のケースからの日数',
         },
         vAxis: {
-//          title: 'Cumulative number of cases',
 	    title: '累積件数',
 	  logScale: true
         },
@@ -51,7 +50,7 @@ colors: ["Red", "Blue", "Green"]
     }
    </script>
 <dl>
-(最終更新日時: 2020-03-18 18:39:58 +0900)
+(最終更新日時: 2020-03-18 19:57:17 +0900)
 <form>
 別のケース数を元にしたグラフに移る:
 <select onChange="top.location.href=value">
