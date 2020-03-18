@@ -1,0 +1,96 @@
+<html>
+<meta http-equiv="Refresh" content="1800">
+<meta charSet="utf-8"/>
+<title>
+cumulative number of cases, by number of days since 20th case
+</title>
+<p style="text-align: right">
+&lt;<a href="covid19jp-20-33.html">JA</a> |
+EN</a>&gt;<p>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
+
+  <div id="chart_div"></div>
+    <script type="text/javascript">
+
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawLineColors);
+
+function drawLineColors() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'X');	
+var pref =  ["Aichi", "Hokkaido", "Osaka", "Tokyo", "Chiba", "Kanagawa", "Niigata", "Hyogo", "Saitama"];
+pref.forEach(function(t) {
+     data.addColumn('number', t);
+     data.addColumn({type:'string', role:'style'});
+     data.addColumn({type:'boolean',role:'certainty'});
+});
+data.addRows([[0, 20, '', true, 25, '', true, 31, '', true, 20, '', true, 20, '', true, 22, '', true, 21, '', true, 25, '', true, 22, '', true], [1, 25, '', true, 29, '', true, 41, '', true, 20, '', true, 23, '', true, 27, '', true, 22, '', true, 37, '', true, 24, '', true], [2, 27, '', true, 33, '', true, 55, '', true, 23, '', true, 23, '', true, 28, '', true, 20, 'stroke-width: 0;', true, 45, '', true, 24, '', true], [3, 28, '', true, 36, '', true, 55, '', true, 23, '', true, 25, '', true, 28, '', true, 20, 'stroke-width: 0;', true, 55, '', true, 24, '', true], [4, 29, '', true, 51, '', true, 73, '', true, 26, '', true, 28, '', true, 32, '', true, 20, 'stroke-width: 0;', true, 66, '', true, 29, '', true], [5, 32, '', true, 63, '', true, 80, '', true, 27, '', true, 30, '', true, 37, '', true, 20, 'stroke-width: 0;', true, 77, '', true, 30, '', true], [6, 32, '', true, 67, '', true, 89, '', true, 28, '', true, 30, '', true, 38, '', true, 20, 'stroke-width: 0;', true, 81, '', true, 20, 'stroke-width: 0;', true], [7, 41, '', true, 69, '', true, 92, '', true, 29, '', true, 30, '', true, 38, '', true, 20, 'stroke-width: 0;', true, 85, '', true, 20, 'stroke-width: 0;', true], [8, 50, '', true, 74, '', true, 102, '', true, 31, '', true, 30, '', true, 38, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [9, 58, '', true, 76, '', true, 106, '', true, 31, '', true, 32, '', true, 40, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [10, 63, '', true, 80, '', true, 108, '', true, 32, '', true, 20, 'stroke-width: 0;', true, 43, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [11, 70, '', true, 80, '', true, 112, '', true, 36, '', true, 20, 'stroke-width: 0;', true, 46, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [12, 80, '', true, 87, '', true, 20, 'stroke-width: 0;', true, 44, '', true, 20, 'stroke-width: 0;', true, 47, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [13, 85, '', true, 95, '', true, 20, 'stroke-width: 0;', true, 49, '', true, 20, 'stroke-width: 0;', true, 48, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [14, 97, '', true, 98, '', true, 20, 'stroke-width: 0;', true, 55, '', true, 20, 'stroke-width: 0;', true, 52, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [15, 102, '', true, 105, '', true, 20, 'stroke-width: 0;', true, 55, '', true, 20, 'stroke-width: 0;', true, 52, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [16, 109, '', true, 108, '', true, 20, 'stroke-width: 0;', true, 55, '', true, 20, 'stroke-width: 0;', true, 56, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [17, 112, '', true, 115, '', true, 20, 'stroke-width: 0;', true, 58, '', true, 20, 'stroke-width: 0;', true, 57, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [18, 119, '', true, 125, '', true, 20, 'stroke-width: 0;', true, 64, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [19, 119, '', true, 134, '', true, 20, 'stroke-width: 0;', true, 66, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [20, 121, '', true, 141, '', true, 20, 'stroke-width: 0;', true, 69, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [21, 123, '', true, 145, '', true, 20, 'stroke-width: 0;', true, 79, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [22, 124, '', true, 149, '', true, 20, 'stroke-width: 0;', true, 84, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [23, 20, 'stroke-width: 0;', true, 149, '', true, 20, 'stroke-width: 0;', true, 84, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [24, 20, 'stroke-width: 0;', true, 151, '', true, 20, 'stroke-width: 0;', true, 96, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true], [25, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 105, '', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true, 20, 'stroke-width: 0;', true]]);
+      var options = {
+        title: 'cumulative number of cases, by number of days since 20th case',
+        width: 700,
+        height: 700,
+
+        hAxis: {
+          title: 'Number of days since 20th case',
+        },
+        vAxis: {
+          title: 'Cumulative number of cases',
+	  logScale: true
+        },
+colors: ["Red", "Blue", "Green", "Black", "Cyan", "Orange", "Purple", "Red", "Blue"]
+       };
+
+      var chart = new           google.visualization.LineChart(document.getElementById('chart_div'));
+//      google.visualization.events.addListener(chart, 'select', selectHandler);
+
+      chart.draw(data, options);
+    }
+   </script>
+<dl>
+(LAST UPDATE: 2020-03-18 20:22:26 +0900)
+<form>
+move to other case graph:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-1-en.html" >1</option>
+  <option value="covid19jp-10-en.html" >10</option>
+  <option value="covid19jp-20-en.html" selected>20</option>
+  <option value="covid19jp-30-.html" >30</option>
+  <option value="covid19jp-40-en.html" >40</option>
+  <option value="covid19jp-50-en.html" >50</option>
+  <option value="covid19jp-60-en.html" >60</option>
+  <option value="covid19jp-70-en.html" >70</option>
+  <option value="covid19jp-80-en.html" >80</option>
+  <option value="covid19jp-90-en.html" >90</option>
+  <option value="covid19jp-100-en.html" >100</option>
+</select>
+th case
+</form>
+<form>
+33% daily increase graph:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-20-33-en.html" >ON</option>
+  <option value="covid19jp-20-en.html" selected>OFF</option>
+</select>
+</form>
+<dl>
+
+<li> This web page is inspired from <a href="https://www.ft.com/">Financial Times</a>: "cumulative number of cases, by number of days since 100th case"
+<li> The base data for this web page is the COVID-19.csv file from <a href="https://gis.jag-japan.com/covid19jp/">J.A.G JAPAN</a>.
+<li> This system automatically downloads above CSV file, and if there are any changes, the web pages are updated within 30min.
+<li> Ruby scripts for this web page are on <a href="https://github.com/sanpei3/covid19jp">GitHub</a>
+<hr>
+If you have any questions or requests, please let me know on Twitter account.
+<br>
+Twitter @yoshiro_mihira
+<br>
+GitHub  @sanpei3
+<br>
+e-mail sanpei@sanpei.org
+</html>
+
+
+

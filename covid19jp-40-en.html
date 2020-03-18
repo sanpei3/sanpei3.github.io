@@ -1,0 +1,96 @@
+<html>
+<meta http-equiv="Refresh" content="1800">
+<meta charSet="utf-8"/>
+<title>
+cumulative number of cases, by number of days since 40th case
+</title>
+<p style="text-align: right">
+&lt;<a href="covid19jp-40-33.html">JA</a> |
+EN</a>&gt;<p>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
+
+  <div id="chart_div"></div>
+    <script type="text/javascript">
+
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawLineColors);
+
+function drawLineColors() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'X');	
+var pref =  ["Aichi", "Hokkaido", "Osaka", "Tokyo", "Kanagawa", "Hyogo"];
+pref.forEach(function(t) {
+     data.addColumn('number', t);
+     data.addColumn({type:'string', role:'style'});
+     data.addColumn({type:'boolean',role:'certainty'});
+});
+data.addRows([[0, 41, '', true, 51, '', true, 41, '', true, 44, '', true, 40, '', true, 45, '', true], [1, 50, '', true, 63, '', true, 55, '', true, 49, '', true, 43, '', true, 55, '', true], [2, 58, '', true, 67, '', true, 55, '', true, 55, '', true, 46, '', true, 66, '', true], [3, 63, '', true, 69, '', true, 73, '', true, 55, '', true, 47, '', true, 77, '', true], [4, 70, '', true, 74, '', true, 80, '', true, 55, '', true, 48, '', true, 81, '', true], [5, 80, '', true, 76, '', true, 89, '', true, 58, '', true, 52, '', true, 85, '', true], [6, 85, '', true, 80, '', true, 92, '', true, 64, '', true, 52, '', true, 40, 'stroke-width: 0;', true], [7, 97, '', true, 80, '', true, 102, '', true, 66, '', true, 56, '', true, 40, 'stroke-width: 0;', true], [8, 102, '', true, 87, '', true, 106, '', true, 69, '', true, 57, '', true, 40, 'stroke-width: 0;', true], [9, 109, '', true, 95, '', true, 108, '', true, 79, '', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true], [10, 112, '', true, 98, '', true, 112, '', true, 84, '', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true], [11, 119, '', true, 105, '', true, 40, 'stroke-width: 0;', true, 84, '', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true], [12, 119, '', true, 108, '', true, 40, 'stroke-width: 0;', true, 96, '', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true], [13, 121, '', true, 115, '', true, 40, 'stroke-width: 0;', true, 105, '', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true], [14, 123, '', true, 125, '', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true], [15, 124, '', true, 134, '', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true], [16, 40, 'stroke-width: 0;', true, 141, '', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true], [17, 40, 'stroke-width: 0;', true, 145, '', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true], [18, 40, 'stroke-width: 0;', true, 149, '', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true], [19, 40, 'stroke-width: 0;', true, 149, '', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true], [20, 40, 'stroke-width: 0;', true, 151, '', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true, 40, 'stroke-width: 0;', true]]);
+      var options = {
+        title: 'cumulative number of cases, by number of days since 40th case',
+        width: 700,
+        height: 700,
+
+        hAxis: {
+          title: 'Number of days since 40th case',
+        },
+        vAxis: {
+          title: 'Cumulative number of cases',
+	  logScale: true
+        },
+colors: ["Red", "Blue", "Green", "Black", "Cyan", "Orange"]
+       };
+
+      var chart = new           google.visualization.LineChart(document.getElementById('chart_div'));
+//      google.visualization.events.addListener(chart, 'select', selectHandler);
+
+      chart.draw(data, options);
+    }
+   </script>
+<dl>
+(LAST UPDATE: 2020-03-18 20:22:27 +0900)
+<form>
+move to other case graph:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-1-en.html" >1</option>
+  <option value="covid19jp-10-en.html" >10</option>
+  <option value="covid19jp-20-en.html" >20</option>
+  <option value="covid19jp-30-.html" >30</option>
+  <option value="covid19jp-40-en.html" selected>40</option>
+  <option value="covid19jp-50-en.html" >50</option>
+  <option value="covid19jp-60-en.html" >60</option>
+  <option value="covid19jp-70-en.html" >70</option>
+  <option value="covid19jp-80-en.html" >80</option>
+  <option value="covid19jp-90-en.html" >90</option>
+  <option value="covid19jp-100-en.html" >100</option>
+</select>
+th case
+</form>
+<form>
+33% daily increase graph:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-40-33-en.html" >ON</option>
+  <option value="covid19jp-40-en.html" selected>OFF</option>
+</select>
+</form>
+<dl>
+
+<li> This web page is inspired from <a href="https://www.ft.com/">Financial Times</a>: "cumulative number of cases, by number of days since 100th case"
+<li> The base data for this web page is the COVID-19.csv file from <a href="https://gis.jag-japan.com/covid19jp/">J.A.G JAPAN</a>.
+<li> This system automatically downloads above CSV file, and if there are any changes, the web pages are updated within 30min.
+<li> Ruby scripts for this web page are on <a href="https://github.com/sanpei3/covid19jp">GitHub</a>
+<hr>
+If you have any questions or requests, please let me know on Twitter account.
+<br>
+Twitter @yoshiro_mihira
+<br>
+GitHub  @sanpei3
+<br>
+e-mail sanpei@sanpei.org
+</html>
+
+
+
