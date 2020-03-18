@@ -2,7 +2,7 @@
 <meta http-equiv="Refresh" content="1800">
 <meta charSet="utf-8"/>
 <title>
-cumulative number of cases, by number of days since 90th case
+COVID-19:cumulative number of cases, by number of days since 90th case
 </title>
 
 &lt;<a href="covid19jp-90-33.html">JA</a> |
@@ -20,15 +20,15 @@ google.charts.setOnLoadCallback(drawLineColors);
 function drawLineColors() {
       var data = new google.visualization.DataTable();
       data.addColumn('number', 'X');	
-var pref =  ["Aichi", "Hokkaido", "Osaka", "Tokyo"];
+var pref =  ["Aichi", "Hokkaido", "Osaka", "Tokyo", "Hyogo"];
 pref.forEach(function(t) {
      data.addColumn('number', t);
      data.addColumn({type:'string', role:'style'});
      data.addColumn({type:'boolean',role:'certainty'});
 });
-data.addRows([[0, 97, '', true, 95, '', true, 92, '', true, 96, '', true], [1, 102, '', true, 98, '', true, 102, '', true, 105, '', true], [2, 109, '', true, 105, '', true, 106, '', true, 90, 'stroke-width: 0;', true], [3, 112, '', true, 108, '', true, 108, '', true, 90, 'stroke-width: 0;', true], [4, 119, '', true, 115, '', true, 112, '', true, 90, 'stroke-width: 0;', true], [5, 119, '', true, 125, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [6, 121, '', true, 134, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [7, 123, '', true, 141, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [8, 124, '', true, 145, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [9, 90, 'stroke-width: 0;', true, 149, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [10, 90, 'stroke-width: 0;', true, 149, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [11, 90, 'stroke-width: 0;', true, 151, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true]]);
+data.addRows([[0, 97, '', true, 95, '', true, 92, '', true, 96, '', true, 90, '', true], [1, 102, '', true, 98, '', true, 102, '', true, 105, '', true, 90, 'stroke-width: 0;', true], [2, 109, '', true, 105, '', true, 106, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [3, 112, '', true, 108, '', true, 108, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [4, 119, '', true, 115, '', true, 112, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [5, 119, '', true, 125, '', true, 117, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [6, 121, '', true, 134, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [7, 123, '', true, 141, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [8, 127, '', true, 145, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [9, 90, 'stroke-width: 0;', true, 149, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [10, 90, 'stroke-width: 0;', true, 149, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true], [11, 90, 'stroke-width: 0;', true, 151, '', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true, 90, 'stroke-width: 0;', true]]);
       var options = {
-        title: 'cumulative number of cases, by number of days since 90th case',
+        title: 'COVID-19:cumulative number of cases, by number of days since 90th case',
         width: 700,
         height: 700,
 
@@ -39,7 +39,7 @@ data.addRows([[0, 97, '', true, 95, '', true, 92, '', true, 96, '', true], [1, 1
           title: 'Cumulative number of cases',
 	  logScale: true
         },
-colors: ["Red", "Blue", "Green", "Black"]
+colors: ["Red", "Blue", "Green", "Black", "Cyan"]
        };
 
       var chart = new           google.visualization.LineChart(document.getElementById('chart_div'));
@@ -49,7 +49,7 @@ colors: ["Red", "Blue", "Green", "Black"]
     }
    </script>
 <dl>
-(LAST UPDATE: 2020-03-18 21:11:19 +0900)
+(LAST UPDATE: 2020-03-18 21:30:05 +0900)
 <form>
 move to other case graph:
 <select onChange="top.location.href=value">
