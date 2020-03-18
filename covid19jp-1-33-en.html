@@ -20,7 +20,7 @@ google.charts.setOnLoadCallback(drawLineColors);
 function drawLineColors() {
       var data = new google.visualization.DataTable();
       data.addColumn('number', 'X');	
-var pref =  ["33% DAILY INCREASE", "Aichi", "Nara", "Hokkaido", "Osaka", "Tokyo", "Chiba", "Kanagawa", nil, "Wakayama", "Okinawa", "Fukuoka", "Ishikawa", "Kumamoto", "Tochigi", "Nagano", "Tokushima", "Gifu", "Shizuoka", "Kochi", "Niigata", "Miyagi", "Hyogo", "Ehime", "Oita", "Kyoto", "Yamaguchi", "Miyazaki", "Shiga", "Saitama", "Yamanashi", "Akita", "Hiroshima", "Fukushima", "Gunma", "Mie", "Saga", "Nagasaki", "Kagawa", "Ibaraki"];
+var pref =  ["33% DAILY INCREASE", "Aichi", "Nara", "Hokkaido", "Osaka", "Tokyo", "Chiba", "Kanagawa", "Unknown", "Wakayama", "Okinawa", "Fukuoka", "Ishikawa", "Kumamoto", "Tochigi", "Nagano", "Tokushima", "Gifu", "Shizuoka", "Kochi", "Niigata", "Miyagi", "Hyogo", "Ehime", "Oita", "Kyoto", "Yamaguchi", "Miyazaki", "Shiga", "Saitama", "Yamanashi", "Akita", "Hiroshima", "Fukushima", "Gunma", "Mie", "Saga", "Nagasaki", "Kagawa", "Ibaraki"];
 pref.forEach(function(t) {
      data.addColumn('number', t);
      data.addColumn({type:'string', role:'style'});
@@ -49,7 +49,7 @@ colors: ["LightGray", "Red", "Blue", "Green", "Black", "Cyan", "Orange", "Purple
     }
    </script>
 <dl>
-(LAST UPDATE: 2020-03-18 21:00:01 +0900)
+(LAST UPDATE: 2020-03-18 21:01:50 +0900)
 <form>
 move to other case graph:
 <select onChange="top.location.href=value">
