@@ -21,7 +21,7 @@ function drawLineColors() {
 
       var data = new google.visualization.DataTable();
       data.addColumn('number', 'X');	
-var pref =  ["愛知県", "北海道", "大阪府", "東京都", "兵庫県"];
+var pref =  ["\u611B\u77E5\u770C", "\u5317\u6D77\u9053", "\u5927\u962A\u5E9C", "\u6771\u4EAC\u90FD", "\u5175\u5EAB\u770C"];
 pref.forEach(function(t) {
      data.addColumn('number', t);
      data.addColumn({type:'string', role:'style'});
@@ -49,7 +49,7 @@ colors: ["Red", "Blue", "Green", "Black", "Cyan"]
     }
    </script>
 <dl>
-(最終更新日時: 2020-03-22 21:00:17 +0900)
+(最終更新日時: 2020-03-22 21:45:20 +0900)
 <form>
 別のケース数を元にしたグラフに移る:
 <select onChange="top.location.href=value">
