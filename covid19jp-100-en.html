@@ -1,0 +1,95 @@
+<html>
+<meta http-equiv="Refresh" content="1800">
+<meta charSet="utf-8"/>
+<title>
+COVID-19: Cumulative number of cases in Japan by number of days since 100th case
+</title>
+
+&lt;<a href="covid19jp-100.html">JA</a> |
+EN</a>&gt;
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
+
+  <div id="chart_div"></div>
+    <script type="text/javascript">
+
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawLineColors);
+
+function drawLineColors() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'X');	
+var pref =  ["Aichi", "Hokkaido", "Osaka", "Tokyo", "Hyogo"];
+pref.forEach(function(t) {
+     data.addColumn('number', t);
+     data.addColumn({type:'string', role:'style'});
+     data.addColumn({type:'boolean',role:'certainty'});
+     data.addColumn({type:'string', role:'tooltip'});
+});
+data.addRows([[0, 101, '', true, '3/11/2020\nAichi:101', 105, '', true, '3/9/2020\nHokkaido:105', 101, '', true, '3/14/2020\nOsaka:101', 101, '', true, '3/19/2020\nTokyo:101', 101, '', true, '3/21/2020\nHyogo:101'], [1, 108, '', true, '3/12/2020\nAichi:108', 108, '', true, '3/10/2020\nHokkaido:108', 105, '', true, '3/15/2020\nOsaka:105', 112, '', true, '3/20/2020\nTokyo:112', 105, '', true, '3/22/2020\nHyogo:105'], [2, 111, '', true, '3/13/2020\nAichi:111', 115, '', true, '3/11/2020\nHokkaido:115', 107, '', true, '3/16/2020\nOsaka:107', 119, '', true, '3/21/2020\nTokyo:119', 100, 'stroke-width: 0;', true, ''], [3, 118, '', true, '3/14/2020\nAichi:118', 125, '', true, '3/12/2020\nHokkaido:125', 111, '', true, '3/17/2020\nOsaka:111', 121, '', true, '3/22/2020\nTokyo:121', 100, 'stroke-width: 0;', true, ''], [4, 118, '', true, '3/14/2020\nAichi:118', 134, '', true, '3/13/2020\nHokkaido:134', 116, '', true, '3/18/2020\nOsaka:116', 136, '', true, '3/23/2020\nTokyo:136', 100, 'stroke-width: 0;', true, ''], [5, 120, '', true, '3/16/2020\nAichi:120', 141, '', true, '3/14/2020\nHokkaido:141', 118, '', true, '3/19/2020\nOsaka:118', 100, 'stroke-width: 0;', true, '', 100, 'stroke-width: 0;', true, ''], [6, 122, '', true, '3/17/2020\nAichi:122', 145, '', true, '3/15/2020\nHokkaido:145', 122, '', true, '3/20/2020\nOsaka:122', 100, 'stroke-width: 0;', true, '', 100, 'stroke-width: 0;', true, ''], [7, 127, '', true, '3/18/2020\nAichi:127', 149, '', true, '3/16/2020\nHokkaido:149', 124, '', true, '3/21/2020\nOsaka:124', 100, 'stroke-width: 0;', true, '', 100, 'stroke-width: 0;', true, ''], [8, 131, '', true, '3/19/2020\nAichi:131', 149, '', true, '3/16/2020\nHokkaido:149', 127, '', true, '3/22/2020\nOsaka:127', 100, 'stroke-width: 0;', true, '', 100, 'stroke-width: 0;', true, ''], [9, 136, '', true, '3/20/2020\nAichi:136', 151, '', true, '3/18/2020\nHokkaido:151', 130, '', true, '3/23/2020\nOsaka:130', 100, 'stroke-width: 0;', true, '', 100, 'stroke-width: 0;', true, ''], [10, 138, '', true, '3/21/2020\nAichi:138', 154, '', true, '3/19/2020\nHokkaido:154', 100, 'stroke-width: 0;', true, '', 100, 'stroke-width: 0;', true, '', 100, 'stroke-width: 0;', true, ''], [11, 140, '', true, '3/22/2020\nAichi:140', 155, '', true, '3/20/2020\nHokkaido:155', 100, 'stroke-width: 0;', true, '', 100, 'stroke-width: 0;', true, '', 100, 'stroke-width: 0;', true, ''], [12, 141, '', true, '3/23/2020\nAichi:141', 157, '', true, '3/21/2020\nHokkaido:157', 100, 'stroke-width: 0;', true, '', 100, 'stroke-width: 0;', true, '', 100, 'stroke-width: 0;', true, ''], [13, 100, 'stroke-width: 0;', true, '', 159, '', true, '3/22/2020\nHokkaido:159', 100, 'stroke-width: 0;', true, '', 100, 'stroke-width: 0;', true, '', 100, 'stroke-width: 0;', true, '']]);
+      var options = {
+        title: 'COVID-19: Cumulative number of cases in Japan by number of days since 100th case',
+        width: 700,
+        height: 700,
+
+        hAxis: {
+          title: 'Number of days since 100th case',
+        },
+        vAxis: {
+          title: 'Cumulative number of cases',
+	  logScale: true
+        },
+colors: ["Red", "Blue", "Green", "Black", "Cyan"]
+       };
+
+      var chart = new           google.visualization.LineChart(document.getElementById('chart_div'));
+//      google.visualization.events.addListener(chart, 'select', selectHandler);
+
+      chart.draw(data, options);
+    }
+   </script>
+<dl>
+(LAST UPDATE: 2020-03-23 22:10:26 +0900)
+<form>
+move to other case graph:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-1-en.html" >1</option>
+  <option value="covid19jp-10-en.html" >10</option>
+  <option value="covid19jp-20-en.html" >20</option>
+  <option value="covid19jp-30-.html" >30</option>
+  <option value="covid19jp-40-en.html" >40</option>
+  <option value="covid19jp-50-en.html" >50</option>
+  <option value="covid19jp-60-en.html" >60</option>
+  <option value="covid19jp-70-en.html" >70</option>
+  <option value="covid19jp-80-en.html" >80</option>
+  <option value="covid19jp-90-en.html" >90</option>
+  <option value="covid19jp-100-en.html" selected>100</option>
+</select>
+th case
+</form>
+<form>
+33% daily increase graph:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-100-33-en.html" >ON</option>
+  <option value="covid19jp-100-en.html" selected>OFF</option>
+</select>
+</form>
+<dl>
+
+<li> This web page is inspired by <a href="https://www.ft.com/">Financial Times</a>: "cumulative number of cases, by number of days since 100th case"
+<li> This web page uses data from COVID-19.csv file, <a href="https://gis.jag-japan.com/covid19jp/">J.A.G JAPAN</a>.
+<li> The system of this web page automatically downloads the CSV file from J.A.G JAPAN. If there are any changes, it updates the data within 30mins.
+<li> The ruby scripts of this web page are on GitHub. <a href="https://github.com/sanpei3/covid19jp">https://github.com/sanpei3/covid19jp/</a>
+<hr>
+If you have any questions or requests, please feel free to let me know via my Twitter account. <a href="https://twitter.com/yoshiro_mihira/">@yoshiro_mihira</a>
+<br>
+GitHub  @sanpei3
+<br>
+e-mail sanpei@sanpei.org
+</html>
+
+
+

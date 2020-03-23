@@ -1,0 +1,97 @@
+<html>
+<meta http-equiv="Refresh" content="1800">
+<meta charSet="utf-8"/>
+<title>
+新型コロナウイルス受診都道府県毎の90番目のケースからの日数による累積ケース数
+</title>
+&lt;JA |
+<a href="covid19jp-90-en.html">EN</a>&gt;
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
+
+  <div id="chart_div"></div>
+    <script type="text/javascript">
+
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawLineColors);
+
+function drawLineColors() {
+
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'X');	
+var pref =  ["\u611B\u77E5\u770C", "\u5317\u6D77\u9053", "\u5927\u962A\u5E9C", "\u6771\u4EAC\u90FD", "\u5175\u5EAB\u770C"];
+pref.forEach(function(t) {
+     data.addColumn('number', t);
+     data.addColumn({type:'string', role:'style'});
+     data.addColumn({type:'boolean',role:'certainty'});
+     data.addColumn({type:'string', role:'tooltip'});
+});
+data.addRows([[0, 96, '', true, '3/10/2020\n\u611B\u77E5\u770C:96', 95, '', true, '3/7/2020\n\u5317\u6D77\u9053:95', 91, '', true, '3/13/2020\n\u5927\u962A\u5E9C:91', 94, '', true, '3/18/2020\n\u6771\u4EAC\u90FD:94', 92, '', true, '3/19/2020\n\u5175\u5EAB\u770C:92'], [1, 101, '', true, '3/11/2020\n\u611B\u77E5\u770C:101', 98, '', true, '3/8/2020\n\u5317\u6D77\u9053:98', 101, '', true, '3/14/2020\n\u5927\u962A\u5E9C:101', 101, '', true, '3/19/2020\n\u6771\u4EAC\u90FD:101', 97, '', true, '3/20/2020\n\u5175\u5EAB\u770C:97'], [2, 108, '', true, '3/12/2020\n\u611B\u77E5\u770C:108', 105, '', true, '3/9/2020\n\u5317\u6D77\u9053:105', 105, '', true, '3/15/2020\n\u5927\u962A\u5E9C:105', 112, '', true, '3/20/2020\n\u6771\u4EAC\u90FD:112', 101, '', true, '3/21/2020\n\u5175\u5EAB\u770C:101'], [3, 111, '', true, '3/13/2020\n\u611B\u77E5\u770C:111', 108, '', true, '3/10/2020\n\u5317\u6D77\u9053:108', 107, '', true, '3/16/2020\n\u5927\u962A\u5E9C:107', 119, '', true, '3/21/2020\n\u6771\u4EAC\u90FD:119', 105, '', true, '3/22/2020\n\u5175\u5EAB\u770C:105'], [4, 118, '', true, '3/14/2020\n\u611B\u77E5\u770C:118', 115, '', true, '3/11/2020\n\u5317\u6D77\u9053:115', 111, '', true, '3/17/2020\n\u5927\u962A\u5E9C:111', 121, '', true, '3/22/2020\n\u6771\u4EAC\u90FD:121', 90, 'stroke-width: 0;', true, ''], [5, 118, '', true, '3/14/2020\n\u611B\u77E5\u770C:118', 125, '', true, '3/12/2020\n\u5317\u6D77\u9053:125', 116, '', true, '3/18/2020\n\u5927\u962A\u5E9C:116', 136, '', true, '3/23/2020\n\u6771\u4EAC\u90FD:136', 90, 'stroke-width: 0;', true, ''], [6, 120, '', true, '3/16/2020\n\u611B\u77E5\u770C:120', 134, '', true, '3/13/2020\n\u5317\u6D77\u9053:134', 118, '', true, '3/19/2020\n\u5927\u962A\u5E9C:118', 90, 'stroke-width: 0;', true, '', 90, 'stroke-width: 0;', true, ''], [7, 122, '', true, '3/17/2020\n\u611B\u77E5\u770C:122', 141, '', true, '3/14/2020\n\u5317\u6D77\u9053:141', 122, '', true, '3/20/2020\n\u5927\u962A\u5E9C:122', 90, 'stroke-width: 0;', true, '', 90, 'stroke-width: 0;', true, ''], [8, 127, '', true, '3/18/2020\n\u611B\u77E5\u770C:127', 145, '', true, '3/15/2020\n\u5317\u6D77\u9053:145', 124, '', true, '3/21/2020\n\u5927\u962A\u5E9C:124', 90, 'stroke-width: 0;', true, '', 90, 'stroke-width: 0;', true, ''], [9, 131, '', true, '3/19/2020\n\u611B\u77E5\u770C:131', 149, '', true, '3/16/2020\n\u5317\u6D77\u9053:149', 127, '', true, '3/22/2020\n\u5927\u962A\u5E9C:127', 90, 'stroke-width: 0;', true, '', 90, 'stroke-width: 0;', true, ''], [10, 136, '', true, '3/20/2020\n\u611B\u77E5\u770C:136', 149, '', true, '3/16/2020\n\u5317\u6D77\u9053:149', 130, '', true, '3/23/2020\n\u5927\u962A\u5E9C:130', 90, 'stroke-width: 0;', true, '', 90, 'stroke-width: 0;', true, ''], [11, 138, '', true, '3/21/2020\n\u611B\u77E5\u770C:138', 151, '', true, '3/18/2020\n\u5317\u6D77\u9053:151', 90, 'stroke-width: 0;', true, '', 90, 'stroke-width: 0;', true, '', 90, 'stroke-width: 0;', true, ''], [12, 140, '', true, '3/22/2020\n\u611B\u77E5\u770C:140', 154, '', true, '3/19/2020\n\u5317\u6D77\u9053:154', 90, 'stroke-width: 0;', true, '', 90, 'stroke-width: 0;', true, '', 90, 'stroke-width: 0;', true, ''], [13, 141, '', true, '3/23/2020\n\u611B\u77E5\u770C:141', 155, '', true, '3/20/2020\n\u5317\u6D77\u9053:155', 90, 'stroke-width: 0;', true, '', 90, 'stroke-width: 0;', true, '', 90, 'stroke-width: 0;', true, ''], [14, 90, 'stroke-width: 0;', true, '', 157, '', true, '3/21/2020\n\u5317\u6D77\u9053:157', 90, 'stroke-width: 0;', true, '', 90, 'stroke-width: 0;', true, '', 90, 'stroke-width: 0;', true, ''], [15, 90, 'stroke-width: 0;', true, '', 159, '', true, '3/22/2020\n\u5317\u6D77\u9053:159', 90, 'stroke-width: 0;', true, '', 90, 'stroke-width: 0;', true, '', 90, 'stroke-width: 0;', true, '']]);
+      var options = {
+        title: '新型コロナウイルス受診都道府県毎の90番目のケースからの日数による累積ケース数',
+        width: 700,
+        height: 700,
+        hAxis: {
+	    title: '90番目のケースからの日数',
+        },
+        vAxis: {
+	    title: '累積件数',
+	  logScale: true
+        },
+colors: ["Red", "Blue", "Green", "Black", "Cyan"]
+       };
+
+      var chart = new           google.visualization.LineChart(document.getElementById('chart_div'));
+//      google.visualization.events.addListener(chart, 'select', selectHandler);
+
+      chart.draw(data, options);
+    }
+   </script>
+<dl>
+(最終更新日時: 2020-03-23 22:10:25 +0900)
+<form>
+別のケース数を元にしたグラフに移る:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-1.html" >1</option>
+  <option value="covid19jp-10.html" >10</option>
+  <option value="covid19jp-20.html" >20</option>
+  <option value="covid19jp-30.html" >30</option>
+  <option value="covid19jp-40.html" >40</option>
+  <option value="covid19jp-50.html" >50</option>
+  <option value="covid19jp-60.html" >60</option>
+  <option value="covid19jp-70.html" >70</option>
+  <option value="covid19jp-80.html" >80</option>
+  <option value="covid19jp-90.html" selected>90</option>
+  <option value="covid19jp-100.html" >100</option>
+</select>
+番目のケースへ
+</form>
+<form>
+33%日次増加グラフ:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-90-33.html" >あり</option>
+  <option value="covid19jp-90.html" selected>なし</option>
+</select>
+</form>
+<dl>
+
+<li> 本グラフの作成には<a href="https://www.ft.com/">Financial Times</a>作成の世界各国に対するグラフを参考にしました。
+<li> グラフ作成に利用しているデータソースは、<a href="https://gis.jag-japan.com/covid19jp/">ジャッグジャパン株式会社提供 COVID-19.csv</a>を利用しています。
+<li> 本ページは、30分おきに上記CSVを自動取得して、変更があった場合のみ自動更新しています。
+<li> 本ページの作成Ruby Scriptは<a href="https://github.com/sanpei3/covid19jp">GitHub</a>で公開しています。
+<hr>
+質問・要望がありましたら、以下のTwitterアカウントにお願いします。
+<br>
+Twitter @yoshiro_mihira
+<br>
+GitHub  @sanpei3
+<br>
+e-mail sanpei@sanpei.org
+</html>
+
+
+

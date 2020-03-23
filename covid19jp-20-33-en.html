@@ -1,0 +1,95 @@
+<html>
+<meta http-equiv="Refresh" content="1800">
+<meta charSet="utf-8"/>
+<title>
+COVID-19: Cumulative number of cases in Japan by number of days since 20th case
+</title>
+
+&lt;<a href="covid19jp-20-33.html">JA</a> |
+EN</a>&gt;
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
+
+  <div id="chart_div"></div>
+    <script type="text/javascript">
+
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawLineColors);
+
+function drawLineColors() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'X');	
+var pref =  ["33% DAILY INCREASE", "Aichi", "Hokkaido", "Osaka", "Tokyo", "Chiba", "Kanagawa", "Niigata", "Hyogo", "Oita", "Kyoto", "Saitama"];
+pref.forEach(function(t) {
+     data.addColumn('number', t);
+     data.addColumn({type:'string', role:'style'});
+     data.addColumn({type:'boolean',role:'certainty'});
+     data.addColumn({type:'string', role:'tooltip'});
+});
+data.addRows([[0, 20, '', false, 20, '', true, '2/25/2020\nAichi:20', 25, '', true, '2/23/2020\nHokkaido:25', 30, '', true, '3/6/2020\nOsaka:30', 20, '', true, '2/27/2020\nTokyo:20', 20, '', true, '3/8/2020\nChiba:20', 22, '', true, '3/1/2020\nKanagawa:22', 21, '', true, '3/17/2020\nNiigata:21', 24, '', true, '3/10/2020\nHyogo:24', 21, '', true, '3/22/2020\nOita:21', 20, '', true, '3/20/2020\nKyoto:20', 20, '', true, '3/13/2020\nSaitama:20'], [1, 27, '', false, 25, '', true, '2/26/2020\nAichi:25', 29, '', true, '2/24/2020\nHokkaido:29', 40, '', true, '3/7/2020\nOsaka:40', 20, '', true, '2/27/2020\nTokyo:20', 20, '', true, '3/8/2020\nChiba:20', 27, '', true, '3/2/2020\nKanagawa:27', 22, '', true, '3/18/2020\nNiigata:22', 36, '', true, '3/11/2020\nHyogo:36', 20, 'stroke-width: 0;', true, '', 20, '', true, '3/20/2020\nKyoto:20', 22, '', true, '3/14/2020\nSaitama:22'], [2, 35, '', false, 27, '', true, '2/27/2020\nAichi:27', 33, '', true, '2/25/2020\nHokkaido:33', 54, '', true, '3/8/2020\nOsaka:54', 21, '', true, '2/29/2020\nTokyo:21', 23, '', true, '3/10/2020\nChiba:23', 28, '', true, '3/3/2020\nKanagawa:28', 24, '', true, '3/19/2020\nNiigata:24', 44, '', true, '3/12/2020\nHyogo:44', 20, 'stroke-width: 0;', true, '', 21, '', true, '3/22/2020\nKyoto:21', 22, '', true, '3/14/2020\nSaitama:22'], [3, 47, '', false, 28, '', true, '2/28/2020\nAichi:28', 36, '', true, '2/26/2020\nHokkaido:36', 54, '', true, '3/8/2020\nOsaka:54', 23, '', true, '3/1/2020\nTokyo:23', 25, '', true, '3/11/2020\nChiba:25', 28, '', true, '3/3/2020\nKanagawa:28', 25, '', true, '3/20/2020\nNiigata:25', 54, '', true, '3/13/2020\nHyogo:54', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 22, '', true, '3/14/2020\nSaitama:22'], [4, 63, '', false, 29, '', true, '2/29/2020\nAichi:29', 51, '', true, '2/27/2020\nHokkaido:51', 72, '', true, '3/10/2020\nOsaka:72', 23, '', true, '3/1/2020\nTokyo:23', 27, '', true, '3/12/2020\nChiba:27', 32, '', true, '3/5/2020\nKanagawa:32', 27, '', true, '3/21/2020\nNiigata:27', 65, '', true, '3/14/2020\nHyogo:65', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 27, '', true, '3/17/2020\nSaitama:27'], [5, 83, '', false, 32, '', true, '3/1/2020\nAichi:32', 63, '', true, '2/28/2020\nHokkaido:63', 79, '', true, '3/11/2020\nOsaka:79', 24, '', true, '3/3/2020\nTokyo:24', 29, '', true, '3/13/2020\nChiba:29', 37, '', true, '3/6/2020\nKanagawa:37', 20, 'stroke-width: 0;', true, '', 77, '', true, '3/15/2020\nHyogo:77', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 28, '', true, '3/18/2020\nSaitama:28'], [6, 111, '', false, 32, '', true, '3/1/2020\nAichi:32', 67, '', true, '2/29/2020\nHokkaido:67', 88, '', true, '3/12/2020\nOsaka:88', 28, '', true, '3/4/2020\nTokyo:28', 29, '', true, '3/13/2020\nChiba:29', 38, '', true, '3/7/2020\nKanagawa:38', 20, 'stroke-width: 0;', true, '', 82, '', true, '3/16/2020\nHyogo:82', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 32, '', true, '3/19/2020\nSaitama:32'], [7, 147, '', false, 41, '', true, '3/3/2020\nAichi:41', 69, '', true, '3/1/2020\nHokkaido:69', 91, '', true, '3/13/2020\nOsaka:91', 36, '', true, '3/5/2020\nTokyo:36', 29, '', true, '3/13/2020\nChiba:29', 38, '', true, '3/7/2020\nKanagawa:38', 20, 'stroke-width: 0;', true, '', 84, '', true, '3/17/2020\nHyogo:84', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 35, '', true, '3/20/2020\nSaitama:35'], [8, 196, '', false, 49, '', true, '3/4/2020\nAichi:49', 74, '', true, '3/2/2020\nHokkaido:74', 101, '', true, '3/14/2020\nOsaka:101', 41, '', true, '3/6/2020\nTokyo:41', 29, '', true, '3/13/2020\nChiba:29', 38, '', true, '3/7/2020\nKanagawa:38', 20, 'stroke-width: 0;', true, '', 88, '', true, '3/18/2020\nHyogo:88', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 41, '', true, '3/21/2020\nSaitama:41'], [9, 260, '', false, 57, '', true, '3/5/2020\nAichi:57', 76, '', true, '3/3/2020\nHokkaido:76', 105, '', true, '3/15/2020\nOsaka:105', 47, '', true, '3/7/2020\nTokyo:47', 31, '', true, '3/17/2020\nChiba:31', 40, '', true, '3/10/2020\nKanagawa:40', 20, 'stroke-width: 0;', true, '', 92, '', true, '3/19/2020\nHyogo:92', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 43, '', true, '3/22/2020\nSaitama:43'], [10, 346, '', false, 62, '', true, '3/6/2020\nAichi:62', 80, '', true, '3/4/2020\nHokkaido:80', 107, '', true, '3/16/2020\nOsaka:107', 47, '', true, '3/7/2020\nTokyo:47', 33, '', true, '3/18/2020\nChiba:33', 43, '', true, '3/11/2020\nKanagawa:43', 20, 'stroke-width: 0;', true, '', 97, '', true, '3/20/2020\nHyogo:97', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 44, '', true, '3/23/2020\nSaitama:44'], [11, 461, '', false, 69, '', true, '3/7/2020\nAichi:69', 80, '', true, '3/4/2020\nHokkaido:80', 111, '', true, '3/17/2020\nOsaka:111', 47, '', true, '3/7/2020\nTokyo:47', 39, '', true, '3/19/2020\nChiba:39', 46, '', true, '3/12/2020\nKanagawa:46', 20, 'stroke-width: 0;', true, '', 101, '', true, '3/21/2020\nHyogo:101', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [12, 613, '', false, 79, '', true, '3/8/2020\nAichi:79', 87, '', true, '3/6/2020\nHokkaido:87', 116, '', true, '3/18/2020\nOsaka:116', 50, '', true, '3/10/2020\nTokyo:50', 40, '', true, '3/20/2020\nChiba:40', 47, '', true, '3/13/2020\nKanagawa:47', 20, 'stroke-width: 0;', true, '', 105, '', true, '3/22/2020\nHyogo:105', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [13, 815, '', false, 84, '', true, '3/9/2020\nAichi:84', 95, '', true, '3/7/2020\nHokkaido:95', 118, '', true, '3/19/2020\nOsaka:118', 56, '', true, '3/11/2020\nTokyo:56', 40, '', true, '3/20/2020\nChiba:40', 48, '', true, '3/14/2020\nKanagawa:48', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [14, 1084, '', false, 96, '', true, '3/10/2020\nAichi:96', 98, '', true, '3/8/2020\nHokkaido:98', 122, '', true, '3/20/2020\nOsaka:122', 58, '', true, '3/12/2020\nTokyo:58', 45, '', true, '3/22/2020\nChiba:45', 52, '', true, '3/15/2020\nKanagawa:52', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [15, 1441, '', false, 101, '', true, '3/11/2020\nAichi:101', 105, '', true, '3/9/2020\nHokkaido:105', 124, '', true, '3/21/2020\nOsaka:124', 60, '', true, '3/13/2020\nTokyo:60', 20, 'stroke-width: 0;', true, '', 55, '', true, '3/16/2020\nKanagawa:55', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [16, 1917, '', false, 108, '', true, '3/12/2020\nAichi:108', 108, '', true, '3/10/2020\nHokkaido:108', 127, '', true, '3/22/2020\nOsaka:127', 70, '', true, '3/14/2020\nTokyo:70', 20, 'stroke-width: 0;', true, '', 56, '', true, '3/17/2020\nKanagawa:56', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [17, 2550, '', false, 111, '', true, '3/13/2020\nAichi:111', 115, '', true, '3/11/2020\nHokkaido:115', 130, '', true, '3/23/2020\nOsaka:130', 73, '', true, '3/15/2020\nTokyo:73', 20, 'stroke-width: 0;', true, '', 57, '', true, '3/18/2020\nKanagawa:57', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [18, 3391, '', false, 118, '', true, '3/14/2020\nAichi:118', 125, '', true, '3/12/2020\nHokkaido:125', 20, 'stroke-width: 0;', true, '', 73, '', true, '3/15/2020\nTokyo:73', 20, 'stroke-width: 0;', true, '', 63, '', true, '3/19/2020\nKanagawa:63', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [19, 4510, '', false, 118, '', true, '3/14/2020\nAichi:118', 134, '', true, '3/13/2020\nHokkaido:134', 20, 'stroke-width: 0;', true, '', 85, '', true, '3/17/2020\nTokyo:85', 20, 'stroke-width: 0;', true, '', 64, '', true, '3/20/2020\nKanagawa:64', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [20, 5999, '', false, 120, '', true, '3/16/2020\nAichi:120', 141, '', true, '3/14/2020\nHokkaido:141', 20, 'stroke-width: 0;', true, '', 94, '', true, '3/18/2020\nTokyo:94', 20, 'stroke-width: 0;', true, '', 69, '', true, '3/21/2020\nKanagawa:69', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [21, 7978, '', false, 122, '', true, '3/17/2020\nAichi:122', 145, '', true, '3/15/2020\nHokkaido:145', 20, 'stroke-width: 0;', true, '', 101, '', true, '3/19/2020\nTokyo:101', 20, 'stroke-width: 0;', true, '', 71, '', true, '3/22/2020\nKanagawa:71', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [22, 10611, '', false, 127, '', true, '3/18/2020\nAichi:127', 149, '', true, '3/16/2020\nHokkaido:149', 20, 'stroke-width: 0;', true, '', 112, '', true, '3/20/2020\nTokyo:112', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [23, 14113, '', false, 131, '', true, '3/19/2020\nAichi:131', 149, '', true, '3/16/2020\nHokkaido:149', 20, 'stroke-width: 0;', true, '', 119, '', true, '3/21/2020\nTokyo:119', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [24, 18770, '', false, 136, '', true, '3/20/2020\nAichi:136', 151, '', true, '3/18/2020\nHokkaido:151', 20, 'stroke-width: 0;', true, '', 121, '', true, '3/22/2020\nTokyo:121', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [25, 24964, '', false, 138, '', true, '3/21/2020\nAichi:138', 154, '', true, '3/19/2020\nHokkaido:154', 20, 'stroke-width: 0;', true, '', 136, '', true, '3/23/2020\nTokyo:136', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [26, 33203, '', false, 140, '', true, '3/22/2020\nAichi:140', 155, '', true, '3/20/2020\nHokkaido:155', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [27, 44160, '', false, 141, '', true, '3/23/2020\nAichi:141', 157, '', true, '3/21/2020\nHokkaido:157', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, ''], [28, 58732, '', false, 20, 'stroke-width: 0;', true, '', 159, '', true, '3/22/2020\nHokkaido:159', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '', 20, 'stroke-width: 0;', true, '']]);
+      var options = {
+        title: 'COVID-19: Cumulative number of cases in Japan by number of days since 20th case',
+        width: 700,
+        height: 700,
+
+        hAxis: {
+          title: 'Number of days since 20th case',
+        },
+        vAxis: {
+          title: 'Cumulative number of cases',
+	  logScale: true
+        },
+colors: ["LightGray", "Red", "Blue", "Green", "Black", "Cyan", "Orange", "Purple", "Red", "Blue", "Green", "Black"]
+       };
+
+      var chart = new           google.visualization.LineChart(document.getElementById('chart_div'));
+//      google.visualization.events.addListener(chart, 'select', selectHandler);
+
+      chart.draw(data, options);
+    }
+   </script>
+<dl>
+(LAST UPDATE: 2020-03-23 22:10:22 +0900)
+<form>
+move to other case graph:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-1-33-en.html" >1</option>
+  <option value="covid19jp-10-33-en.html" >10</option>
+  <option value="covid19jp-20-33-en.html" selected>20</option>
+  <option value="covid19jp-30-33-.html" >30</option>
+  <option value="covid19jp-40-33-en.html" >40</option>
+  <option value="covid19jp-50-33-en.html" >50</option>
+  <option value="covid19jp-60-33-en.html" >60</option>
+  <option value="covid19jp-70-33-en.html" >70</option>
+  <option value="covid19jp-80-33-en.html" >80</option>
+  <option value="covid19jp-90-33-en.html" >90</option>
+  <option value="covid19jp-100-33-en.html" >100</option>
+</select>
+th case
+</form>
+<form>
+33% daily increase graph:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-20-33-en.html" selected>ON</option>
+  <option value="covid19jp-20-en.html" >OFF</option>
+</select>
+</form>
+<dl>
+
+<li> This web page is inspired by <a href="https://www.ft.com/">Financial Times</a>: "cumulative number of cases, by number of days since 100th case"
+<li> This web page uses data from COVID-19.csv file, <a href="https://gis.jag-japan.com/covid19jp/">J.A.G JAPAN</a>.
+<li> The system of this web page automatically downloads the CSV file from J.A.G JAPAN. If there are any changes, it updates the data within 30mins.
+<li> The ruby scripts of this web page are on GitHub. <a href="https://github.com/sanpei3/covid19jp">https://github.com/sanpei3/covid19jp/</a>
+<hr>
+If you have any questions or requests, please feel free to let me know via my Twitter account. <a href="https://twitter.com/yoshiro_mihira/">@yoshiro_mihira</a>
+<br>
+GitHub  @sanpei3
+<br>
+e-mail sanpei@sanpei.org
+</html>
+
+
+

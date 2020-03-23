@@ -1,0 +1,97 @@
+<html>
+<meta http-equiv="Refresh" content="1800">
+<meta charSet="utf-8"/>
+<title>
+新型コロナウイルス受診都道府県毎の30番目のケースからの日数による累積ケース数
+</title>
+&lt;JA |
+<a href="covid19jp-30-en.html">EN</a>&gt;
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
+
+  <div id="chart_div"></div>
+    <script type="text/javascript">
+
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawLineColors);
+
+function drawLineColors() {
+
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'X');	
+var pref =  ["\u611B\u77E5\u770C", "\u5317\u6D77\u9053", "\u5927\u962A\u5E9C", "\u6771\u4EAC\u90FD", "\u5343\u8449\u770C", "\u795E\u5948\u5DDD\u770C", "\u5175\u5EAB\u770C", "\u57FC\u7389\u770C"];
+pref.forEach(function(t) {
+     data.addColumn('number', t);
+     data.addColumn({type:'string', role:'style'});
+     data.addColumn({type:'boolean',role:'certainty'});
+     data.addColumn({type:'string', role:'tooltip'});
+});
+data.addRows([[0, 32, '', true, '3/1/2020\n\u611B\u77E5\u770C:32', 33, '', true, '2/25/2020\n\u5317\u6D77\u9053:33', 30, '', true, '3/6/2020\n\u5927\u962A\u5E9C:30', 36, '', true, '3/5/2020\n\u6771\u4EAC\u90FD:36', 31, '', true, '3/17/2020\n\u5343\u8449\u770C:31', 32, '', true, '3/5/2020\n\u795E\u5948\u5DDD\u770C:32', 36, '', true, '3/11/2020\n\u5175\u5EAB\u770C:36', 32, '', true, '3/19/2020\n\u57FC\u7389\u770C:32'], [1, 32, '', true, '3/1/2020\n\u611B\u77E5\u770C:32', 36, '', true, '2/26/2020\n\u5317\u6D77\u9053:36', 40, '', true, '3/7/2020\n\u5927\u962A\u5E9C:40', 41, '', true, '3/6/2020\n\u6771\u4EAC\u90FD:41', 33, '', true, '3/18/2020\n\u5343\u8449\u770C:33', 37, '', true, '3/6/2020\n\u795E\u5948\u5DDD\u770C:37', 44, '', true, '3/12/2020\n\u5175\u5EAB\u770C:44', 35, '', true, '3/20/2020\n\u57FC\u7389\u770C:35'], [2, 41, '', true, '3/3/2020\n\u611B\u77E5\u770C:41', 51, '', true, '2/27/2020\n\u5317\u6D77\u9053:51', 54, '', true, '3/8/2020\n\u5927\u962A\u5E9C:54', 47, '', true, '3/7/2020\n\u6771\u4EAC\u90FD:47', 39, '', true, '3/19/2020\n\u5343\u8449\u770C:39', 38, '', true, '3/7/2020\n\u795E\u5948\u5DDD\u770C:38', 54, '', true, '3/13/2020\n\u5175\u5EAB\u770C:54', 41, '', true, '3/21/2020\n\u57FC\u7389\u770C:41'], [3, 49, '', true, '3/4/2020\n\u611B\u77E5\u770C:49', 63, '', true, '2/28/2020\n\u5317\u6D77\u9053:63', 54, '', true, '3/8/2020\n\u5927\u962A\u5E9C:54', 47, '', true, '3/7/2020\n\u6771\u4EAC\u90FD:47', 40, '', true, '3/20/2020\n\u5343\u8449\u770C:40', 38, '', true, '3/7/2020\n\u795E\u5948\u5DDD\u770C:38', 65, '', true, '3/14/2020\n\u5175\u5EAB\u770C:65', 43, '', true, '3/22/2020\n\u57FC\u7389\u770C:43'], [4, 57, '', true, '3/5/2020\n\u611B\u77E5\u770C:57', 67, '', true, '2/29/2020\n\u5317\u6D77\u9053:67', 72, '', true, '3/10/2020\n\u5927\u962A\u5E9C:72', 47, '', true, '3/7/2020\n\u6771\u4EAC\u90FD:47', 40, '', true, '3/20/2020\n\u5343\u8449\u770C:40', 38, '', true, '3/7/2020\n\u795E\u5948\u5DDD\u770C:38', 77, '', true, '3/15/2020\n\u5175\u5EAB\u770C:77', 44, '', true, '3/23/2020\n\u57FC\u7389\u770C:44'], [5, 62, '', true, '3/6/2020\n\u611B\u77E5\u770C:62', 69, '', true, '3/1/2020\n\u5317\u6D77\u9053:69', 79, '', true, '3/11/2020\n\u5927\u962A\u5E9C:79', 50, '', true, '3/10/2020\n\u6771\u4EAC\u90FD:50', 45, '', true, '3/22/2020\n\u5343\u8449\u770C:45', 40, '', true, '3/10/2020\n\u795E\u5948\u5DDD\u770C:40', 82, '', true, '3/16/2020\n\u5175\u5EAB\u770C:82', 30, 'stroke-width: 0;', true, ''], [6, 69, '', true, '3/7/2020\n\u611B\u77E5\u770C:69', 74, '', true, '3/2/2020\n\u5317\u6D77\u9053:74', 88, '', true, '3/12/2020\n\u5927\u962A\u5E9C:88', 56, '', true, '3/11/2020\n\u6771\u4EAC\u90FD:56', 30, 'stroke-width: 0;', true, '', 43, '', true, '3/11/2020\n\u795E\u5948\u5DDD\u770C:43', 84, '', true, '3/17/2020\n\u5175\u5EAB\u770C:84', 30, 'stroke-width: 0;', true, ''], [7, 79, '', true, '3/8/2020\n\u611B\u77E5\u770C:79', 76, '', true, '3/3/2020\n\u5317\u6D77\u9053:76', 91, '', true, '3/13/2020\n\u5927\u962A\u5E9C:91', 58, '', true, '3/12/2020\n\u6771\u4EAC\u90FD:58', 30, 'stroke-width: 0;', true, '', 46, '', true, '3/12/2020\n\u795E\u5948\u5DDD\u770C:46', 88, '', true, '3/18/2020\n\u5175\u5EAB\u770C:88', 30, 'stroke-width: 0;', true, ''], [8, 84, '', true, '3/9/2020\n\u611B\u77E5\u770C:84', 80, '', true, '3/4/2020\n\u5317\u6D77\u9053:80', 101, '', true, '3/14/2020\n\u5927\u962A\u5E9C:101', 60, '', true, '3/13/2020\n\u6771\u4EAC\u90FD:60', 30, 'stroke-width: 0;', true, '', 47, '', true, '3/13/2020\n\u795E\u5948\u5DDD\u770C:47', 92, '', true, '3/19/2020\n\u5175\u5EAB\u770C:92', 30, 'stroke-width: 0;', true, ''], [9, 96, '', true, '3/10/2020\n\u611B\u77E5\u770C:96', 80, '', true, '3/4/2020\n\u5317\u6D77\u9053:80', 105, '', true, '3/15/2020\n\u5927\u962A\u5E9C:105', 70, '', true, '3/14/2020\n\u6771\u4EAC\u90FD:70', 30, 'stroke-width: 0;', true, '', 48, '', true, '3/14/2020\n\u795E\u5948\u5DDD\u770C:48', 97, '', true, '3/20/2020\n\u5175\u5EAB\u770C:97', 30, 'stroke-width: 0;', true, ''], [10, 101, '', true, '3/11/2020\n\u611B\u77E5\u770C:101', 87, '', true, '3/6/2020\n\u5317\u6D77\u9053:87', 107, '', true, '3/16/2020\n\u5927\u962A\u5E9C:107', 73, '', true, '3/15/2020\n\u6771\u4EAC\u90FD:73', 30, 'stroke-width: 0;', true, '', 52, '', true, '3/15/2020\n\u795E\u5948\u5DDD\u770C:52', 101, '', true, '3/21/2020\n\u5175\u5EAB\u770C:101', 30, 'stroke-width: 0;', true, ''], [11, 108, '', true, '3/12/2020\n\u611B\u77E5\u770C:108', 95, '', true, '3/7/2020\n\u5317\u6D77\u9053:95', 111, '', true, '3/17/2020\n\u5927\u962A\u5E9C:111', 73, '', true, '3/15/2020\n\u6771\u4EAC\u90FD:73', 30, 'stroke-width: 0;', true, '', 55, '', true, '3/16/2020\n\u795E\u5948\u5DDD\u770C:55', 105, '', true, '3/22/2020\n\u5175\u5EAB\u770C:105', 30, 'stroke-width: 0;', true, ''], [12, 111, '', true, '3/13/2020\n\u611B\u77E5\u770C:111', 98, '', true, '3/8/2020\n\u5317\u6D77\u9053:98', 116, '', true, '3/18/2020\n\u5927\u962A\u5E9C:116', 85, '', true, '3/17/2020\n\u6771\u4EAC\u90FD:85', 30, 'stroke-width: 0;', true, '', 56, '', true, '3/17/2020\n\u795E\u5948\u5DDD\u770C:56', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, ''], [13, 118, '', true, '3/14/2020\n\u611B\u77E5\u770C:118', 105, '', true, '3/9/2020\n\u5317\u6D77\u9053:105', 118, '', true, '3/19/2020\n\u5927\u962A\u5E9C:118', 94, '', true, '3/18/2020\n\u6771\u4EAC\u90FD:94', 30, 'stroke-width: 0;', true, '', 57, '', true, '3/18/2020\n\u795E\u5948\u5DDD\u770C:57', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, ''], [14, 118, '', true, '3/14/2020\n\u611B\u77E5\u770C:118', 108, '', true, '3/10/2020\n\u5317\u6D77\u9053:108', 122, '', true, '3/20/2020\n\u5927\u962A\u5E9C:122', 101, '', true, '3/19/2020\n\u6771\u4EAC\u90FD:101', 30, 'stroke-width: 0;', true, '', 63, '', true, '3/19/2020\n\u795E\u5948\u5DDD\u770C:63', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, ''], [15, 120, '', true, '3/16/2020\n\u611B\u77E5\u770C:120', 115, '', true, '3/11/2020\n\u5317\u6D77\u9053:115', 124, '', true, '3/21/2020\n\u5927\u962A\u5E9C:124', 112, '', true, '3/20/2020\n\u6771\u4EAC\u90FD:112', 30, 'stroke-width: 0;', true, '', 64, '', true, '3/20/2020\n\u795E\u5948\u5DDD\u770C:64', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, ''], [16, 122, '', true, '3/17/2020\n\u611B\u77E5\u770C:122', 125, '', true, '3/12/2020\n\u5317\u6D77\u9053:125', 127, '', true, '3/22/2020\n\u5927\u962A\u5E9C:127', 119, '', true, '3/21/2020\n\u6771\u4EAC\u90FD:119', 30, 'stroke-width: 0;', true, '', 69, '', true, '3/21/2020\n\u795E\u5948\u5DDD\u770C:69', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, ''], [17, 127, '', true, '3/18/2020\n\u611B\u77E5\u770C:127', 134, '', true, '3/13/2020\n\u5317\u6D77\u9053:134', 130, '', true, '3/23/2020\n\u5927\u962A\u5E9C:130', 121, '', true, '3/22/2020\n\u6771\u4EAC\u90FD:121', 30, 'stroke-width: 0;', true, '', 71, '', true, '3/22/2020\n\u795E\u5948\u5DDD\u770C:71', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, ''], [18, 131, '', true, '3/19/2020\n\u611B\u77E5\u770C:131', 141, '', true, '3/14/2020\n\u5317\u6D77\u9053:141', 30, 'stroke-width: 0;', true, '', 136, '', true, '3/23/2020\n\u6771\u4EAC\u90FD:136', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, ''], [19, 136, '', true, '3/20/2020\n\u611B\u77E5\u770C:136', 145, '', true, '3/15/2020\n\u5317\u6D77\u9053:145', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, ''], [20, 138, '', true, '3/21/2020\n\u611B\u77E5\u770C:138', 149, '', true, '3/16/2020\n\u5317\u6D77\u9053:149', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, ''], [21, 140, '', true, '3/22/2020\n\u611B\u77E5\u770C:140', 149, '', true, '3/16/2020\n\u5317\u6D77\u9053:149', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, ''], [22, 141, '', true, '3/23/2020\n\u611B\u77E5\u770C:141', 151, '', true, '3/18/2020\n\u5317\u6D77\u9053:151', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, ''], [23, 30, 'stroke-width: 0;', true, '', 154, '', true, '3/19/2020\n\u5317\u6D77\u9053:154', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, ''], [24, 30, 'stroke-width: 0;', true, '', 155, '', true, '3/20/2020\n\u5317\u6D77\u9053:155', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, ''], [25, 30, 'stroke-width: 0;', true, '', 157, '', true, '3/21/2020\n\u5317\u6D77\u9053:157', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, ''], [26, 30, 'stroke-width: 0;', true, '', 159, '', true, '3/22/2020\n\u5317\u6D77\u9053:159', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '', 30, 'stroke-width: 0;', true, '']]);
+      var options = {
+        title: '新型コロナウイルス受診都道府県毎の30番目のケースからの日数による累積ケース数',
+        width: 700,
+        height: 700,
+        hAxis: {
+	    title: '30番目のケースからの日数',
+        },
+        vAxis: {
+	    title: '累積件数',
+	  logScale: true
+        },
+colors: ["Red", "Blue", "Green", "Black", "Cyan", "Orange", "Purple", "Red"]
+       };
+
+      var chart = new           google.visualization.LineChart(document.getElementById('chart_div'));
+//      google.visualization.events.addListener(chart, 'select', selectHandler);
+
+      chart.draw(data, options);
+    }
+   </script>
+<dl>
+(最終更新日時: 2020-03-23 22:10:22 +0900)
+<form>
+別のケース数を元にしたグラフに移る:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-1.html" >1</option>
+  <option value="covid19jp-10.html" >10</option>
+  <option value="covid19jp-20.html" >20</option>
+  <option value="covid19jp-30.html" selected>30</option>
+  <option value="covid19jp-40.html" >40</option>
+  <option value="covid19jp-50.html" >50</option>
+  <option value="covid19jp-60.html" >60</option>
+  <option value="covid19jp-70.html" >70</option>
+  <option value="covid19jp-80.html" >80</option>
+  <option value="covid19jp-90.html" >90</option>
+  <option value="covid19jp-100.html" >100</option>
+</select>
+番目のケースへ
+</form>
+<form>
+33%日次増加グラフ:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-30-33.html" >あり</option>
+  <option value="covid19jp-30.html" selected>なし</option>
+</select>
+</form>
+<dl>
+
+<li> 本グラフの作成には<a href="https://www.ft.com/">Financial Times</a>作成の世界各国に対するグラフを参考にしました。
+<li> グラフ作成に利用しているデータソースは、<a href="https://gis.jag-japan.com/covid19jp/">ジャッグジャパン株式会社提供 COVID-19.csv</a>を利用しています。
+<li> 本ページは、30分おきに上記CSVを自動取得して、変更があった場合のみ自動更新しています。
+<li> 本ページの作成Ruby Scriptは<a href="https://github.com/sanpei3/covid19jp">GitHub</a>で公開しています。
+<hr>
+質問・要望がありましたら、以下のTwitterアカウントにお願いします。
+<br>
+Twitter @yoshiro_mihira
+<br>
+GitHub  @sanpei3
+<br>
+e-mail sanpei@sanpei.org
+</html>
+
+
+
