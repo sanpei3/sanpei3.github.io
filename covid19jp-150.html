@@ -31,14 +31,14 @@ pref.forEach(function(t) {
 });
 data.addRows([[0, 154, '', true, '0:03/23\n\u6771\u4EAC\u90FD:154', '', 154, '', true, '0:03/25\n\u611B\u77E5\u770C:154', '', 150, '', true, '0:03/15\n\u5317\u6D77\u9053:150', '', 150, '', true, '0:03/25\n\u5927\u962A\u5E9C:150', ''], [1, 171, '', true, '1:03/24\n\u6771\u4EAC\u90FD:171', '', 157, '', true, '1:03/26\n\u611B\u77E5\u770C:157', '', 152, '', true, '1:03/16\n\u5317\u6D77\u9053:152', '', 157, '', true, '1:03/26\n\u5927\u962A\u5E9C:157', ''], [2, 212, '', true, '2:03/25\n\u6771\u4EAC\u90FD:212', '', 160, '', true, '2:03/27\n\u611B\u77E5\u770C:160', '', 152, '', true, '2:03/17\n\u5317\u6D77\u9053:152', '', 177, '', true, '2:03/27\n\u5927\u962A\u5E9C:177', ''], [3, 259, '', true, '3:03/26\n\u6771\u4EAC\u90FD:259', '', 150, 'stroke-width: 0;', true, '', '', 155, '', true, '3:03/18\n\u5317\u6D77\u9053:155', '', 150, 'stroke-width: 0;', true, '', ''], [4, 299, '', true, '4:03/27\n\u6771\u4EAC\u90FD:299', '', 150, 'stroke-width: 0;', true, '', '', 158, '', true, '4:03/19\n\u5317\u6D77\u9053:158', '', 150, 'stroke-width: 0;', true, '', ''], [5, 150, 'stroke-width: 0;', true, '', '', 150, 'stroke-width: 0;', true, '', '', 158, '', true, '5:03/20\n\u5317\u6D77\u9053:158', '', 150, 'stroke-width: 0;', true, '', ''], [6, 150, 'stroke-width: 0;', true, '', '', 150, 'stroke-width: 0;', true, '', '', 161, '', true, '6:03/21\n\u5317\u6D77\u9053:161', '', 150, 'stroke-width: 0;', true, '', ''], [7, 150, 'stroke-width: 0;', true, '', '', 150, 'stroke-width: 0;', true, '', '', 162, '', true, '7:03/22\n\u5317\u6D77\u9053:162', '', 150, 'stroke-width: 0;', true, '', ''], [8, 150, 'stroke-width: 0;', true, '', '', 150, 'stroke-width: 0;', true, '', '', 163, '', true, '8:03/23\n\u5317\u6D77\u9053:163', '', 150, 'stroke-width: 0;', true, '', ''], [9, 150, 'stroke-width: 0;', true, '', '', 150, 'stroke-width: 0;', true, '', '', 166, '', true, '9:03/24\n\u5317\u6D77\u9053:166', '', 150, 'stroke-width: 0;', true, '', ''], [10, 150, 'stroke-width: 0;', true, '', '', 150, 'stroke-width: 0;', true, '', '', 167, '', true, '10:03/25\n\u5317\u6D77\u9053:167', '', 150, 'stroke-width: 0;', true, '', ''], [11, 150, 'stroke-width: 0;', true, '', '', 150, 'stroke-width: 0;', true, '', '', 168, '', true, '11:03/26\n\u5317\u6D77\u9053:168', '', 150, 'stroke-width: 0;', true, '', ''], [12, 150, 'stroke-width: 0;', true, '', '', 150, 'stroke-width: 0;', true, '', '', 169, '', true, '12:03/27\n\u5317\u6D77\u9053:169', '', 150, 'stroke-width: 0;', true, '', '']]);
       var options = {
-        title: '新型コロナウイルス受診都道府県毎の150番目のケースからの日数による累積ケース数',
+        title: '新型コロナウイルス受診都道府県毎の150番目のケースからの日数による累積陽性患者数',
         width: 700,
         height: 700,
         hAxis: {
 	    title: '150番目のケースからの日数',
         },
         vAxis: {
-	    title: '累積件数',
+	    title: '累積陽性患者数',
 	  logScale: true
         },
 colors: ["Red", "Blue", "Green", "Black"]
@@ -51,7 +51,7 @@ colors: ["Red", "Blue", "Green", "Black"]
     }
    </script>
 <dl>
-(最終更新日時: 2020-03-28 03:30:17 +0900)
+(最終更新日時: 2020-03-28 06:41:10 +0900)
 <form>
 別のケース数を元にしたグラフに移る:
 <select onChange="top.location.href=value">
@@ -72,7 +72,7 @@ colors: ["Red", "Blue", "Green", "Black"]
 番目のケースへ
 </form>
 <form>
-基準グラフ:
+基準補助線:
 <select onChange="top.location.href=value">
 <option value="#"></option>
   <option value="covid19jp-150-33.html" >あり</option>
