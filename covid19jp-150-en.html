@@ -1,0 +1,97 @@
+<html>
+<meta http-equiv="Refresh" content="1800">
+<meta charSet="utf-8"/>
+<title>
+COVID-19: Cumulative number of cases in Japan by number of days since 150th case
+</title>
+
+&lt;<a href="covid19jp-150.html">JA</a> |
+EN</a>&gt;
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
+
+  <div id="chart_div"></div>
+    <script type="text/javascript">
+
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawLineColors);
+
+function drawLineColors() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'X');	
+var pref =  ["Tokyo", "Aichi", "Hokkaido", "Osaka"];
+pref.forEach(function(t) {
+     data.addColumn('number', t);
+     data.addColumn({type:'string', role:'style'});
+     data.addColumn({type:'boolean',role:'certainty'});
+     data.addColumn({type:'string', role:'tooltip'});
+     data.addColumn({type:'string', role:'annotation'});
+});
+data.addRows([[0, 154, '', true, '0th day:03/23\nTokyo:154', null, 154, '', true, '0th day:03/25\nAichi:154', null, 150, '', true, '0th day:03/15\nHokkaido:150', null, 150, '', true, '0th day:03/25\nOsaka:150', null], [1, 171, '', true, '1th day:03/24\nTokyo:171', null, 157, '', true, '1th day:03/26\nAichi:157', null, 152, '', true, '1th day:03/16\nHokkaido:152', null, 157, '', true, '1th day:03/26\nOsaka:157', null], [2, 212, '', true, '2th day:03/25\nTokyo:212', null, 160, '', true, '2th day:03/27\nAichi:160', null, 152, '', true, '2th day:03/17\nHokkaido:152', null, 177, '', true, '2th day:03/27\nOsaka:177', null], [3, 259, '', true, '3th day:03/26\nTokyo:259', null, 164, '', true, '3th day:03/28\nAichi:164', null, 155, '', true, '3th day:03/18\nHokkaido:155', null, 192, '', true, '3th day:03/28\nOsaka:192', null], [4, 299, '', true, '4th day:03/27\nTokyo:299', null, 167, '', true, '4:03/29\nAichi:167', null, 158, '', true, '4th day:03/19\nHokkaido:158', null, 209, '', true, '4:03/29\nOsaka:209', null], [5, 362, '', true, '5th day:03/28\nTokyo:362', null, 150, 'stroke-width: 0;', true, '', null, 158, '', true, '5th day:03/20\nHokkaido:158', null, 150, 'stroke-width: 0;', true, '', null], [6, 430, '', true, '6:03/29\nTokyo:430', null, 150, 'stroke-width: 0;', true, '', null, 161, '', true, '6th day:03/21\nHokkaido:161', null, 150, 'stroke-width: 0;', true, '', null], [7, 150, 'stroke-width: 0;', true, '', null, 150, 'stroke-width: 0;', true, '', null, 162, '', true, '7th day:03/22\nHokkaido:162', null, 150, 'stroke-width: 0;', true, '', null], [8, 150, 'stroke-width: 0;', true, '', null, 150, 'stroke-width: 0;', true, '', null, 163, '', true, '8th day:03/23\nHokkaido:163', null, 150, 'stroke-width: 0;', true, '', null], [9, 150, 'stroke-width: 0;', true, '', null, 150, 'stroke-width: 0;', true, '', null, 166, '', true, '9th day:03/24\nHokkaido:166', null, 150, 'stroke-width: 0;', true, '', null], [10, 150, 'stroke-width: 0;', true, '', null, 150, 'stroke-width: 0;', true, '', null, 167, '', true, '10th day:03/25\nHokkaido:167', null, 150, 'stroke-width: 0;', true, '', null], [11, 150, 'stroke-width: 0;', true, '', null, 150, 'stroke-width: 0;', true, '', null, 168, '', true, '11th day:03/26\nHokkaido:168', null, 150, 'stroke-width: 0;', true, '', null], [12, 150, 'stroke-width: 0;', true, '', null, 150, 'stroke-width: 0;', true, '', null, 172, '', true, '12th day:03/27\nHokkaido:172', null, 150, 'stroke-width: 0;', true, '', null], [13, 150, 'stroke-width: 0;', true, '', null, 150, 'stroke-width: 0;', true, '', null, 172, '', true, '13th day:03/28\nHokkaido:172', null, 150, 'stroke-width: 0;', true, '', null], [14, 150, 'stroke-width: 0;', true, '', null, 150, 'stroke-width: 0;', true, '', null, 176, '', true, '14:03/29\nHokkaido:176', null, 150, 'stroke-width: 0;', true, '', null]]);
+      var options = {
+        title: 'COVID-19: Cumulative number of cases in Japan by number of days since 150th case',
+        width: 700,
+        height: 700,
+
+        hAxis: {
+          title: 'Number of days since 150th case',
+        },
+        vAxis: {
+          title: 'Cumulative number of cases',
+	  logScale: true
+        },
+colors: ["Red", "Blue", "Green", "Black"]
+       };
+
+      var chart = new           google.visualization.LineChart(document.getElementById('chart_div'));
+//      google.visualization.events.addListener(chart, 'select', selectHandler);
+
+      chart.draw(data, options);
+    }
+   </script>
+<dl>
+(LAST UPDATE: 2020-03-29 22:59:45 +0900)
+<form>
+move to other case graph:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-1-en.html" >1</option>
+  <option value="covid19jp-10-en.html" >10</option>
+  <option value="covid19jp-20-en.html" >20</option>
+  <option value="covid19jp-30-en.html" >30</option>
+  <option value="covid19jp-40-en.html" >40</option>
+  <option value="covid19jp-50-en.html" >50</option>
+  <option value="covid19jp-60-en.html" >60</option>
+  <option value="covid19jp-70-en.html" >70</option>
+  <option value="covid19jp-80-en.html" >80</option>
+  <option value="covid19jp-90-en.html" >90</option>
+  <option value="covid19jp-100-en.html" >100</option>
+  <option value="covid19jp-150-en.html" selected>150</option>
+</select>
+th case
+</form>
+<form>
+daily/weekly increase line:
+<select onChange="top.location.href=value">
+<option value="#"></option>
+  <option value="covid19jp-150-33-en.html" >ON</option>
+  <option value="covid19jp-150-en.html" selected>OFF</option>
+</select>
+</form>
+<dl>
+
+<li> This web page is inspired by <a href="https://www.ft.com/coronavirus-latest">Financial Times</a>: "cumulative number of cases, by number of days since 100th case"
+<li> This web page uses data from COVID-19.csv file, <a href="https://gis.jag-japan.com/covid19jp/">J.A.G JAPAN</a> for Japan, and data from <a href="https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series">CSSE at Johns Hopkins University</a> for except Japan countries.
+<li> The system of this web page automatically downloads the CSV file from J.A.G JAPAN. If there are any changes, it updates the data within 30mins.
+<li> The ruby scripts of this web page are on GitHub. <a href="https://github.com/sanpei3/covid19jp">https://github.com/sanpei3/covid19jp/</a>
+<hr>
+If you have any questions or requests, please feel free to let me know via my Twitter account. <a href="https://twitter.com/yoshiro_mihira/">@yoshiro_mihira</a>
+<br>
+GitHub  sanpei3
+<br>
+e-mail sanpei@sanpei.org
+</html>
+
+
+
