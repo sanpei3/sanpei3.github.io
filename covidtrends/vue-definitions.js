@@ -431,7 +431,6 @@ let app = new Vue({
     },
 
     pullData(selectedData, selectedRegion, updateSelectedCountries = true) {
-<<<<<<< HEAD
 	//console.log('pulling', selectedData, ' for ', selectedRegion);
         if (selectedRegion == 'Japan') {
         let url;
@@ -442,10 +441,6 @@ let app = new Vue({
 	}
         Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion, updateSelectedCountries));
 	} else if (selectedRegion != 'US') {
-=======
-      //console.log('pulling', selectedData, ' for ', selectedRegion);
-      if (selectedRegion == 'Japan') {
->>>>>>> 05755f29b6c9a01b0e921f0c0c45227dc2ae998d
         let url;
         if (selectedData == 'Confirmed Cases') {
 	    url = "https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv";
@@ -463,7 +458,7 @@ let app = new Vue({
           return;
         }
         Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion, updateSelectedCountries));
-      }	else { // selectedRegion == 'US'
+      } else { // selectedRegion == 'US'
         const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
         const url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv';
         Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion, updateSelectedCountries));
@@ -758,8 +753,6 @@ let app = new Vue({
         case 'Canada':
         case 'Japan':
           return 'Provinces';
-        case 'Japan':
-          return 'Provinces';
         default:
           return 'Regions';
       }
@@ -774,11 +767,7 @@ let app = new Vue({
 
     selectedData: 'Confirmed Cases',
 
-<<<<<<< HEAD
-      regions: ['World', 'US', 'China', 'Australia', 'Canada', "Japan"],
-=======
     regions: ['World', 'US', 'China', 'Australia', 'Canada', 'Japan'],
->>>>>>> 05755f29b6c9a01b0e921f0c0c45227dc2ae998d
 
     selectedRegion: 'Japan',
 
