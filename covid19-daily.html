@@ -15,6 +15,9 @@
 </head>
 
 <body>
+&lt;<a href="covid19jp-150-US-en.html">move to Cumulative number of cases graph</a>&gt;
+
+
 	<div id="container" style="width: 75%;">
 		<canvas id="canvas"></canvas>
 	</div>
@@ -25,8 +28,8 @@
 	<button id="ToggleDatasetWashington"  style="background-color:white">Washington</button>
 	<button id="ToggleDatasetFlorida"  style="background-color:white">Florida</button>
 	<button id="ToggleDatasetGeorgia"  style="background-color:white">Georgia</button>
-	<button id="ToggleDatasetKanagawa"  style="background-color:grey">Kanagawa</button>
-	<button id="ToggleDatasetTokyo"  style="background-color:red">Tokyo</button>
+	<button id="ToggleDatasetKanagawa"  style="background-color:yellow">Kanagawa</button>
+	<button id="ToggleDatasetTokyo"  style="background-color:orange">Tokyo</button>
 	<button id="ToggleDatasetChiba"  style="background-color:white">Chiba</button>
 	<button id="ToggleDatasetSaitama"  style="background-color:white">Saitama</button>
 	<button id="ToggleDatasetIbaraki"  style="background-color:white">Ibaraki</button>
@@ -84,7 +87,8 @@
  "05/08",
  "05/09",
  "05/10",
- "05/11"]
+ "05/11",
+ "05/12"]
 ,
 			datasets: [],};
 var dataMinnesota = 
@@ -155,8 +159,8 @@ barChartData.datasets.push(dataMinnesota);
 var datasetFlagMinnesota = true;
 var dataNewYork = 
 {label: 'New York',
-backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
-borderColor: window.chartColors.blue,
+backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(),
+borderColor: window.chartColors.purple,
 borderWidth: 1,
 data:  
 [967,
@@ -285,8 +289,8 @@ data:
 var datasetFlagCalifornia = false;
 var dataWashington = 
 {label: 'Washington',
-backgroundColor: color(window.chartColors.orange).alpha(0.5).rgbString(),
-borderColor: window.chartColors.orange,
+backgroundColor: color(window.chartColors.grey).alpha(0.5).rgbString(),
+borderColor: window.chartColors.grey,
 borderWidth: 1,
 data:  
 [904,
@@ -350,8 +354,8 @@ data:
 var datasetFlagWashington = false;
 var dataFlorida = 
 {label: 'Florida',
-backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(),
-borderColor: window.chartColors.yellow,
+backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(),
+borderColor: window.chartColors.purple,
 borderWidth: 1,
 data:  
 [155,
@@ -415,8 +419,8 @@ data:
 var datasetFlagFlorida = false;
 var dataGeorgia = 
 {label: 'Georgia',
-backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(),
-borderColor: window.chartColors.purple,
+backgroundColor: color(window.chartColors.grey).alpha(0.5).rgbString(),
+borderColor: window.chartColors.grey,
 borderWidth: 1,
 data:  
 [121,
@@ -547,7 +551,7 @@ var dataNewYork_avg =
 {label: 'New York_avg',
 type: 'line',
 fill: false,
-borderColor: window.chartColors.blue,
+borderColor: window.chartColors.purple,
 data:  
 [0,
  0,
@@ -675,7 +679,7 @@ var dataWashington_avg =
 {label: 'Washington_avg',
 type: 'line',
 fill: false,
-borderColor: window.chartColors.orange,
+borderColor: window.chartColors.grey,
 data:  
 [0,
  0,
@@ -739,7 +743,7 @@ var dataFlorida_avg =
 {label: 'Florida_avg',
 type: 'line',
 fill: false,
-borderColor: window.chartColors.yellow,
+borderColor: window.chartColors.purple,
 data:  
 [0,
  0,
@@ -803,7 +807,7 @@ var dataGeorgia_avg =
 {label: 'Georgia_avg',
 type: 'line',
 fill: false,
-borderColor: window.chartColors.purple,
+borderColor: window.chartColors.grey,
 data:  
 [0,
  0,
@@ -865,8 +869,8 @@ data:
 			}; 
 var dataKanagawa = 
 {label: 'Kanagawa',
-backgroundColor: color(window.chartColors.grey).alpha(0.5).rgbString(),
-borderColor: window.chartColors.grey,
+backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(),
+borderColor: window.chartColors.yellow,
 borderWidth: 1,
 data:  
 [2,
@@ -928,7 +932,7 @@ var dataKanagawa_avg =
 {label: 'Kanagawa_avg',
 type: 'line',
 fill: false,
-borderColor: window.chartColors.grey,
+borderColor: window.chartColors.yellow,
 data:  
 [0,
  0,
@@ -986,8 +990,8 @@ data:
 barChartData.datasets.push(dataKanagawa_avg);
 var dataTokyo = 
 {label: 'Tokyo',
-backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-borderColor: window.chartColors.red,
+backgroundColor: color(window.chartColors.orange).alpha(0.5).rgbString(),
+borderColor: window.chartColors.orange,
 borderWidth: 1,
 data:  
 [2,
@@ -1049,7 +1053,7 @@ var dataTokyo_avg =
 {label: 'Tokyo_avg',
 type: 'line',
 fill: false,
-borderColor: window.chartColors.red,
+borderColor: window.chartColors.orange,
 data:  
 [0,
  0,
@@ -1107,8 +1111,8 @@ data:
 barChartData.datasets.push(dataTokyo_avg);
 var dataChiba = 
 {label: 'Chiba',
-backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
-borderColor: window.chartColors.blue,
+backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(),
+borderColor: window.chartColors.purple,
 borderWidth: 1,
 data:  
 [5,
@@ -1169,7 +1173,7 @@ var dataChiba_avg =
 {label: 'Chiba_avg',
 type: 'line',
 fill: false,
-borderColor: window.chartColors.blue,
+borderColor: window.chartColors.purple,
 data:  
 [0,
  0,
@@ -1226,8 +1230,8 @@ data:
 			}; 
 var dataSaitama = 
 {label: 'Saitama',
-backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
-borderColor: window.chartColors.green,
+backgroundColor: color(window.chartColors.grey).alpha(0.5).rgbString(),
+borderColor: window.chartColors.grey,
 borderWidth: 1,
 data:  
 [2,
@@ -1288,7 +1292,7 @@ var dataSaitama_avg =
 {label: 'Saitama_avg',
 type: 'line',
 fill: false,
-borderColor: window.chartColors.green,
+borderColor: window.chartColors.grey,
 data:  
 [0,
  0,
@@ -1345,8 +1349,8 @@ data:
 			}; 
 var dataIbaraki = 
 {label: 'Ibaraki',
-backgroundColor: color(window.chartColors.orange).alpha(0.5).rgbString(),
-borderColor: window.chartColors.orange,
+backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(),
+borderColor: window.chartColors.purple,
 borderWidth: 1,
 data:  
 [1,
@@ -1407,7 +1411,7 @@ var dataIbaraki_avg =
 {label: 'Ibaraki_avg',
 type: 'line',
 fill: false,
-borderColor: window.chartColors.orange,
+borderColor: window.chartColors.purple,
 data:  
 [0,
  0,
@@ -1522,7 +1526,7 @@ data:
 			barChartData.datasets.push(dataNewYork_avg);
 			barChartData.datasets.push(dataNewYork);
 			datasetFlagNewYork = true;
-			element.style.backgroundColor = 'blue';
+			element.style.backgroundColor = 'purple';
 			window.myBar.update();
 		  } else {
                         var l = barChartData.datasets.length;
@@ -1588,7 +1592,7 @@ data:
 			barChartData.datasets.push(dataWashington_avg);
 			barChartData.datasets.push(dataWashington);
 			datasetFlagWashington = true;
-			element.style.backgroundColor = 'orange';
+			element.style.backgroundColor = 'grey';
 			window.myBar.update();
 		  } else {
                         var l = barChartData.datasets.length;
@@ -1621,7 +1625,7 @@ data:
 			barChartData.datasets.push(dataFlorida_avg);
 			barChartData.datasets.push(dataFlorida);
 			datasetFlagFlorida = true;
-			element.style.backgroundColor = 'yellow';
+			element.style.backgroundColor = 'purple';
 			window.myBar.update();
 		  } else {
                         var l = barChartData.datasets.length;
@@ -1654,7 +1658,7 @@ data:
 			barChartData.datasets.push(dataGeorgia_avg);
 			barChartData.datasets.push(dataGeorgia);
 			datasetFlagGeorgia = true;
-			element.style.backgroundColor = 'purple';
+			element.style.backgroundColor = 'grey';
 			window.myBar.update();
 		  } else {
                         var l = barChartData.datasets.length;
@@ -1687,7 +1691,7 @@ data:
 			barChartData.datasets.push(dataKanagawa_avg);
 			barChartData.datasets.push(dataKanagawa);
 			datasetFlagKanagawa = true;
-			element.style.backgroundColor = 'grey';
+			element.style.backgroundColor = 'yellow';
 			window.myBar.update();
 		  } else {
                         var l = barChartData.datasets.length;
@@ -1720,7 +1724,7 @@ data:
 			barChartData.datasets.push(dataTokyo_avg);
 			barChartData.datasets.push(dataTokyo);
 			datasetFlagTokyo = true;
-			element.style.backgroundColor = 'red';
+			element.style.backgroundColor = 'orange';
 			window.myBar.update();
 		  } else {
                         var l = barChartData.datasets.length;
@@ -1753,7 +1757,7 @@ data:
 			barChartData.datasets.push(dataChiba_avg);
 			barChartData.datasets.push(dataChiba);
 			datasetFlagChiba = true;
-			element.style.backgroundColor = 'blue';
+			element.style.backgroundColor = 'purple';
 			window.myBar.update();
 		  } else {
                         var l = barChartData.datasets.length;
@@ -1786,7 +1790,7 @@ data:
 			barChartData.datasets.push(dataSaitama_avg);
 			barChartData.datasets.push(dataSaitama);
 			datasetFlagSaitama = true;
-			element.style.backgroundColor = 'green';
+			element.style.backgroundColor = 'grey';
 			window.myBar.update();
 		  } else {
                         var l = barChartData.datasets.length;
@@ -1819,7 +1823,7 @@ data:
 			barChartData.datasets.push(dataIbaraki_avg);
 			barChartData.datasets.push(dataIbaraki);
 			datasetFlagIbaraki = true;
-			element.style.backgroundColor = 'orange';
+			element.style.backgroundColor = 'purple';
 			window.myBar.update();
 		  } else {
                         var l = barChartData.datasets.length;
@@ -1863,6 +1867,8 @@ var element = document.getElementById("ToggleDatasetIbaraki");element.style.back
                         window.myBar.update();
 		});
 	</script>
+	<dl>
+(LAST UPDATE: 2020-05-12 00:04:11 +0900)
 <dl>
 <hr>
 <font size="1">
