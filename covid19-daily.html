@@ -28,6 +28,7 @@
 	<button id="ToggleDatasetWashington"  style="background-color:white">Washington</button>
 	<button id="ToggleDatasetFlorida"  style="background-color:white">Florida</button>
 	<button id="ToggleDatasetGeorgia"  style="background-color:white">Georgia</button>
+	<button id="ToggleDatasetHennepin_Minnesota"  style="background-color:white">Hennepin_Minnesota</button>
 	<button id="ToggleDatasetRice_Minnesota"  style="background-color:red">Rice_Minnesota</button>
 	<button id="ToggleDatasetKanagawa"  style="background-color:yellow">Kanagawa</button>
 	<button id="ToggleDatasetTokyo"  style="background-color:orange">Tokyo</button>
@@ -38,7 +39,13 @@
 		var color = Chart.helpers.color;
 		var barChartData = {
 		labels:	
-["03/22",
+["03/16",
+ "03/17",
+ "03/18",
+ "03/19",
+ "03/20",
+ "03/21",
+ "03/22",
  "03/23",
  "03/24",
  "03/25",
@@ -90,7 +97,8 @@
  "05/10",
  "05/11",
  "05/12",
- "05/13"]
+ "05/13",
+ "05/14"]
 ,
 			datasets: [],};
 var dataMinnesota = 
@@ -99,7 +107,13 @@ backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
 borderColor: window.chartColors.red,
 borderWidth: 1,
 data:  
-[29,
+[19,
+ 6,
+ 17,
+ 12,
+ 26,
+ 23,
+ 29,
  67,
  27,
  25,
@@ -161,7 +175,13 @@ backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(),
 borderColor: window.chartColors.purple,
 borderWidth: 1,
 data:  
-[4090,
+[235,
+ 739,
+ 789,
+ 2870,
+ 2945,
+ 3400,
+ 4090,
  5084,
  4797,
  5160,
@@ -222,7 +242,13 @@ backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
 borderColor: window.chartColors.green,
 borderWidth: 1,
 data:  
-[282,
+[131,
+ 141,
+ 53,
+ 201,
+ 225,
+ 187,
+ 282,
  462,
  430,
  460,
@@ -283,7 +309,13 @@ backgroundColor: color(window.chartColors.grey).alpha(0.5).rgbString(),
 borderColor: window.chartColors.grey,
 borderWidth: 1,
 data:  
-[204,
+[261,
+ 172,
+ 0,
+ 362,
+ 148,
+ 269,
+ 204,
  224,
  107,
  263,
@@ -344,7 +376,13 @@ backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(),
 borderColor: window.chartColors.purple,
 borderWidth: 1,
 data:  
-[345,
+[40,
+ 61,
+ 98,
+ 103,
+ 146,
+ 96,
+ 345,
  223,
  185,
  270,
@@ -405,7 +443,13 @@ backgroundColor: color(window.chartColors.grey).alpha(0.5).rgbString(),
 borderColor: window.chartColors.grey,
 borderWidth: 1,
 data:  
-[114,
+[22,
+ 25,
+ 53,
+ 88,
+ 133,
+ 87,
+ 114,
  151,
  254,
  221,
@@ -466,7 +510,13 @@ type: 'line',
 fill: false,
 borderColor: window.chartColors.red,
 data:  
-[16,
+[7,
+ 7,
+ 9,
+ 10,
+ 13,
+ 14,
+ 16,
  24,
  26,
  28,
@@ -527,7 +577,13 @@ type: 'line',
 fill: false,
 borderColor: window.chartColors.purple,
 data:  
-[2119,
+[113,
+ 212,
+ 309,
+ 706,
+ 1112,
+ 1568,
+ 2119,
  2739,
  3312,
  3639,
@@ -587,7 +643,13 @@ type: 'line',
 fill: false,
 borderColor: window.chartColors.green,
 data:  
-[155,
+[59,
+ 74,
+ 75,
+ 95,
+ 119,
+ 134,
+ 155,
  201,
  255,
  292,
@@ -647,7 +709,13 @@ type: 'line',
 fill: false,
 borderColor: window.chartColors.grey,
 data:  
-[156,
+[91,
+ 101,
+ 81,
+ 115,
+ 136,
+ 164,
+ 156,
  163,
  187,
  173,
@@ -707,7 +775,13 @@ type: 'line',
 fill: false,
 borderColor: window.chartColors.purple,
 data:  
-[121,
+[20,
+ 26,
+ 39,
+ 52,
+ 69,
+ 77,
+ 121,
  144,
  156,
  180,
@@ -767,7 +841,13 @@ type: 'line',
 fill: false,
 borderColor: window.chartColors.grey,
 data:  
-[71,
+[14,
+ 17,
+ 24,
+ 35,
+ 50,
+ 58,
+ 71,
  89,
  118,
  137,
@@ -821,6 +901,139 @@ data:
  597]
 ,
 			}; 
+var dataHennepin_Minnesota = 
+{label: 'Hennepin_Minnesota',
+backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(),
+borderColor: window.chartColors.purple,
+borderWidth: 1,
+data:  
+[16,
+ 2,
+ 4,
+ 4,
+ 13,
+ 7,
+ 5,
+ 32,
+ 14,
+ 8,
+ 17,
+ 13,
+ 11,
+ 19,
+ 19,
+ 14,
+ 14,
+ 17,
+ 7,
+ 10,
+ 15,
+ 13,
+ 30,
+ 34,
+ 31,
+ 40,
+ 49,
+ 93,
+ 0,
+ 1,
+ 93,
+ 0,
+ 155,
+ 69,
+ 49,
+ 51,
+ 38,
+ 60,
+ 59,
+ 68,
+ 87,
+ 45,
+ 84,
+ 108,
+ 109,
+ 105,
+ 91,
+ 151,
+ 171,
+ 147,
+ 221,
+ 245,
+ 198,
+ 191,
+ 226,
+ 179,
+ 186,
+ 289]
+,
+			}; 
+var datasetFlagHennepin_Minnesota = false;
+var dataHennepin_Minnesota_avg = 
+{label: 'Hennepin_Minnesota_avg',
+type: 'line',
+fill: false,
+borderColor: window.chartColors.purple,
+data:  
+[3,
+ 3,
+ 3,
+ 4,
+ 5,
+ 6,
+ 5,
+ 9,
+ 10,
+ 11,
+ 11,
+ 12,
+ 13,
+ 11,
+ 12,
+ 13,
+ 12,
+ 13,
+ 12,
+ 11,
+ 11,
+ 10,
+ 13,
+ 15,
+ 19,
+ 23,
+ 28,
+ 39,
+ 35,
+ 30,
+ 39,
+ 33,
+ 48,
+ 45,
+ 52,
+ 59,
+ 51,
+ 60,
+ 46,
+ 46,
+ 51,
+ 51,
+ 57,
+ 64,
+ 71,
+ 76,
+ 77,
+ 92,
+ 105,
+ 110,
+ 126,
+ 146,
+ 161,
+ 167,
+ 175,
+ 180,
+ 175,
+ 181]
+,
+			}; 
 var dataRice_Minnesota = 
 {label: 'Rice_Minnesota',
 backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
@@ -828,6 +1041,12 @@ borderColor: window.chartColors.red,
 borderWidth: 1,
 data:  
 [0,
+ 0,
+ 0,
+ 1,
+ 0,
+ 0,
+ 0,
  1,
  0,
  0,
@@ -930,6 +1149,12 @@ data:
  0,
  0,
  0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
  1,
  1,
  1,
@@ -950,7 +1175,13 @@ backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(),
 borderColor: window.chartColors.yellow,
 borderWidth: 1,
 data:  
-[2,
+[3,
+ 2,
+ 4,
+ 5,
+ 3,
+ 3,
+ 2,
  0,
  8,
  5,
@@ -1014,6 +1245,12 @@ fill: false,
 borderColor: window.chartColors.yellow,
 data:  
 [2,
+ 1,
+ 2,
+ 2,
+ 3,
+ 2,
+ 2,
  2,
  3,
  3,
@@ -1075,7 +1312,13 @@ backgroundColor: color(window.chartColors.orange).alpha(0.5).rgbString(),
 borderColor: window.chartColors.orange,
 borderWidth: 1,
 data:  
-[3,
+[0,
+ 12,
+ 9,
+ 11,
+ 7,
+ 7,
+ 3,
  16,
  18,
  41,
@@ -1138,7 +1381,13 @@ type: 'line',
 fill: false,
 borderColor: window.chartColors.orange,
 data:  
-[7,
+[3,
+ 4,
+ 5,
+ 6,
+ 6,
+ 6,
+ 7,
  7,
  8,
  13,
@@ -1196,11 +1445,17 @@ data:
 barChartData.datasets.push(dataTokyo_avg);
 var dataChiba = 
 {label: 'Chiba',
-backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(),
-borderColor: window.chartColors.purple,
+backgroundColor: color(window.chartColors.grey).alpha(0.5).rgbString(),
+borderColor: window.chartColors.grey,
 borderWidth: 1,
 data:  
-[5,
+[0,
+ 2,
+ 2,
+ 6,
+ 1,
+ 0,
+ 5,
  1,
  5,
  4,
@@ -1260,9 +1515,15 @@ var dataChiba_avg =
 {label: 'Chiba_avg',
 type: 'line',
 fill: false,
-borderColor: window.chartColors.purple,
+borderColor: window.chartColors.grey,
 data:  
-[2,
+[1,
+ 1,
+ 1,
+ 1,
+ 1,
+ 1,
+ 2,
  2,
  2,
  2,
@@ -1319,11 +1580,17 @@ data:
 			}; 
 var dataSaitama = 
 {label: 'Saitama',
-backgroundColor: color(window.chartColors.grey).alpha(0.5).rgbString(),
-borderColor: window.chartColors.grey,
+backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(),
+borderColor: window.chartColors.purple,
 borderWidth: 1,
 data:  
-[2,
+[0,
+ 5,
+ 1,
+ 4,
+ 3,
+ 7,
+ 2,
  1,
  7,
  1,
@@ -1383,9 +1650,15 @@ var dataSaitama_avg =
 {label: 'Saitama_avg',
 type: 'line',
 fill: false,
-borderColor: window.chartColors.grey,
+borderColor: window.chartColors.purple,
 data:  
-[3,
+[2,
+ 2,
+ 2,
+ 1,
+ 1,
+ 2,
+ 3,
  2,
  3,
  3,
@@ -1442,11 +1715,17 @@ data:
 			}; 
 var dataIbaraki = 
 {label: 'Ibaraki',
-backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(),
-borderColor: window.chartColors.purple,
+backgroundColor: color(window.chartColors.grey).alpha(0.5).rgbString(),
+borderColor: window.chartColors.grey,
 borderWidth: 1,
 data:  
-[1,
+[0,
+ 1,
+ 2,
+ 0,
+ 0,
+ 0,
+ 1,
  1,
  5,
  0,
@@ -1506,9 +1785,15 @@ var dataIbaraki_avg =
 {label: 'Ibaraki_avg',
 type: 'line',
 fill: false,
-borderColor: window.chartColors.purple,
+borderColor: window.chartColors.grey,
 data:  
 [0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
  0,
  1,
  1,
@@ -1782,6 +2067,39 @@ data:
                         window.myBar.update();
 		  }
 		});
+		document.getElementById('ToggleDatasetHennepin_Minnesota').addEventListener('click', function() {
+		var element = document.getElementById("ToggleDatasetHennepin_Minnesota");
+		  if (datasetFlagHennepin_Minnesota == false) {
+			barChartData.datasets.push(dataHennepin_Minnesota_avg);
+			barChartData.datasets.push(dataHennepin_Minnesota);
+			datasetFlagHennepin_Minnesota = true;
+			element.style.backgroundColor = 'purple';
+			window.myBar.update();
+		  } else {
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            console.log(i);
+                            console.log(barChartData.datasets[i].label);
+                            if (barChartData.datasets[i].label == "Hennepin_Minnesota") {
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            if (barChartData.datasets[i].label == "Hennepin_Minnesota_avg") 
+{
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+         		datasetFlagHennepin_Minnesota = false;
+			element.style.backgroundColor = 'white';
+                        window.myBar.update();
+		  }
+		});
 		document.getElementById('ToggleDatasetRice_Minnesota').addEventListener('click', function() {
 		var element = document.getElementById("ToggleDatasetRice_Minnesota");
 		  if (datasetFlagRice_Minnesota == false) {
@@ -1887,7 +2205,7 @@ data:
 			barChartData.datasets.push(dataChiba_avg);
 			barChartData.datasets.push(dataChiba);
 			datasetFlagChiba = true;
-			element.style.backgroundColor = 'purple';
+			element.style.backgroundColor = 'grey';
 			window.myBar.update();
 		  } else {
                         var l = barChartData.datasets.length;
@@ -1920,7 +2238,7 @@ data:
 			barChartData.datasets.push(dataSaitama_avg);
 			barChartData.datasets.push(dataSaitama);
 			datasetFlagSaitama = true;
-			element.style.backgroundColor = 'grey';
+			element.style.backgroundColor = 'purple';
 			window.myBar.update();
 		  } else {
                         var l = barChartData.datasets.length;
@@ -1953,7 +2271,7 @@ data:
 			barChartData.datasets.push(dataIbaraki_avg);
 			barChartData.datasets.push(dataIbaraki);
 			datasetFlagIbaraki = true;
-			element.style.backgroundColor = 'purple';
+			element.style.backgroundColor = 'grey';
 			window.myBar.update();
 		  } else {
                         var l = barChartData.datasets.length;
@@ -1988,7 +2306,8 @@ var element = document.getElementById("ToggleDatasetNewYork");element.style.back
 var element = document.getElementById("ToggleDatasetCalifornia");element.style.backgroundColor = 'white'; datasetFlagWashington = false;
 var element = document.getElementById("ToggleDatasetWashington");element.style.backgroundColor = 'white'; datasetFlagFlorida = false;
 var element = document.getElementById("ToggleDatasetFlorida");element.style.backgroundColor = 'white'; datasetFlagGeorgia = false;
-var element = document.getElementById("ToggleDatasetGeorgia");element.style.backgroundColor = 'white'; datasetFlagRice_Minnesota = false;
+var element = document.getElementById("ToggleDatasetGeorgia");element.style.backgroundColor = 'white'; datasetFlagHennepin_Minnesota = false;
+var element = document.getElementById("ToggleDatasetHennepin_Minnesota");element.style.backgroundColor = 'white'; datasetFlagRice_Minnesota = false;
 var element = document.getElementById("ToggleDatasetRice_Minnesota");element.style.backgroundColor = 'white'; datasetFlagKanagawa = false;
 var element = document.getElementById("ToggleDatasetKanagawa");element.style.backgroundColor = 'white'; datasetFlagTokyo = false;
 var element = document.getElementById("ToggleDatasetTokyo");element.style.backgroundColor = 'white'; datasetFlagChiba = false;
@@ -1999,7 +2318,7 @@ var element = document.getElementById("ToggleDatasetIbaraki");element.style.back
 		});
 	</script>
 	<dl>
-(LAST UPDATE: 2020-05-13 18:06:50 +0900)
+(LAST UPDATE: 2020-05-14 08:36:45 +0900)
 <dl>
 <hr>
 <font size="1">
