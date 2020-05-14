@@ -1,0 +1,2367 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>COVID-19 daily new cases</title>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+	<script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+	<style>
+	canvas {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+	</style>
+</head>
+
+<body>
+&lt;<a href="covid19jp-150-US-en.html">move to Cumulative number of cases graph</a>&gt;
+
+
+	<div id="container" style="width: 75%;">
+		<canvas id="canvas"></canvas>
+	</div>
+<button id="AllClear">All Clear</button>
+	<button id="ToggleDatasetMinnesota"  style="background-color:red">Minnesota</button>
+	<button id="ToggleDatasetNewYork"  style="background-color:white">NewYork</button>
+	<button id="ToggleDatasetCalifornia"  style="background-color:white">California</button>
+	<button id="ToggleDatasetWashington"  style="background-color:white">Washington</button>
+	<button id="ToggleDatasetFlorida"  style="background-color:white">Florida</button>
+	<button id="ToggleDatasetGeorgia"  style="background-color:white">Georgia</button>
+	<button id="ToggleDatasetHennepin_Minnesota"  style="background-color:white">Hennepin_Minnesota</button>
+	<button id="ToggleDatasetRice_Minnesota"  style="background-color:red">Rice_Minnesota</button>
+	<button id="ToggleDatasetKanagawa"  style="background-color:yellow">Kanagawa</button>
+	<button id="ToggleDatasetTokyo"  style="background-color:orange">Tokyo</button>
+	<button id="ToggleDatasetChiba"  style="background-color:white">Chiba</button>
+	<button id="ToggleDatasetSaitama"  style="background-color:white">Saitama</button>
+	<button id="ToggleDatasetIbaraki"  style="background-color:white">Ibaraki</button>
+	<script>
+		var color = Chart.helpers.color;
+		var barChartData = {
+		labels:	
+["03/16",
+ "03/17",
+ "03/18",
+ "03/19",
+ "03/20",
+ "03/21",
+ "03/22",
+ "03/23",
+ "03/24",
+ "03/25",
+ "03/26",
+ "03/27",
+ "03/28",
+ "03/29",
+ "03/30",
+ "03/31",
+ "04/01",
+ "04/02",
+ "04/03",
+ "04/04",
+ "04/05",
+ "04/06",
+ "04/07",
+ "04/08",
+ "04/09",
+ "04/10",
+ "04/11",
+ "04/12",
+ "04/13",
+ "04/14",
+ "04/15",
+ "04/16",
+ "04/17",
+ "04/18",
+ "04/19",
+ "04/20",
+ "04/21",
+ "04/22",
+ "04/23",
+ "04/24",
+ "04/25",
+ "04/26",
+ "04/27",
+ "04/28",
+ "04/29",
+ "04/30",
+ "05/01",
+ "05/02",
+ "05/03",
+ "05/04",
+ "05/05",
+ "05/06",
+ "05/07",
+ "05/08",
+ "05/09",
+ "05/10",
+ "05/11",
+ "05/12",
+ "05/13",
+ "05/14",
+ "05/15"]
+,
+			datasets: [],};
+var dataMinnesota = 
+{label: 'Minnesota',
+backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+borderColor: window.chartColors.red,
+borderWidth: 1,
+data:  
+[19,
+ 6,
+ 17,
+ 12,
+ 26,
+ 23,
+ 29,
+ 67,
+ 27,
+ 25,
+ 58,
+ 52,
+ 45,
+ 62,
+ 73,
+ 53,
+ 60,
+ 53,
+ 46,
+ 77,
+ 70,
+ 51,
+ 83,
+ 85,
+ 86,
+ 96,
+ 91,
+ 194,
+ 0,
+ 74,
+ 114,
+ 0,
+ 261,
+ 139,
+ 147,
+ 114,
+ 97,
+ 155,
+ 220,
+ 243,
+ 261,
+ 156,
+ 209,
+ 370,
+ 463,
+ 492,
+ 594,
+ 502,
+ 431,
+ 571,
+ 617,
+ 728,
+ 786,
+ 723,
+ 702,
+ 481,
+ 528,
+ 695,
+ 423]
+,
+			}; 
+barChartData.datasets.push(dataMinnesota);
+var datasetFlagMinnesota = true;
+var dataNewYork = 
+{label: 'New York',
+backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(),
+borderColor: window.chartColors.purple,
+borderWidth: 1,
+data:  
+[235,
+ 739,
+ 789,
+ 2870,
+ 2945,
+ 3400,
+ 4090,
+ 5084,
+ 4797,
+ 5160,
+ 7036,
+ 6999,
+ 7534,
+ 7238,
+ 7015,
+ 9170,
+ 8115,
+ 8558,
+ 10481,
+ 10846,
+ 9327,
+ 8655,
+ 8060,
+ 11186,
+ 10718,
+ 10569,
+ 8678,
+ 8007,
+ 6716,
+ 7271,
+ 11434,
+ 9237,
+ 6906,
+ 11115,
+ 6103,
+ 5245,
+ 5301,
+ 4931,
+ 168,
+ 8130,
+ 10553,
+ 5902,
+ 3951,
+ 3110,
+ 4585,
+ 4681,
+ 3942,
+ 4663,
+ 3438,
+ 2538,
+ 2239,
+ 2786,
+ 3491,
+ 2938,
+ 2715,
+ 2273,
+ 1660,
+ 1430,
+ 2176]
+,
+			}; 
+var datasetFlagNewYork = false;
+var dataCalifornia = 
+{label: 'California',
+backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+borderColor: window.chartColors.green,
+borderWidth: 1,
+data:  
+[131,
+ 141,
+ 53,
+ 201,
+ 225,
+ 187,
+ 282,
+ 462,
+ 430,
+ 460,
+ 901,
+ 758,
+ 438,
+ 757,
+ 1286,
+ 1072,
+ 1189,
+ 1374,
+ 1231,
+ 833,
+ 2197,
+ 985,
+ 1332,
+ 1546,
+ 813,
+ 1371,
+ 625,
+ 1089,
+ 1136,
+ 1425,
+ 1330,
+ 991,
+ 1480,
+ 1334,
+ 940,
+ 2255,
+ 1779,
+ 1879,
+ 2217,
+ 1794,
+ 1013,
+ 1190,
+ 1408,
+ 1198,
+ 2583,
+ 1383,
+ 1896,
+ 1321,
+ 1556,
+ 981,
+ 2572,
+ 2160,
+ 1532,
+ 1631,
+ 2779,
+ 1042,
+ 1729,
+ 1649,
+ 1820]
+,
+			}; 
+var datasetFlagCalifornia = false;
+var dataWashington = 
+{label: 'Washington',
+backgroundColor: color(window.chartColors.grey).alpha(0.5).rgbString(),
+borderColor: window.chartColors.grey,
+borderWidth: 1,
+data:  
+[261,
+ 172,
+ 0,
+ 362,
+ 148,
+ 269,
+ 204,
+ 224,
+ 107,
+ 263,
+ 616,
+ 270,
+ 553,
+ 435,
+ 458,
+ 509,
+ 176,
+ 781,
+ 457,
+ 401,
+ 578,
+ 486,
+ 381,
+ 584,
+ 363,
+ 480,
+ 315,
+ 175,
+ 26,
+ 164,
+ 143,
+ 115,
+ 460,
+ 259,
+ 479,
+ 0,
+ 278,
+ 204,
+ 157,
+ 224,
+ 342,
+ 202,
+ 165,
+ 156,
+ 228,
+ 257,
+ 310,
+ 366,
+ 182,
+ 277,
+ 132,
+ 311,
+ 326,
+ 157,
+ 286,
+ 217,
+ 231,
+ 208,
+ 182]
+,
+			}; 
+var datasetFlagWashington = false;
+var dataFlorida = 
+{label: 'Florida',
+backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(),
+borderColor: window.chartColors.purple,
+borderWidth: 1,
+data:  
+[40,
+ 61,
+ 98,
+ 103,
+ 146,
+ 96,
+ 345,
+ 223,
+ 185,
+ 270,
+ 675,
+ 543,
+ 863,
+ 483,
+ 1227,
+ 1268,
+ 215,
+ 2052,
+ 1260,
+ 1269,
+ 813,
+ 974,
+ 1221,
+ 911,
+ 908,
+ 1167,
+ 963,
+ 1401,
+ 1124,
+ 609,
+ 883,
+ 832,
+ 1416,
+ 733,
+ 822,
+ 745,
+ 810,
+ 440,
+ 1339,
+ 885,
+ 306,
+ 693,
+ 606,
+ 710,
+ 345,
+ 497,
+ 1038,
+ 735,
+ 615,
+ 819,
+ 542,
+ 563,
+ 826,
+ 371,
+ 802,
+ 595,
+ 386,
+ 941,
+ 479]
+,
+			}; 
+var datasetFlagFlorida = false;
+var dataGeorgia = 
+{label: 'Georgia',
+backgroundColor: color(window.chartColors.grey).alpha(0.5).rgbString(),
+borderColor: window.chartColors.grey,
+borderWidth: 1,
+data:  
+[22,
+ 25,
+ 53,
+ 88,
+ 133,
+ 87,
+ 114,
+ 151,
+ 254,
+ 221,
+ 278,
+ 475,
+ 366,
+ 285,
+ 157,
+ 1121,
+ 709,
+ 710,
+ 483,
+ 329,
+ 487,
+ 667,
+ 1508,
+ 1079,
+ 665,
+ 919,
+ 674,
+ 293,
+ 863,
+ 1263,
+ 409,
+ 682,
+ 1525,
+ 475,
+ 632,
+ 1106,
+ 474,
+ 1333,
+ 669,
+ 608,
+ 731,
+ 264,
+ 816,
+ 620,
+ 853,
+ 489,
+ 1225,
+ 842,
+ 334,
+ 786,
+ 547,
+ 745,
+ 875,
+ 563,
+ 407,
+ 992,
+ 422,
+ 922,
+ 503]
+,
+			}; 
+var datasetFlagGeorgia = false;
+var dataMinnesota_avg = 
+{label: 'Minnesota_avg',
+type: 'line',
+fill: false,
+borderColor: window.chartColors.red,
+data:  
+[7,
+ 7,
+ 9,
+ 10,
+ 13,
+ 14,
+ 16,
+ 24,
+ 26,
+ 28,
+ 32,
+ 36,
+ 39,
+ 38,
+ 45,
+ 49,
+ 49,
+ 49,
+ 49,
+ 51,
+ 51,
+ 51,
+ 54,
+ 58,
+ 64,
+ 67,
+ 70,
+ 90,
+ 78,
+ 77,
+ 81,
+ 67,
+ 91,
+ 84,
+ 105,
+ 110,
+ 108,
+ 130,
+ 124,
+ 139,
+ 155,
+ 161,
+ 177,
+ 208,
+ 243,
+ 278,
+ 326,
+ 375,
+ 407,
+ 436,
+ 458,
+ 491,
+ 519,
+ 550,
+ 589,
+ 576,
+ 564,
+ 559,
+ 507]
+,
+			}; 
+barChartData.datasets.push(dataMinnesota_avg);
+var dataNewYork_avg = 
+{label: 'New York_avg',
+type: 'line',
+fill: false,
+borderColor: window.chartColors.purple,
+data:  
+[113,
+ 212,
+ 309,
+ 706,
+ 1112,
+ 1568,
+ 2119,
+ 2739,
+ 3312,
+ 3639,
+ 4223,
+ 4738,
+ 5230,
+ 5537,
+ 5854,
+ 6427,
+ 6581,
+ 6804,
+ 7225,
+ 7740,
+ 8071,
+ 7997,
+ 7989,
+ 8365,
+ 8398,
+ 8359,
+ 8266,
+ 8174,
+ 7982,
+ 7422,
+ 7525,
+ 7334,
+ 7081,
+ 7525,
+ 7438,
+ 7148,
+ 6272,
+ 5657,
+ 4694,
+ 4268,
+ 4904,
+ 4997,
+ 4805,
+ 4544,
+ 5175,
+ 4683,
+ 3738,
+ 3561,
+ 3488,
+ 3406,
+ 3071,
+ 2800,
+ 2736,
+ 2490,
+ 2386,
+ 2348,
+ 2266,
+ 2072,
+ 1884]
+,
+			}; 
+var dataCalifornia_avg = 
+{label: 'California_avg',
+type: 'line',
+fill: false,
+borderColor: window.chartColors.green,
+data:  
+[59,
+ 74,
+ 75,
+ 95,
+ 119,
+ 134,
+ 155,
+ 201,
+ 255,
+ 292,
+ 388,
+ 470,
+ 492,
+ 534,
+ 657,
+ 744,
+ 785,
+ 873,
+ 987,
+ 997,
+ 1128,
+ 1115,
+ 1136,
+ 1160,
+ 1100,
+ 1177,
+ 953,
+ 968,
+ 940,
+ 922,
+ 996,
+ 942,
+ 1064,
+ 1099,
+ 1071,
+ 1190,
+ 1254,
+ 1381,
+ 1486,
+ 1552,
+ 1562,
+ 1410,
+ 1357,
+ 1260,
+ 1312,
+ 1253,
+ 1379,
+ 1398,
+ 1419,
+ 1388,
+ 1387,
+ 1498,
+ 1446,
+ 1490,
+ 1665,
+ 1673,
+ 1553,
+ 1480,
+ 1521]
+,
+			}; 
+var dataWashington_avg = 
+{label: 'Washington_avg',
+type: 'line',
+fill: false,
+borderColor: window.chartColors.grey,
+data:  
+[91,
+ 101,
+ 81,
+ 115,
+ 136,
+ 164,
+ 156,
+ 163,
+ 187,
+ 173,
+ 240,
+ 240,
+ 290,
+ 320,
+ 370,
+ 405,
+ 343,
+ 416,
+ 402,
+ 397,
+ 414,
+ 411,
+ 440,
+ 412,
+ 399,
+ 410,
+ 372,
+ 328,
+ 277,
+ 217,
+ 186,
+ 134,
+ 154,
+ 166,
+ 231,
+ 187,
+ 207,
+ 219,
+ 176,
+ 171,
+ 152,
+ 201,
+ 184,
+ 178,
+ 188,
+ 192,
+ 188,
+ 211,
+ 214,
+ 231,
+ 217,
+ 225,
+ 227,
+ 197,
+ 212,
+ 204,
+ 218,
+ 203,
+ 183]
+,
+			}; 
+var dataFlorida_avg = 
+{label: 'Florida_avg',
+type: 'line',
+fill: false,
+borderColor: window.chartColors.purple,
+data:  
+[20,
+ 26,
+ 39,
+ 52,
+ 69,
+ 77,
+ 121,
+ 144,
+ 156,
+ 180,
+ 256,
+ 320,
+ 394,
+ 431,
+ 580,
+ 722,
+ 657,
+ 872,
+ 929,
+ 1041,
+ 982,
+ 940,
+ 1084,
+ 921,
+ 870,
+ 856,
+ 877,
+ 938,
+ 924,
+ 881,
+ 878,
+ 830,
+ 895,
+ 799,
+ 756,
+ 775,
+ 765,
+ 709,
+ 698,
+ 720,
+ 646,
+ 639,
+ 609,
+ 648,
+ 506,
+ 451,
+ 555,
+ 561,
+ 562,
+ 578,
+ 606,
+ 616,
+ 585,
+ 533,
+ 560,
+ 528,
+ 506,
+ 560,
+ 510]
+,
+			}; 
+var dataGeorgia_avg = 
+{label: 'Georgia_avg',
+type: 'line',
+fill: false,
+borderColor: window.chartColors.grey,
+data:  
+[14,
+ 17,
+ 24,
+ 35,
+ 50,
+ 58,
+ 71,
+ 89,
+ 118,
+ 137,
+ 157,
+ 213,
+ 249,
+ 268,
+ 254,
+ 383,
+ 444,
+ 478,
+ 495,
+ 501,
+ 548,
+ 483,
+ 597,
+ 650,
+ 676,
+ 760,
+ 787,
+ 734,
+ 641,
+ 668,
+ 631,
+ 597,
+ 719,
+ 745,
+ 712,
+ 689,
+ 699,
+ 792,
+ 669,
+ 688,
+ 703,
+ 582,
+ 631,
+ 529,
+ 556,
+ 539,
+ 609,
+ 692,
+ 623,
+ 647,
+ 603,
+ 639,
+ 589,
+ 550,
+ 560,
+ 589,
+ 572,
+ 597,
+ 544]
+,
+			}; 
+var dataHennepin_Minnesota = 
+{label: 'Hennepin_Minnesota',
+backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(),
+borderColor: window.chartColors.purple,
+borderWidth: 1,
+data:  
+[16,
+ 2,
+ 4,
+ 4,
+ 13,
+ 7,
+ 5,
+ 32,
+ 14,
+ 8,
+ 17,
+ 13,
+ 11,
+ 19,
+ 19,
+ 14,
+ 14,
+ 17,
+ 7,
+ 10,
+ 15,
+ 13,
+ 30,
+ 34,
+ 31,
+ 40,
+ 49,
+ 93,
+ 0,
+ 1,
+ 93,
+ 0,
+ 155,
+ 69,
+ 49,
+ 51,
+ 38,
+ 60,
+ 59,
+ 68,
+ 87,
+ 45,
+ 84,
+ 108,
+ 109,
+ 105,
+ 91,
+ 151,
+ 171,
+ 147,
+ 221,
+ 245,
+ 198,
+ 191,
+ 226,
+ 179,
+ 186,
+ 289,
+ 150]
+,
+			}; 
+var datasetFlagHennepin_Minnesota = false;
+var dataHennepin_Minnesota_avg = 
+{label: 'Hennepin_Minnesota_avg',
+type: 'line',
+fill: false,
+borderColor: window.chartColors.purple,
+data:  
+[3,
+ 3,
+ 3,
+ 4,
+ 5,
+ 6,
+ 5,
+ 9,
+ 10,
+ 11,
+ 11,
+ 12,
+ 13,
+ 11,
+ 12,
+ 13,
+ 12,
+ 13,
+ 12,
+ 11,
+ 11,
+ 10,
+ 13,
+ 15,
+ 19,
+ 23,
+ 28,
+ 39,
+ 35,
+ 30,
+ 39,
+ 33,
+ 48,
+ 45,
+ 52,
+ 59,
+ 51,
+ 60,
+ 46,
+ 46,
+ 51,
+ 51,
+ 57,
+ 64,
+ 71,
+ 76,
+ 77,
+ 92,
+ 105,
+ 110,
+ 126,
+ 146,
+ 161,
+ 167,
+ 175,
+ 180,
+ 175,
+ 181,
+ 174]
+,
+			}; 
+var dataRice_Minnesota = 
+{label: 'Rice_Minnesota',
+backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+borderColor: window.chartColors.red,
+borderWidth: 1,
+data:  
+[0,
+ 0,
+ 0,
+ 1,
+ 0,
+ 0,
+ 0,
+ 1,
+ 0,
+ 0,
+ 0,
+ 0,
+ 1,
+ 0,
+ 0,
+ 0,
+ 1,
+ 0,
+ 0,
+ 1,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 1,
+ 0,
+ 0,
+ 1,
+ 0,
+ 2,
+ 0,
+ 0,
+ 0,
+ 1,
+ 1,
+ 0,
+ 0,
+ 1,
+ 1,
+ 1,
+ 2,
+ 0,
+ 4,
+ 2,
+ 4,
+ 6,
+ 0,
+ 18,
+ 33,
+ 21,
+ 12,
+ 12,
+ 8,
+ 19]
+,
+			}; 
+barChartData.datasets.push(dataRice_Minnesota);
+var datasetFlagRice_Minnesota = true;
+var dataRice_Minnesota_avg = 
+{label: 'Rice_Minnesota_avg',
+type: 'line',
+fill: false,
+borderColor: window.chartColors.red,
+data:  
+[0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 1,
+ 1,
+ 1,
+ 2,
+ 2,
+ 4,
+ 9,
+ 11,
+ 12,
+ 13,
+ 14,
+ 15]
+,
+			}; 
+barChartData.datasets.push(dataRice_Minnesota_avg);
+var dataKanagawa = 
+{label: 'Kanagawa',
+backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(),
+borderColor: window.chartColors.yellow,
+borderWidth: 1,
+data:  
+[3,
+ 2,
+ 4,
+ 5,
+ 3,
+ 3,
+ 2,
+ 0,
+ 8,
+ 5,
+ 9,
+ 13,
+ 12,
+ 4,
+ 12,
+ 18,
+ 26,
+ 32,
+ 25,
+ 25,
+ 2,
+ 20,
+ 58,
+ 33,
+ 54,
+ 42,
+ 59,
+ 26,
+ 12,
+ 31,
+ 45,
+ 49,
+ 39,
+ 42,
+ 18,
+ 6,
+ 26,
+ 32,
+ 37,
+ 29,
+ 23,
+ 17,
+ 1,
+ 22,
+ 21,
+ 20,
+ 29,
+ 29,
+ 17,
+ 14,
+ 8,
+ 10,
+ 10,
+ 4,
+ 10,
+ 12,
+ 6,
+ 10,
+ 0,
+ 0]
+,
+			}; 
+barChartData.datasets.push(dataKanagawa);
+var datasetFlagKanagawa = true;
+var dataKanagawa_avg = 
+{label: 'Kanagawa_avg',
+type: 'line',
+fill: false,
+borderColor: window.chartColors.yellow,
+data:  
+[2,
+ 1,
+ 2,
+ 2,
+ 3,
+ 2,
+ 2,
+ 2,
+ 3,
+ 3,
+ 3,
+ 5,
+ 6,
+ 7,
+ 7,
+ 9,
+ 12,
+ 14,
+ 16,
+ 19,
+ 18,
+ 18,
+ 23,
+ 23,
+ 27,
+ 29,
+ 38,
+ 38,
+ 32,
+ 32,
+ 30,
+ 31,
+ 28,
+ 31,
+ 32,
+ 28,
+ 25,
+ 23,
+ 23,
+ 21,
+ 21,
+ 23,
+ 19,
+ 18,
+ 16,
+ 14,
+ 15,
+ 17,
+ 19,
+ 18,
+ 16,
+ 15,
+ 12,
+ 9,
+ 8,
+ 7,
+ 7,
+ 7,
+ 6,
+ 5]
+,
+			}; 
+barChartData.datasets.push(dataKanagawa_avg);
+var dataTokyo = 
+{label: 'Tokyo',
+backgroundColor: color(window.chartColors.orange).alpha(0.5).rgbString(),
+borderColor: window.chartColors.orange,
+borderWidth: 1,
+data:  
+[0,
+ 12,
+ 9,
+ 11,
+ 7,
+ 7,
+ 3,
+ 16,
+ 18,
+ 41,
+ 47,
+ 40,
+ 64,
+ 72,
+ 12,
+ 79,
+ 67,
+ 99,
+ 92,
+ 118,
+ 141,
+ 85,
+ 86,
+ 157,
+ 183,
+ 200,
+ 198,
+ 171,
+ 98,
+ 160,
+ 127,
+ 150,
+ 204,
+ 185,
+ 107,
+ 100,
+ 123,
+ 125,
+ 134,
+ 166,
+ 107,
+ 76,
+ 40,
+ 112,
+ 47,
+ 46,
+ 164,
+ 157,
+ 90,
+ 87,
+ 57,
+ 37,
+ 23,
+ 39,
+ 36,
+ 22,
+ 15,
+ 28,
+ 10,
+ 30]
+,
+			}; 
+barChartData.datasets.push(dataTokyo);
+var datasetFlagTokyo = true;
+var dataTokyo_avg = 
+{label: 'Tokyo_avg',
+type: 'line',
+fill: false,
+borderColor: window.chartColors.orange,
+data:  
+[3,
+ 4,
+ 5,
+ 6,
+ 6,
+ 6,
+ 7,
+ 7,
+ 8,
+ 13,
+ 18,
+ 23,
+ 32,
+ 40,
+ 39,
+ 44,
+ 47,
+ 56,
+ 60,
+ 66,
+ 85,
+ 86,
+ 88,
+ 97,
+ 110,
+ 121,
+ 129,
+ 142,
+ 143,
+ 144,
+ 136,
+ 129,
+ 130,
+ 132,
+ 133,
+ 124,
+ 124,
+ 120,
+ 110,
+ 107,
+ 107,
+ 104,
+ 92,
+ 90,
+ 78,
+ 61,
+ 69,
+ 80,
+ 88,
+ 84,
+ 85,
+ 84,
+ 64,
+ 47,
+ 39,
+ 30,
+ 24,
+ 23,
+ 21,
+ 20]
+,
+			}; 
+barChartData.datasets.push(dataTokyo_avg);
+var dataChiba = 
+{label: 'Chiba',
+backgroundColor: color(window.chartColors.grey).alpha(0.5).rgbString(),
+borderColor: window.chartColors.grey,
+borderWidth: 1,
+data:  
+[0,
+ 2,
+ 2,
+ 6,
+ 1,
+ 0,
+ 5,
+ 1,
+ 5,
+ 4,
+ 6,
+ 5,
+ 62,
+ 30,
+ 14,
+ 12,
+ 7,
+ 16,
+ 29,
+ 30,
+ 10,
+ 12,
+ 37,
+ 33,
+ 29,
+ 41,
+ 40,
+ 17,
+ 16,
+ 34,
+ 54,
+ 34,
+ 32,
+ 19,
+ 25,
+ 19,
+ 22,
+ 23,
+ 19,
+ 12,
+ 9,
+ 7,
+ 8,
+ 6,
+ 10,
+ 4,
+ 6,
+ 6,
+ 5,
+ 1,
+ 2,
+ 5,
+ 3,
+ 3,
+ 1,
+ 3,
+ 1,
+ 2,
+ 0,
+ 0]
+,
+			}; 
+var datasetFlagChiba = false;
+var dataChiba_avg = 
+{label: 'Chiba_avg',
+type: 'line',
+fill: false,
+borderColor: window.chartColors.grey,
+data:  
+[1,
+ 1,
+ 1,
+ 1,
+ 1,
+ 1,
+ 2,
+ 2,
+ 2,
+ 2,
+ 3,
+ 3,
+ 11,
+ 16,
+ 17,
+ 18,
+ 18,
+ 20,
+ 15,
+ 15,
+ 14,
+ 14,
+ 19,
+ 21,
+ 21,
+ 23,
+ 27,
+ 28,
+ 25,
+ 25,
+ 28,
+ 27,
+ 26,
+ 27,
+ 28,
+ 26,
+ 21,
+ 20,
+ 18,
+ 17,
+ 14,
+ 13,
+ 11,
+ 8,
+ 7,
+ 6,
+ 5,
+ 5,
+ 5,
+ 4,
+ 3,
+ 3,
+ 3,
+ 2,
+ 2,
+ 2,
+ 2,
+ 1,
+ 1,
+ 1]
+,
+			}; 
+var dataSaitama = 
+{label: 'Saitama',
+backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(),
+borderColor: window.chartColors.purple,
+borderWidth: 1,
+data:  
+[0,
+ 5,
+ 1,
+ 4,
+ 3,
+ 7,
+ 2,
+ 1,
+ 7,
+ 1,
+ 7,
+ 6,
+ 6,
+ 5,
+ 2,
+ 16,
+ 3,
+ 16,
+ 16,
+ 28,
+ 19,
+ 16,
+ 22,
+ 40,
+ 60,
+ 37,
+ 31,
+ 36,
+ 21,
+ 35,
+ 56,
+ 47,
+ 28,
+ 44,
+ 20,
+ 11,
+ 10,
+ 30,
+ 32,
+ 31,
+ 17,
+ 13,
+ 9,
+ 2,
+ 17,
+ 8,
+ 4,
+ 27,
+ 6,
+ 5,
+ 15,
+ 4,
+ 15,
+ 15,
+ 12,
+ 2,
+ 1,
+ 0,
+ 0,
+ 0]
+,
+			}; 
+var datasetFlagSaitama = false;
+var dataSaitama_avg = 
+{label: 'Saitama_avg',
+type: 'line',
+fill: false,
+borderColor: window.chartColors.purple,
+data:  
+[2,
+ 2,
+ 2,
+ 1,
+ 1,
+ 2,
+ 3,
+ 2,
+ 3,
+ 3,
+ 3,
+ 3,
+ 4,
+ 4,
+ 3,
+ 6,
+ 5,
+ 6,
+ 8,
+ 11,
+ 14,
+ 14,
+ 16,
+ 20,
+ 26,
+ 27,
+ 29,
+ 32,
+ 32,
+ 31,
+ 30,
+ 32,
+ 31,
+ 33,
+ 32,
+ 29,
+ 22,
+ 20,
+ 21,
+ 19,
+ 18,
+ 19,
+ 18,
+ 14,
+ 12,
+ 9,
+ 7,
+ 9,
+ 9,
+ 9,
+ 9,
+ 8,
+ 10,
+ 8,
+ 9,
+ 9,
+ 7,
+ 6,
+ 4,
+ 2]
+,
+			}; 
+var dataIbaraki = 
+{label: 'Ibaraki',
+backgroundColor: color(window.chartColors.grey).alpha(0.5).rgbString(),
+borderColor: window.chartColors.grey,
+borderWidth: 1,
+data:  
+[0,
+ 1,
+ 2,
+ 0,
+ 0,
+ 0,
+ 1,
+ 1,
+ 5,
+ 0,
+ 0,
+ 3,
+ 3,
+ 0,
+ 4,
+ 5,
+ 18,
+ 1,
+ 10,
+ 5,
+ 5,
+ 7,
+ 6,
+ 0,
+ 5,
+ 9,
+ 18,
+ 1,
+ 1,
+ 5,
+ 4,
+ 11,
+ 3,
+ 3,
+ 3,
+ 4,
+ 6,
+ 2,
+ 4,
+ 2,
+ 2,
+ 1,
+ 0,
+ 1,
+ 1,
+ 0,
+ 2,
+ 0,
+ 2,
+ 1,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0]
+,
+			}; 
+var datasetFlagIbaraki = false;
+var dataIbaraki_avg = 
+{label: 'Ibaraki_avg',
+type: 'line',
+fill: false,
+borderColor: window.chartColors.grey,
+data:  
+[0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 1,
+ 1,
+ 1,
+ 1,
+ 1,
+ 1,
+ 1,
+ 2,
+ 4,
+ 4,
+ 5,
+ 6,
+ 6,
+ 6,
+ 4,
+ 4,
+ 4,
+ 4,
+ 6,
+ 5,
+ 4,
+ 5,
+ 5,
+ 5,
+ 3,
+ 3,
+ 4,
+ 4,
+ 4,
+ 3,
+ 3,
+ 3,
+ 2,
+ 2,
+ 1,
+ 1,
+ 1,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0]
+,
+			}; 
+
+		window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myBar = new Chart(ctx, {
+				type: 'bar',
+				data: barChartData,
+				options: {
+					responsive: true,
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: 'COVID-19 daily new cases'
+					}
+				}
+			});
+
+		};
+
+		var colorNames = Object.keys(window.chartColors);
+		document.getElementById('ToggleDatasetMinnesota').addEventListener('click', function() {
+		var element = document.getElementById("ToggleDatasetMinnesota");
+		  if (datasetFlagMinnesota == false) {
+			barChartData.datasets.push(dataMinnesota_avg);
+			barChartData.datasets.push(dataMinnesota);
+			datasetFlagMinnesota = true;
+			element.style.backgroundColor = 'red';
+			window.myBar.update();
+		  } else {
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            console.log(i);
+                            console.log(barChartData.datasets[i].label);
+                            if (barChartData.datasets[i].label == "Minnesota") {
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            if (barChartData.datasets[i].label == "Minnesota_avg") 
+{
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+         		datasetFlagMinnesota = false;
+			element.style.backgroundColor = 'white';
+                        window.myBar.update();
+		  }
+		});
+		document.getElementById('ToggleDatasetNewYork').addEventListener('click', function() {
+		var element = document.getElementById("ToggleDatasetNewYork");
+		  if (datasetFlagNewYork == false) {
+			barChartData.datasets.push(dataNewYork_avg);
+			barChartData.datasets.push(dataNewYork);
+			datasetFlagNewYork = true;
+			element.style.backgroundColor = 'purple';
+			window.myBar.update();
+		  } else {
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            console.log(i);
+                            console.log(barChartData.datasets[i].label);
+                            if (barChartData.datasets[i].label == "New York") {
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            if (barChartData.datasets[i].label == "New York_avg") 
+{
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+         		datasetFlagNewYork = false;
+			element.style.backgroundColor = 'white';
+                        window.myBar.update();
+		  }
+		});
+		document.getElementById('ToggleDatasetCalifornia').addEventListener('click', function() {
+		var element = document.getElementById("ToggleDatasetCalifornia");
+		  if (datasetFlagCalifornia == false) {
+			barChartData.datasets.push(dataCalifornia_avg);
+			barChartData.datasets.push(dataCalifornia);
+			datasetFlagCalifornia = true;
+			element.style.backgroundColor = 'green';
+			window.myBar.update();
+		  } else {
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            console.log(i);
+                            console.log(barChartData.datasets[i].label);
+                            if (barChartData.datasets[i].label == "California") {
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            if (barChartData.datasets[i].label == "California_avg") 
+{
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+         		datasetFlagCalifornia = false;
+			element.style.backgroundColor = 'white';
+                        window.myBar.update();
+		  }
+		});
+		document.getElementById('ToggleDatasetWashington').addEventListener('click', function() {
+		var element = document.getElementById("ToggleDatasetWashington");
+		  if (datasetFlagWashington == false) {
+			barChartData.datasets.push(dataWashington_avg);
+			barChartData.datasets.push(dataWashington);
+			datasetFlagWashington = true;
+			element.style.backgroundColor = 'grey';
+			window.myBar.update();
+		  } else {
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            console.log(i);
+                            console.log(barChartData.datasets[i].label);
+                            if (barChartData.datasets[i].label == "Washington") {
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            if (barChartData.datasets[i].label == "Washington_avg") 
+{
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+         		datasetFlagWashington = false;
+			element.style.backgroundColor = 'white';
+                        window.myBar.update();
+		  }
+		});
+		document.getElementById('ToggleDatasetFlorida').addEventListener('click', function() {
+		var element = document.getElementById("ToggleDatasetFlorida");
+		  if (datasetFlagFlorida == false) {
+			barChartData.datasets.push(dataFlorida_avg);
+			barChartData.datasets.push(dataFlorida);
+			datasetFlagFlorida = true;
+			element.style.backgroundColor = 'purple';
+			window.myBar.update();
+		  } else {
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            console.log(i);
+                            console.log(barChartData.datasets[i].label);
+                            if (barChartData.datasets[i].label == "Florida") {
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            if (barChartData.datasets[i].label == "Florida_avg") 
+{
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+         		datasetFlagFlorida = false;
+			element.style.backgroundColor = 'white';
+                        window.myBar.update();
+		  }
+		});
+		document.getElementById('ToggleDatasetGeorgia').addEventListener('click', function() {
+		var element = document.getElementById("ToggleDatasetGeorgia");
+		  if (datasetFlagGeorgia == false) {
+			barChartData.datasets.push(dataGeorgia_avg);
+			barChartData.datasets.push(dataGeorgia);
+			datasetFlagGeorgia = true;
+			element.style.backgroundColor = 'grey';
+			window.myBar.update();
+		  } else {
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            console.log(i);
+                            console.log(barChartData.datasets[i].label);
+                            if (barChartData.datasets[i].label == "Georgia") {
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            if (barChartData.datasets[i].label == "Georgia_avg") 
+{
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+         		datasetFlagGeorgia = false;
+			element.style.backgroundColor = 'white';
+                        window.myBar.update();
+		  }
+		});
+		document.getElementById('ToggleDatasetHennepin_Minnesota').addEventListener('click', function() {
+		var element = document.getElementById("ToggleDatasetHennepin_Minnesota");
+		  if (datasetFlagHennepin_Minnesota == false) {
+			barChartData.datasets.push(dataHennepin_Minnesota_avg);
+			barChartData.datasets.push(dataHennepin_Minnesota);
+			datasetFlagHennepin_Minnesota = true;
+			element.style.backgroundColor = 'purple';
+			window.myBar.update();
+		  } else {
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            console.log(i);
+                            console.log(barChartData.datasets[i].label);
+                            if (barChartData.datasets[i].label == "Hennepin_Minnesota") {
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            if (barChartData.datasets[i].label == "Hennepin_Minnesota_avg") 
+{
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+         		datasetFlagHennepin_Minnesota = false;
+			element.style.backgroundColor = 'white';
+                        window.myBar.update();
+		  }
+		});
+		document.getElementById('ToggleDatasetRice_Minnesota').addEventListener('click', function() {
+		var element = document.getElementById("ToggleDatasetRice_Minnesota");
+		  if (datasetFlagRice_Minnesota == false) {
+			barChartData.datasets.push(dataRice_Minnesota_avg);
+			barChartData.datasets.push(dataRice_Minnesota);
+			datasetFlagRice_Minnesota = true;
+			element.style.backgroundColor = 'red';
+			window.myBar.update();
+		  } else {
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            console.log(i);
+                            console.log(barChartData.datasets[i].label);
+                            if (barChartData.datasets[i].label == "Rice_Minnesota") {
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            if (barChartData.datasets[i].label == "Rice_Minnesota_avg") 
+{
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+         		datasetFlagRice_Minnesota = false;
+			element.style.backgroundColor = 'white';
+                        window.myBar.update();
+		  }
+		});
+		document.getElementById('ToggleDatasetKanagawa').addEventListener('click', function() {
+		var element = document.getElementById("ToggleDatasetKanagawa");
+		  if (datasetFlagKanagawa == false) {
+			barChartData.datasets.push(dataKanagawa_avg);
+			barChartData.datasets.push(dataKanagawa);
+			datasetFlagKanagawa = true;
+			element.style.backgroundColor = 'yellow';
+			window.myBar.update();
+		  } else {
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            console.log(i);
+                            console.log(barChartData.datasets[i].label);
+                            if (barChartData.datasets[i].label == "Kanagawa") {
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            if (barChartData.datasets[i].label == "Kanagawa_avg") 
+{
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+         		datasetFlagKanagawa = false;
+			element.style.backgroundColor = 'white';
+                        window.myBar.update();
+		  }
+		});
+		document.getElementById('ToggleDatasetTokyo').addEventListener('click', function() {
+		var element = document.getElementById("ToggleDatasetTokyo");
+		  if (datasetFlagTokyo == false) {
+			barChartData.datasets.push(dataTokyo_avg);
+			barChartData.datasets.push(dataTokyo);
+			datasetFlagTokyo = true;
+			element.style.backgroundColor = 'orange';
+			window.myBar.update();
+		  } else {
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            console.log(i);
+                            console.log(barChartData.datasets[i].label);
+                            if (barChartData.datasets[i].label == "Tokyo") {
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            if (barChartData.datasets[i].label == "Tokyo_avg") 
+{
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+         		datasetFlagTokyo = false;
+			element.style.backgroundColor = 'white';
+                        window.myBar.update();
+		  }
+		});
+		document.getElementById('ToggleDatasetChiba').addEventListener('click', function() {
+		var element = document.getElementById("ToggleDatasetChiba");
+		  if (datasetFlagChiba == false) {
+			barChartData.datasets.push(dataChiba_avg);
+			barChartData.datasets.push(dataChiba);
+			datasetFlagChiba = true;
+			element.style.backgroundColor = 'grey';
+			window.myBar.update();
+		  } else {
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            console.log(i);
+                            console.log(barChartData.datasets[i].label);
+                            if (barChartData.datasets[i].label == "Chiba") {
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            if (barChartData.datasets[i].label == "Chiba_avg") 
+{
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+         		datasetFlagChiba = false;
+			element.style.backgroundColor = 'white';
+                        window.myBar.update();
+		  }
+		});
+		document.getElementById('ToggleDatasetSaitama').addEventListener('click', function() {
+		var element = document.getElementById("ToggleDatasetSaitama");
+		  if (datasetFlagSaitama == false) {
+			barChartData.datasets.push(dataSaitama_avg);
+			barChartData.datasets.push(dataSaitama);
+			datasetFlagSaitama = true;
+			element.style.backgroundColor = 'purple';
+			window.myBar.update();
+		  } else {
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            console.log(i);
+                            console.log(barChartData.datasets[i].label);
+                            if (barChartData.datasets[i].label == "Saitama") {
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            if (barChartData.datasets[i].label == "Saitama_avg") 
+{
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+         		datasetFlagSaitama = false;
+			element.style.backgroundColor = 'white';
+                        window.myBar.update();
+		  }
+		});
+		document.getElementById('ToggleDatasetIbaraki').addEventListener('click', function() {
+		var element = document.getElementById("ToggleDatasetIbaraki");
+		  if (datasetFlagIbaraki == false) {
+			barChartData.datasets.push(dataIbaraki_avg);
+			barChartData.datasets.push(dataIbaraki);
+			datasetFlagIbaraki = true;
+			element.style.backgroundColor = 'grey';
+			window.myBar.update();
+		  } else {
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            console.log(i);
+                            console.log(barChartData.datasets[i].label);
+                            if (barChartData.datasets[i].label == "Ibaraki") {
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+                        var l = barChartData.datasets.length;
+                        console.log(l);
+                        for (let i = 0; i < l ; i++) {
+                            if (barChartData.datasets[i].label == "Ibaraki_avg") 
+{
+                                barChartData.datasets.splice(i,1);
+                                break;
+                            }
+                        }
+         		datasetFlagIbaraki = false;
+			element.style.backgroundColor = 'white';
+                        window.myBar.update();
+		  }
+		});
+		document.getElementById('AllClear').addEventListener('click', function() {
+			barChartData.datasets =[];
+datasetFlagMinnesota = false;
+var element = document.getElementById("ToggleDatasetMinnesota");element.style.backgroundColor = 'white'; datasetFlagNewYork = false;
+var element = document.getElementById("ToggleDatasetNewYork");element.style.backgroundColor = 'white'; datasetFlagCalifornia = false;
+var element = document.getElementById("ToggleDatasetCalifornia");element.style.backgroundColor = 'white'; datasetFlagWashington = false;
+var element = document.getElementById("ToggleDatasetWashington");element.style.backgroundColor = 'white'; datasetFlagFlorida = false;
+var element = document.getElementById("ToggleDatasetFlorida");element.style.backgroundColor = 'white'; datasetFlagGeorgia = false;
+var element = document.getElementById("ToggleDatasetGeorgia");element.style.backgroundColor = 'white'; datasetFlagHennepin_Minnesota = false;
+var element = document.getElementById("ToggleDatasetHennepin_Minnesota");element.style.backgroundColor = 'white'; datasetFlagRice_Minnesota = false;
+var element = document.getElementById("ToggleDatasetRice_Minnesota");element.style.backgroundColor = 'white'; datasetFlagKanagawa = false;
+var element = document.getElementById("ToggleDatasetKanagawa");element.style.backgroundColor = 'white'; datasetFlagTokyo = false;
+var element = document.getElementById("ToggleDatasetTokyo");element.style.backgroundColor = 'white'; datasetFlagChiba = false;
+var element = document.getElementById("ToggleDatasetChiba");element.style.backgroundColor = 'white'; datasetFlagSaitama = false;
+var element = document.getElementById("ToggleDatasetSaitama");element.style.backgroundColor = 'white'; datasetFlagIbaraki = false;
+var element = document.getElementById("ToggleDatasetIbaraki");element.style.backgroundColor = 'white'; 
+                        window.myBar.update();
+		});
+	</script>
+	<dl>
+(LAST UPDATE: 2020-05-15 03:02:31 +0900)
+<dl>
+<hr>
+<font size="1">
+<li> This web page uses data from COVID-19.csv file, <a href="https://gis.jag-japan.com/covid19jp/">J.A.G JAPAN</a> for Japan, and data from <a href="https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series">CSSE at Johns Hopkins University</a> for except Japan countries.</li>
+<li> The system of this web page automatically downloads the CSV file from J.A.G JAPAN. If there are any changes, it updates the data within 30mins.</li>
+<li> The ruby scripts of this web page are on GitHub. <a href="https://github.com/sanpei3/covid19jp">https://github.com/sanpei3/covid19jp/</a></li>
+<li> The content of this page is licensed under the Creative Commons Attribution 4.0 License, and you can link freely.</li>
+<hr>
+If you have any questions or requests, please feel free to let me know via my Twitter account. <a href="https://twitter.com/yoshiro_mihira/">@yoshiro_mihira</a>
+<br>
+GitHub  sanpei3
+<br>
+e-mail sanpei@sanpei.org
+</font>
+
+
+</body>
+
+</html>
