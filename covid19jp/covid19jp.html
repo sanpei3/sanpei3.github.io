@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<button id="daily_new_cases" style="background-color:red">Daily New cases</button>
+<button id="double_days"  style="background-color:white">Double Days</button>
+<button id="k_value"  style="background-color:white">K value</button>
+<button id="total_cases"  style="background-color:white">Total cases</button>
+  <form id="form1" action="#">
+      <input type="text" id="start_day" value="">
+      <input type="button" onclick="func1()" value="送信">
+  </form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js"></script>
+        <script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+	
+	    <script src="covid19jp.js"></script>
+
+    <title>chart of results</title>
+    </head>
+    <body>
+    <!--ここにグラフが挿入されます-->
+    <div style="width: 100%; height: 100%;">
+        <canvas id="myChart" style="width: 100%; height: auto;"></canvas>
+	</div>
+
+	</body>
+	</html>
