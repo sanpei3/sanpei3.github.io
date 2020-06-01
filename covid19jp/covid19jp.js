@@ -77,37 +77,36 @@ function updateData(data, draw_mode) {
     }
 }
 
-var datasets;
+var myChartData;
 function drawBarChart(data, draw_mode) {
   // 3)chart.jsのdataset用の配列を用意
     updateData(data, draw_mode)
-
-    datasets =
-    [
+    myChartData =
+    {
+	labels: tmpLabels,
+	datasets:     [
           { label: "Tokyo", data: tmpData1, fill: false,
 	    borderColor: window.chartColors.blue},
           { label: "Kanagawa", data: tmpData2,fill: false,
 	    borderColor: window.chartColors.red},
           { label: "Fukuoka", data: tmpData3,fill: false,
 	    borderColor: window.chartColors.green},
-    ];
+	]
+    };
   // 4)chart.jsで描画
   var ctx = document.getElementById("myChart").getContext("2d");
   window.myChart = new Chart(ctx, {
     type: 'line',
-    data: {
-	labels: tmpLabels,
-	datasets: datasets,
-    },
+    data: myChartData,
   });
 }
 function updateBarChart(data, draw_mode) {
   // 3)chart.jsのdataset用の配列を用意
     updateData(data, draw_mode)
-    datasets[0].data = tmpData1
-    datasets[1].data = tmpData2
-    datasets[2].data = tmpData3
-
+    myChartData.datasets[0].data = tmpData1
+    myChartData.datasets[1].data = tmpData2
+    myChartData.datasets[2].data = tmpData3
+    myChartData.labels = tmpLabels
   // 4)chart.jsで描画
     window.myChart.update();
 }
