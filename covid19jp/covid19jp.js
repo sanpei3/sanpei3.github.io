@@ -77,26 +77,39 @@ function updateData(data, draw_mode) {
     }
 }
 
+var datasets;
 function drawBarChart(data, draw_mode) {
   // 3)chart.jsのdataset用の配列を用意
     updateData(data, draw_mode)
 
-  // 4)chart.jsで描画
-  var ctx = document.getElementById("myChart").getContext("2d");
-  var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: tmpLabels,
-      datasets: [
+    datasets =
+    [
           { label: "Tokyo", data: tmpData1, fill: false,
 	    borderColor: window.chartColors.blue},
           { label: "Kanagawa", data: tmpData2,fill: false,
 	    borderColor: window.chartColors.red},
           { label: "Fukuoka", data: tmpData3,fill: false,
 	    borderColor: window.chartColors.green},
-      ]
+    ];
+  // 4)chart.jsで描画
+  var ctx = document.getElementById("myChart").getContext("2d");
+  window.myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+	labels: tmpLabels,
+	datasets: datasets,
     },
   });
+}
+function updateBarChart(data, draw_mode) {
+  // 3)chart.jsのdataset用の配列を用意
+    updateData(data, draw_mode)
+    datasets[0].data = tmpData1
+    datasets[1].data = tmpData2
+    datasets[2].data = tmpData3
+
+  // 4)chart.jsで描画
+    window.myChart.update();
 }
 
 function main() {
@@ -115,7 +128,7 @@ function main() {
 function func1() {
     var input_message = document.getElementById("start_day").value;
     start_day = input_message;
-    drawBarChart(data, draw_mode);
+    updateBarChart(data, draw_mode);
 }
 
 
@@ -126,7 +139,7 @@ main();
 document.getElementById('daily_new_cases').addEventListener('click', function() {
     if (draw_mode != 0) {
 	draw_mode = 0;
-	drawBarChart(data, draw_mode);
+	updateBarChart(data, draw_mode);
 	var element = document.getElementById("daily_new_cases");element.style.backgroundColor = 'red';	 
 	var element = document.getElementById("double_days");element.style.backgroundColor = 'white';	 
 	var element = document.getElementById("k_value");element.style.backgroundColor = 'white';	 
@@ -136,7 +149,7 @@ document.getElementById('daily_new_cases').addEventListener('click', function() 
 document.getElementById('double_days').addEventListener('click', function() {
     if (draw_mode != 1) {
 	draw_mode = 1;
-	drawBarChart(data, draw_mode);
+	updateBarChart(data, draw_mode);
 	var element = document.getElementById("daily_new_cases");element.style.backgroundColor = 'white';	 
 	var element = document.getElementById("double_days");element.style.backgroundColor = 'red';	 
 	var element = document.getElementById("k_value");element.style.backgroundColor = 'white';	 
@@ -146,7 +159,7 @@ document.getElementById('double_days').addEventListener('click', function() {
 document.getElementById('k_value').addEventListener('click', function() {
     if (draw_mode != 2) {
 	draw_mode = 2;
-	drawBarChart(data, draw_mode);
+	updateBarChart(data, draw_mode);
 	var element = document.getElementById("daily_new_cases");element.style.backgroundColor = 'white';	 
 	var element = document.getElementById("double_days");element.style.backgroundColor = 'white';	 
 	var element = document.getElementById("k_value");element.style.backgroundColor = 'red';	 
@@ -156,7 +169,7 @@ document.getElementById('k_value').addEventListener('click', function() {
 document.getElementById('total_cases').addEventListener('click', function() {
     if (draw_mode != 3) {
 	draw_mode = 3;
-	drawBarChart(data, draw_mode);
+	updateBarChart(data, draw_mode);
 	var element = document.getElementById("daily_new_cases");element.style.backgroundColor = 'white';	 
 	var element = document.getElementById("double_days");element.style.backgroundColor = 'white';	 
 	var element = document.getElementById("k_value");element.style.backgroundColor = 'white';	 
