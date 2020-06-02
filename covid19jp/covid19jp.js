@@ -47,7 +47,6 @@ function updateData(data, draw_mode) {
 	} else if (data[row][0] == "Tokyo") {
 	    for (var i = start_i; i <= data[row].length; i++) {
 		a = calculate(data, row, i, draw_mode);
-		console.log(a);
 		if ( a >=0) {
 		    tmpData1.push(a)
 		} else {
@@ -110,7 +109,6 @@ function updateBarChart(data, draw_mode) {
   // 4)chart.jsで描画
     window.myChart.update();
 }
-
 function main() {
   // 1) ajaxでCSVファイルをロード
   var req = new XMLHttpRequest();
@@ -118,9 +116,20 @@ function main() {
   req.open("GET", filePath, true);
   req.onload = function() {
     // 2) CSVデータ変換の呼び出し
-    data = csv2Array(req.responseText);
+  data = csv2Array(req.responseText);
     // 3) chart.jsデータ準備、4) chart.js描画の呼び出し
       drawBarChart(data, draw_mode);
+      
+      var update_str;
+      var filePath = "https://api.github.com/repos/sanpei3/covid19jp/commits?path=time_series_covid19_confirmed_Japan.csv&page=1&per_page=1"
+      req.open("GET", filePath, true);
+      req.onload = function() {
+	  update_str = JSON.parse(req.responseText)[0].commit.committer.date;
+	  var update_date = document.getElementById("update_date");
+	  update_date.innerHTML = update_str;
+	  console.log(update_str);
+      }
+       req.send(null);
   }
   req.send(null);
 }
