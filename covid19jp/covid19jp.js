@@ -17,7 +17,7 @@ function calculate(data, row, i, draw_mode) {
     } else if (draw_mode == 1) {
 	// Double Days
 	const days = 6;
-	var d = days * Math.log(2.0, 2.0) / Math.log(data[row][i] / data[row][i - days], 2.0);
+	var d = days * Math.log(2.0, 2.0) / Math.log((data[row][i] - data[row][start_day])/ (data[row][i - days]- data[row][start_day]), 2.0);
 	if (isNaN(d) || d == Infinity) {
 	    return 0;
 	} else {
@@ -25,14 +25,23 @@ function calculate(data, row, i, draw_mode) {
 	}
     } else if (draw_mode == 2) {
 	// K value
-	return 1 - data[row][i- 7]/data[row][i];
+	var k = 1 - (data[row][i- 7] - data[row][start_day])/(data[row][i] - data[row][start_day]);
+	if (isNaN(k) || k == Infinity || i - 7 < start_day) {
+	    return 0;
+	} else {
+	    return k
+	}
     } else if (draw_mode == 3) {
 	// Total cases
-	return data[row][i]- data[row][start_day];
+	return data[row][i] - data[row][start_day];
     }
 }
-    
+
+var color = Chart.helpers.color;
 var tmpLabels = [], tmpData1 = [], tmpData2 = [], tmpData3 = [];;
+var tmpData1_avgCases = [], tmpData2_avgCases = [], tmpData3_avgCases = [];
+
+var showFlagTokyo = true, showFlagKanagawa = true, showFlagFukuoka = true;
 function updateData(data, draw_mode) {
     var start_i = start_day;
     myChartData.datasets = [];
@@ -40,13 +49,16 @@ function updateData(data, draw_mode) {
     tmpData1 = [];
     tmpData2 = [];
     tmpData3 = [];
+    tmpData1_avgCases = [];
+    tmpData2_avgCases = [];
+    tmpData3_avgCases = [];
     for (var row in data) {
 	if (data[row][0] == "Province/State") {
 	    for (var i = start_i; i <= data[row].length; i++) {
 		tmpLabels.push(data[row][i]);
 	    }
 	    myChartData.labels = tmpLabels;
-	} else if (data[row][0] == "Tokyo") {
+	} else if (data[row][0] == "Tokyo" && showFlagTokyo) {
 	    for (var i = start_i; i <= data[row].length; i++) {
 		a = calculate(data, row, i, draw_mode);
 		if ( a >=0) {
@@ -54,11 +66,35 @@ function updateData(data, draw_mode) {
 		} else {
 		    tmpData1.push(0)
 		}
+		if (draw_mode == 0) {
+		    b = (data[row][i] - data[row][i - 6]) / 7;
+		    if ( b >=0) {
+			tmpData1_avgCases.push(b)
+		    } else {
+			tmpData1_avgCases.push(0)
+		    }
+		}
 	    }
-            myChartData.datasets.push(
+	    if (draw_mode == 0) {
+		myChartData.datasets.push(
+		    { label: "Tokyo",
+		      type: "bar",
+		      backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+		      borderColor: window.chartColors.red,
+		      borderWidth: 1,
+		      data: tmpData1});
+		myChartData.datasets.push(
+		    { label: "Tokyo_avg", data: tmpData1_avgCases, fill: false,
+		      type: "line",
+		      borderColor: window.chartColors.red})
+	    } else {
+		myChartData.datasets.push(
 		{ label: "Tokyo", data: tmpData1, fill: false,
-		  borderColor: window.chartColors.blue})
-	} else if (data[row][0] == "Kanagawa") {
+		      type: "line",
+		  borderColor: window.chartColors.red})
+	    }
+	    
+	} else if (data[row][0] == "Kanagawa" && showFlagKanagawa) {
 	    for (var i = start_i; i <= data[row].length; i++) {
 		a = calculate(data, row, i, draw_mode);
 		if ( a >=0) {
@@ -66,11 +102,34 @@ function updateData(data, draw_mode) {
 		} else {
 		    tmpData2.push(0)
 		}
+		if (draw_mode == 0) {
+		    b = (data[row][i] - data[row][i - 6]) / 7;
+		    if ( b >=0) {
+			tmpData2_avgCases.push(b)
+		    } else {
+			tmpData2_avgCases.push(0)
+		    }
+		}
 	    }
-            myChartData.datasets.push(
-		{ label: "Kanagawa", data: tmpData2, fill: false,
-		  borderColor: window.chartColors.green});
-	} else if (data[row][0] == "Fukuoka") {
+	    if (draw_mode == 0) {
+		myChartData.datasets.push(
+		    { label: "Kanagawa",
+		      type: "bar",
+		      backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+		      borderColor: window.chartColors.green,
+		      borderWidth: 1,
+		      data: tmpData2});
+		myChartData.datasets.push(
+		    { label: "Kanagawa_avg", data: tmpData2_avgCases, fill: false,
+		      type: "line",
+		      borderColor: window.chartColors.green})
+	    } else {
+		myChartData.datasets.push(
+		    { label: "Kanagawa", data: tmpData2, fill: false,
+		      type: "line",
+		      borderColor: window.chartColors.green});
+	    }
+	} else if (data[row][0] == "Fukuoka" && showFlagFukuoka) {
 	    for (var i = start_i; i <= data[row].length; i++) {
 		a = calculate(data, row, i, draw_mode);
 		if ( a >=0) {
@@ -78,10 +137,34 @@ function updateData(data, draw_mode) {
 		} else {
 		    tmpData3.push(0)
 		}
+		if (draw_mode == 0) {
+		    b = (data[row][i] - data[row][i - 6]) / 7;
+		    if ( b >=0) {
+			tmpData3_avgCases.push(b)
+		    } else {
+			tmpData3_avgCases.push(0)
+		    }
+		}
+
 	    }
-	    myChartData.datasets.push(
-		{ label: "Fukuoka", data: tmpData3,fill: false,
-		  borderColor: window.chartColors.green});
+	    if (draw_mode == 0) {
+		myChartData.datasets.push(
+		    { label: "Fukuoka",
+		      type: "bar",
+		      backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+		      borderColor: window.chartColors.blue,
+		      borderWidth: 1,
+		      data: tmpData3});
+		myChartData.datasets.push(
+		    { label: "Fukuoka_avg", data: tmpData3_avgCases, fill: false,
+		      type: "line",
+		      borderColor: window.chartColors.blue})
+	    } else {
+		myChartData.datasets.push(
+		    { label: "Fukuoka", data: tmpData3,fill: false,
+		      type: "line",
+		      borderColor: window.chartColors.blue});
+	    }
 	}
     }
 }
@@ -125,9 +208,8 @@ function drawBarChart(data, draw_mode) {
     };
     // 4)chart.jsで描画
     var ctx = document.getElementById("myChart").getContext("2d");
-    console.log(myChartData);
     window.myChart = new Chart(ctx, {
-	type: 'line',
+	type: 'bar',
 	data: myChartData,
 	options: myChartOptions,
     });
@@ -140,11 +222,14 @@ function updateBarChart(data, draw_mode) {
     if (draw_mode == 3) {
 	myChartOptions.scales = myChartOptionsLogarithmic;
 	console.log(myChartOptions.scales);
-    } else {
+    } else if (draw_mode == 0) {
 	myChartOptions.scales = myChartOptionsLinear;
 	console.log(myChartOptions);
+    } else {
+    	myChartOptions.scales = myChartOptionsLinear;
+	console.log(myChartOptions);
     }
-  // 4)chart.jsで描画
+    // 4)chart.jsで描画
     window.myChart.update();
 }
 function main() {
@@ -165,7 +250,6 @@ function main() {
 	  update_str = JSON.parse(req.responseText)[0].commit.committer.date;
 	  var update_date = document.getElementById("update_date");
 	  update_date.innerHTML = update_str;
-	  console.log(update_str);
       }
        req.send(null);
   }
@@ -229,3 +313,40 @@ document.getElementById("start_day")
 	    func1();
 	}
     });
+
+
+document.getElementById('ToggleDatasetTokyo').addEventListener('click', function() {
+    var element = document.getElementById("ToggleDatasetTokyo");
+    if (showFlagTokyo) {
+	element.style.backgroundColor = 'white';
+    } else {
+	element.style.backgroundColor = 'red';
+    }
+    showFlagTokyo = !(showFlagTokyo);
+    updateBarChart(data, draw_mode);
+});
+
+document.getElementById('ToggleDatasetKanagawa').addEventListener('click', function() {
+    var element = document.getElementById("ToggleDatasetKanagawa");
+    if (showFlagKanagawa) {
+	element.style.backgroundColor = 'white';
+    } else {
+	element.style.backgroundColor = 'green';
+    }
+    showFlagKanagawa = !(showFlagKanagawa);
+    updateBarChart(data, draw_mode);
+});
+
+
+document.getElementById('ToggleDatasetFukuoka').addEventListener('click', function() {
+    var element = document.getElementById("ToggleDatasetFukuoka");
+    if (showFlagFukuoka) {
+	element.style.backgroundColor = 'white';
+    } else {
+	element.style.backgroundColor = 'skyblue';
+    }
+    showFlagFukuoka = !(showFlagFukuoka);
+    updateBarChart(data, draw_mode);
+});
+
+
