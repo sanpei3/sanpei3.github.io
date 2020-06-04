@@ -35,15 +35,17 @@ function calculate(data, row, i, draw_mode) {
 var tmpLabels = [], tmpData1 = [], tmpData2 = [], tmpData3 = [];;
 function updateData(data, draw_mode) {
     var start_i = start_day;
+    myChartData.datasets = [];
     tmpLabels = [];
     tmpData1 = [];
     tmpData2 = [];
-    tmpData3 = [];;
+    tmpData3 = [];
     for (var row in data) {
 	if (data[row][0] == "Province/State") {
 	    for (var i = start_i; i <= data[row].length; i++) {
 		tmpLabels.push(data[row][i]);
 	    }
+	    myChartData.labels = tmpLabels;
 	} else if (data[row][0] == "Tokyo") {
 	    for (var i = start_i; i <= data[row].length; i++) {
 		a = calculate(data, row, i, draw_mode);
@@ -52,8 +54,10 @@ function updateData(data, draw_mode) {
 		} else {
 		    tmpData1.push(0)
 		}
-		    
 	    }
+            myChartData.datasets.push(
+		{ label: "Tokyo", data: tmpData1, fill: false,
+		  borderColor: window.chartColors.blue})
 	} else if (data[row][0] == "Kanagawa") {
 	    for (var i = start_i; i <= data[row].length; i++) {
 		a = calculate(data, row, i, draw_mode);
@@ -63,6 +67,9 @@ function updateData(data, draw_mode) {
 		    tmpData2.push(0)
 		}
 	    }
+            myChartData.datasets.push(
+		{ label: "Kanagawa", data: tmpData2, fill: false,
+		  borderColor: window.chartColors.green});
 	} else if (data[row][0] == "Fukuoka") {
 	    for (var i = start_i; i <= data[row].length; i++) {
 		a = calculate(data, row, i, draw_mode);
@@ -72,40 +79,71 @@ function updateData(data, draw_mode) {
 		    tmpData3.push(0)
 		}
 	    }
+	    myChartData.datasets.push(
+		{ label: "Fukuoka", data: tmpData3,fill: false,
+		  borderColor: window.chartColors.green});
 	}
     }
 }
+const  myChartOptionsLogarithmic =
+      {
+	  yAxes: [{
+	      type: 'linear',
+	  }]
+      };
+//	  {
+//	  scales: {
+//	      yAxes: [{
+//		  type: 'logarithmic',
+//		  ticks: {
+//		      min: 10, //minimum tick
+//		      max: 1000, //maximum tick
+//		  },
+//	      }],
+//	  }
+//    };
+
+const  myChartOptionsLinear =
+      {
+	  yAxes: [{
+	      type: 'linear',
+	  }],
+      };
 
 var myChartData;
+var myChartOptions;
 function drawBarChart(data, draw_mode) {
-  // 3)chart.jsのdataset用の配列を用意
-    updateData(data, draw_mode)
+    // 3)chart.jsのdataset用の配列を用意
     myChartData =
-    {
-	labels: tmpLabels,
-	datasets:     [
-          { label: "Tokyo", data: tmpData1, fill: false,
-	    borderColor: window.chartColors.blue},
-          { label: "Kanagawa", data: tmpData2,fill: false,
-	    borderColor: window.chartColors.red},
-          { label: "Fukuoka", data: tmpData3,fill: false,
-	    borderColor: window.chartColors.green},
-	]
+	{
+	    labels: [],
+	    datasets: []
+	};
+    updateData(data, draw_mode)
+    myChartOptions = {
+	scales: myChartOptionsLinear
     };
-  // 4)chart.jsで描画
-  var ctx = document.getElementById("myChart").getContext("2d");
-  window.myChart = new Chart(ctx, {
-    type: 'line',
-    data: myChartData,
-  });
+    // 4)chart.jsで描画
+    var ctx = document.getElementById("myChart").getContext("2d");
+    console.log(myChartData);
+    window.myChart = new Chart(ctx, {
+	type: 'line',
+	data: myChartData,
+	options: myChartOptions,
+    });
 }
+
+
 function updateBarChart(data, draw_mode) {
   // 3)chart.jsのdataset用の配列を用意
     updateData(data, draw_mode)
-    myChartData.datasets[0].data = tmpData1
-    myChartData.datasets[1].data = tmpData2
-    myChartData.datasets[2].data = tmpData3
-    myChartData.labels = tmpLabels
+    if (draw_mode == 3) {
+	myChartOptions.scales = myChartOptionsLogarithmic;
+	console.log(myChartOptions.scales);
+    } else {
+	myChartOptions.scales = myChartOptionsLinear;
+	console.log(myChartOptions);
+    }
   // 4)chart.jsで描画
     window.myChart.update();
 }
@@ -184,3 +222,10 @@ document.getElementById('total_cases').addEventListener('click', function() {
 	var element = document.getElementById("total_cases");element.style.backgroundColor = 'red';	 
     }
 });
+document.getElementById("start_day")
+    .addEventListener("keyup", function(event) {
+	event.preventDefault();
+	if (event.keyCode === 13) {
+	    func1();
+	}
+    });
