@@ -1,4 +1,6 @@
 // 2) CSVから２次元配列に変換
+
+var dataStartDay = "2020-01-15";
 function csv2Array(str) {
   var csvData = [];
   var lines = str.split("\n");
@@ -228,14 +230,20 @@ function updateBarChart(data, draw_mode) {
 	console.log(myChartOptions.scales);
     } else if (draw_mode == 0) {
 	myChartOptions.scales = myChartOptionsLinear;
-	console.log(myChartOptions);
     } else {
     	myChartOptions.scales = myChartOptionsLinear;
-	console.log(myChartOptions);
     }
     // 4)chart.jsで描画
     window.myChart.update();
 }
+flatpickr('#calendar', {
+//    mode: "range",
+    minDate: dataStartDay,
+    maxDate: "today",
+    dateFormat: "Y-m-d",
+    defaultDate: "2020-05-20",
+}
+	 );
 function main() {
   // 1) ajaxでCSVファイルをロード
   var req = new XMLHttpRequest();
@@ -262,9 +270,12 @@ function main() {
   }
   req.send(null);
 }
-function func1() {
-    var input_message = document.getElementById("start_day").value;
-    start_day = input_message;
+function func2() {
+    var input_message = document.getElementById("calendar").value;
+    var ts = Date.parse(input_message);
+    var ts_start = Date.parse(dataStartDay);
+    ts = parseInt((ts - ts_start) /1000 / 60 / 60 / 24) + 4; // 4 is pre cell
+    start_day = parseInt(ts);
     updateBarChart(data, draw_mode);
 }
 
@@ -313,12 +324,9 @@ document.getElementById('total_cases').addEventListener('click', function() {
 	var element = document.getElementById("total_cases");element.style.backgroundColor = 'red';	 
     }
 });
-document.getElementById("start_day")
-    .addEventListener("keyup", function(event) {
-	event.preventDefault();
-	if (event.keyCode === 13) {
-	    func1();
-	}
+document.getElementById("calendar")
+    .addEventListener("change", function(event) {
+	func2();
     });
 
 
