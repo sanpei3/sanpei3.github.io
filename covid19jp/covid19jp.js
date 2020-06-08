@@ -54,12 +54,12 @@ function updateData(data, draw_mode) {
     tmpData3_avgCases = [];
     for (var row in data) {
 	if (data[row][0] == "Province/State") {
-	    for (var i = start_i; i <= data[row].length; i++) {
+	    for (var i = start_i; i < data[row].length; i++) {
 		tmpLabels.push(data[row][i]);
 	    }
 	    myChartData.labels = tmpLabels;
 	} else if (data[row][0] == "Tokyo" && showFlagTokyo) {
-	    for (var i = start_i; i <= data[row].length; i++) {
+	    for (var i = start_i; i < data[row].length; i++) {
 		a = calculate(data, row, i, draw_mode);
 		if ( a >=0) {
 		    tmpData1.push(a)
@@ -95,7 +95,7 @@ function updateData(data, draw_mode) {
 	    }
 	    
 	} else if (data[row][0] == "Kanagawa" && showFlagKanagawa) {
-	    for (var i = start_i; i <= data[row].length; i++) {
+	    for (var i = start_i; i < data[row].length; i++) {
 		a = calculate(data, row, i, draw_mode);
 		if ( a >=0) {
 		    tmpData2.push(a)
@@ -130,7 +130,7 @@ function updateData(data, draw_mode) {
 		      borderColor: window.chartColors.green});
 	    }
 	} else if (data[row][0] == "Fukuoka" && showFlagFukuoka) {
-	    for (var i = start_i; i <= data[row].length; i++) {
+	    for (var i = start_i; i < data[row].length; i++) {
 		a = calculate(data, row, i, draw_mode);
 		if ( a >=0) {
 		    tmpData3.push(a)
