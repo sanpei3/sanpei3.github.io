@@ -8,6 +8,10 @@ function csv2Array(str) {
   }
   return csvData;
 }
+function getTzOffset() {
+    var date = new Date();
+    return tzoff = (date.getHours() - date.getUTCHours() + 24) % 24;
+}
 
 function calculate(data, row, i, draw_mode) {
     if (draw_mode == 0) {
@@ -248,8 +252,11 @@ function main() {
       req.open("GET", filePath, true);
       req.onload = function() {
 	  update_str = JSON.parse(req.responseText)[0].commit.committer.date;
+	  var ts = Date.parse(update_str);
+	  ts = parseInt(ts) + getTzOffset() * 60 * 60;
+	  const dt = new Date(ts);
 	  var update_date = document.getElementById("update_date");
-	  update_date.innerHTML = update_str;
+	  update_date.innerHTML = dt;
       }
        req.send(null);
   }
