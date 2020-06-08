@@ -46,6 +46,8 @@ function calculate(data, row, i, draw_mode) {
 var color = Chart.helpers.color;
 var tmpLabels = [], tmpData1 = [], tmpData2 = [], tmpData3 = [];;
 var tmpData1_avgCases = [], tmpData2_avgCases = [], tmpData3_avgCases = [];
+var tmpDoubleEvery = [], tmpDouble2Days = [], tmpDouble3Days = [],
+    tmpDoubleOneWeek =[];
 
 var showFlagTokyo = true, showFlagKanagawa = true, showFlagFukuoka = true;
 function updateData(data, draw_mode) {
@@ -58,6 +60,10 @@ function updateData(data, draw_mode) {
     tmpData1_avgCases = [];
     tmpData2_avgCases = [];
     tmpData3_avgCases = [];
+    tmpDoubleEvery = [];
+    tmpDouble2Days = [];
+    tmpDouble3Days = [];
+    tmpDoubleOneWeek =[];
     for (var row in data) {
 	if (data[row][0] == "Province/State") {
 	    for (var i = start_i; i < data[row].length; i++) {
@@ -173,24 +179,46 @@ function updateData(data, draw_mode) {
 	    }
 	}
     }
+    if (draw_mode == 3) {
+	var newCases = 10;
+	for (var i = start_i; i < data[0].length; i++) {
+	    newCases = newCases * 1.41421356237309504880;
+	    tmpDouble2Days.push(newCases);
+	}
+	myChartData.datasets.push(
+	    { label: "CASES DOUBLE 2 DAYS", data: tmpDouble2Days,fill: false,
+	      type: "line",
+	      borderColor: window.chartColors.gray});
+	var newCases = 10;
+	for (var i = start_i; i < data[0].length; i++) {
+	    newCases = newCases * 1.2599210498;
+	    tmpDouble3Days.push(newCases);
+	}
+	myChartData.datasets.push(
+	    { label: "CASES DOUBLE 3 DAYS", data: tmpDouble3Days,fill: false,
+	      type: "line",
+	      borderColor: window.chartColors.gray});
+	var newCases = 10;
+	for (var i = start_i; i < data[0].length; i++) {
+	    newCases = newCases * 1.1040895136738;
+	    tmpDoubleOneWeek.push(newCases);
+	}
+	myChartData.datasets.push(
+	    { label: "CASES DOUBLE 1 Week", data: tmpDoubleOneWeek,fill: false,
+	      type: "line",
+	      borderColor: window.chartColors.gray});
+    }
 }
 const  myChartOptionsLogarithmic =
       {
 	  yAxes: [{
-	      type: 'linear',
-	  }]
+	      type: 'logarithmic',
+	      ticks: {
+		  min: 10, //minimum tick
+		  max: 1000, //maximum tick
+	      },
+	  }],
       };
-//	  {
-//	  scales: {
-//	      yAxes: [{
-//		  type: 'logarithmic',
-//		  ticks: {
-//		      min: 10, //minimum tick
-//		      max: 1000, //maximum tick
-//		  },
-//	      }],
-//	  }
-//    };
 
 const  myChartOptionsLinear =
       {
@@ -228,8 +256,6 @@ function updateBarChart(data, draw_mode) {
     if (draw_mode == 3) {
 	myChartOptions.scales = myChartOptionsLogarithmic;
 	console.log(myChartOptions.scales);
-    } else if (draw_mode == 0) {
-	myChartOptions.scales = myChartOptionsLinear;
     } else {
     	myChartOptions.scales = myChartOptionsLinear;
     }
@@ -363,5 +389,4 @@ document.getElementById('ToggleDatasetFukuoka').addEventListener('click', functi
     showFlagFukuoka = !(showFlagFukuoka);
     updateBarChart(data, draw_mode);
 });
-
 
