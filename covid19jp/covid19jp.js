@@ -80,10 +80,12 @@ pref_table =
     ];
 
 var showFlag = {};
+var prefColor = {};
 pref_table.forEach(function(val) {
     const pref = val.pref;
     const defaultenable = val.defaultenable;
     showFlag[pref] = defaultenable;
+    prefColor[pref] = val.color;
 });
    
 
@@ -95,7 +97,6 @@ var tmpData_avgCases = [];
 var tmpDoubleEvery = [], tmpDouble2Days = [], tmpDouble3Days = [],
     tmpDoubleOneWeek =[];
 
-var showFlagTokyo = true, showFlagKanagawa = true, showFlagFukuoka = true;
 function updateData(data, draw_mode) {
     var start_i = start_day;
     myChartData.datasets = [];
@@ -333,37 +334,29 @@ document.getElementById("calendar")
     });
 
 
-document.getElementById('ToggleDatasetTokyo').addEventListener('click', function() {
-    var element = document.getElementById("ToggleDatasetTokyo");
-    if (showFlag["Tokyo"]) {
-	element.style.backgroundColor = 'white';
+pref_table.forEach(function(val) {
+    const pref = val.pref;
+    const defaultenable = val.defaultenable;
+    const gcolor = val.color;
+    const addButton = document.createElement('input');
+    addButton.classList.add('addition');
+    addButton.type = 'button';
+    addButton.id = pref;
+    addButton.value = pref;
+    if (defaultenable) {
+	addButton.style.backgroundColor = gcolor;
     } else {
-	element.style.backgroundColor = 'red';
+	addButton.style.backgroundColor = 'white';
     }
-    showFlag["Tokyo"] = !(showFlag["Tokyo"]);
-    updateBarChart(data, draw_mode);
+    document.body.appendChild(addButton);
+    document.getElementById(pref).addEventListener('click', ()=> {
+	var element = document.getElementById(pref);
+	if (showFlag[pref]) {
+	    element.style.backgroundColor = 'white';
+	} else {
+	    element.style.backgroundColor = prefColor[pref];
+	}
+	showFlag[pref] = !(showFlag[pref]);
+	updateBarChart(data, draw_mode);
+    }, false);
 });
-
-document.getElementById('ToggleDatasetKanagawa').addEventListener('click', function() {
-    var element = document.getElementById("ToggleDatasetKanagawa");
-    if (showFlag["Kanagawa"]) {
-	element.style.backgroundColor = 'white';
-    } else {
-	element.style.backgroundColor = 'green';
-    }
-    showFlag["Kanagawa"] = !(showFlag["Kanagawa"]);
-    updateBarChart(data, draw_mode);
-});
-
-
-document.getElementById('ToggleDatasetFukuoka').addEventListener('click', function() {
-    var element = document.getElementById("ToggleDatasetFukuoka");
-    if (showFlag["Fukuoka"]) {
-	element.style.backgroundColor = 'white';
-    } else {
-	element.style.backgroundColor = 'skyblue';
-    }
-    showFlag["Fukuoka"] = !(showFlag["Fukuoka"]);
-    updateBarChart(data, draw_mode);
-});
-
