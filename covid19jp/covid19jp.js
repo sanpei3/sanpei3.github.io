@@ -44,8 +44,8 @@ function calculate(data, row, i, draw_mode) {
 }
 
 var color = Chart.helpers.color;
-var tmpLabels = [], tmpData1 = [], tmpData2 = [], tmpData3 = [];;
-var tmpData1_avgCases = [], tmpData2_avgCases = [], tmpData3_avgCases = [];
+var tmpLabels = [], tmpData = [];
+var tmpData_avgCases = [];
 var tmpDoubleEvery = [], tmpDouble2Days = [], tmpDouble3Days = [],
     tmpDoubleOneWeek =[];
 
@@ -54,12 +54,6 @@ function updateData(data, draw_mode) {
     var start_i = start_day;
     myChartData.datasets = [];
     tmpLabels = [];
-    tmpData1 = [];
-    tmpData2 = [];
-    tmpData3 = [];
-    tmpData1_avgCases = [];
-    tmpData2_avgCases = [];
-    tmpData3_avgCases = [];
     tmpDoubleEvery = [];
     tmpDouble2Days = [];
     tmpDouble3Days = [];
@@ -71,19 +65,21 @@ function updateData(data, draw_mode) {
 	    }
 	    myChartData.labels = tmpLabels;
 	} else if (data[row][0] == "Tokyo" && showFlagTokyo) {
+	    tmpData = [];
+	    tmpData_avgCases = [];
 	    for (var i = start_i; i < data[row].length; i++) {
 		a = calculate(data, row, i, draw_mode);
 		if ( a >=0) {
-		    tmpData1.push(a)
+		    tmpData.push(a)
 		} else {
-		    tmpData1.push(0)
+		    tmpData.push(0)
 		}
 		if (draw_mode == 0) {
 		    b = (data[row][i] - data[row][i - 6]) / 7;
 		    if ( b >=0) {
-			tmpData1_avgCases.push(b)
+			tmpData_avgCases.push(b)
 		    } else {
-			tmpData1_avgCases.push(0)
+			tmpData_avgCases.push(0)
 		    }
 		}
 	    }
@@ -94,32 +90,34 @@ function updateData(data, draw_mode) {
 		      backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
 		      borderColor: window.chartColors.red,
 		      borderWidth: 1,
-		      data: tmpData1});
+		      data: tmpData});
 		myChartData.datasets.push(
-		    { label: "Tokyo_avg", data: tmpData1_avgCases, fill: false,
+		    { label: "Tokyo_avg", data: tmpData_avgCases, fill: false,
 		      type: "line",
 		      borderColor: window.chartColors.red})
 	    } else {
 		myChartData.datasets.push(
-		{ label: "Tokyo", data: tmpData1, fill: false,
+		{ label: "Tokyo", data: tmpData, fill: false,
 		      type: "line",
 		  borderColor: window.chartColors.red})
 	    }
 	    
 	} else if (data[row][0] == "Kanagawa" && showFlagKanagawa) {
+	    tmpData = [];
+	    tmpData_avgCases = [];
 	    for (var i = start_i; i < data[row].length; i++) {
 		a = calculate(data, row, i, draw_mode);
 		if ( a >=0) {
-		    tmpData2.push(a)
+		    tmpData.push(a)
 		} else {
-		    tmpData2.push(0)
+		    tmpData.push(0)
 		}
 		if (draw_mode == 0) {
 		    b = (data[row][i] - data[row][i - 6]) / 7;
 		    if ( b >=0) {
-			tmpData2_avgCases.push(b)
+			tmpData_avgCases.push(b)
 		    } else {
-			tmpData2_avgCases.push(0)
+			tmpData_avgCases.push(0)
 		    }
 		}
 	    }
@@ -130,31 +128,33 @@ function updateData(data, draw_mode) {
 		      backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
 		      borderColor: window.chartColors.green,
 		      borderWidth: 1,
-		      data: tmpData2});
+		      data: tmpData});
 		myChartData.datasets.push(
-		    { label: "Kanagawa_avg", data: tmpData2_avgCases, fill: false,
+		    { label: "Kanagawa_avg", data: tmpData_avgCases, fill: false,
 		      type: "line",
 		      borderColor: window.chartColors.green})
 	    } else {
 		myChartData.datasets.push(
-		    { label: "Kanagawa", data: tmpData2, fill: false,
+		    { label: "Kanagawa", data: tmpData, fill: false,
 		      type: "line",
 		      borderColor: window.chartColors.green});
 	    }
 	} else if (data[row][0] == "Fukuoka" && showFlagFukuoka) {
+	    tmpData = [];
+	    tmpData_avgCases = [];
 	    for (var i = start_i; i < data[row].length; i++) {
 		a = calculate(data, row, i, draw_mode);
 		if ( a >=0) {
-		    tmpData3.push(a)
+		    tmpData.push(a)
 		} else {
-		    tmpData3.push(0)
+		    tmpData.push(0)
 		}
 		if (draw_mode == 0) {
 		    b = (data[row][i] - data[row][i - 6]) / 7;
 		    if ( b >=0) {
-			tmpData3_avgCases.push(b)
+			tmpData_avgCases.push(b)
 		    } else {
-			tmpData3_avgCases.push(0)
+			tmpData_avgCases.push(0)
 		    }
 		}
 
@@ -166,14 +166,14 @@ function updateData(data, draw_mode) {
 		      backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
 		      borderColor: window.chartColors.blue,
 		      borderWidth: 1,
-		      data: tmpData3});
+		      data: tmpData});
 		myChartData.datasets.push(
-		    { label: "Fukuoka_avg", data: tmpData3_avgCases, fill: false,
+		    { label: "Fukuoka_avg", data: tmpData_avgCases, fill: false,
 		      type: "line",
 		      borderColor: window.chartColors.blue})
 	    } else {
 		myChartData.datasets.push(
-		    { label: "Fukuoka", data: tmpData3,fill: false,
+		    { label: "Fukuoka", data: tmpData,fill: false,
 		      type: "line",
 		      borderColor: window.chartColors.blue});
 	    }
