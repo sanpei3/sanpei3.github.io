@@ -77,6 +77,11 @@ pref_table =
 	    defaultenable: false,
 	    color: window.chartColors.blue,
 	},
+	{
+	    pref: "US",
+	    defaultenable: false,
+	    color: window.chartColors.blue,
+	},
     ];
 
 var showFlag = {};
@@ -249,44 +254,35 @@ flatpickr('#calendar', {
 }
 	 );
 function main() {
-  // 1) ajaxでCSVファイルをロード
-  var req = new XMLHttpRequest();
-  var filePath = 'https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv';
-  req.open("GET", filePath, true);
-  req.onload = function() {
-    // 2) CSVデータ変換の呼び出し
-  data = csv2Array(req.responseText);
-    // 3) chart.jsデータ準備、4) chart.js描画の呼び出し
-      drawBarChart(data, draw_mode);
-      
-      var update_str;
-      var filePath = "https://api.github.com/repos/sanpei3/covid19jp/commits?path=time_series_covid19_confirmed_Japan.csv&page=1&per_page=1"
-      req.open("GET", filePath, true);
-      req.onload = function() {
-	  update_str = JSON.parse(req.responseText)[0].commit.committer.date;
-	  var ts = Date.parse(update_str);
-	  ts = parseInt(ts) + getTzOffset() * 60 * 60;
-	  const dt = new Date(ts);
-	  var update_date = document.getElementById("update_date");
-	  update_date.innerHTML = dt;
-      }
-       req.send(null);
-  }
-  req.send(null);
-}
-function func2() {
-    var input_message = document.getElementById("calendar").value;
-    var ts = Date.parse(input_message);
-    var ts_start = Date.parse(dataStartDay);
-    ts = parseInt((ts - ts_start) /1000 / 60 / 60 / 24) + 4; // 4 is pre cell
-    start_day = parseInt(ts);
-    updateBarChart(data, draw_mode);
+    // 1) ajaxでCSVファイルをロード
+    var req = new XMLHttpRequest();
+    var filePath = 'https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv';
+    req.open("GET", filePath, true);
+    req.onload = function() {
+	// 2) CSVデータ変換の呼び出し
+	data = csv2Array(req.responseText);
+	// 3) chart.jsデータ準備、4) chart.js描画の呼び出し
+	drawBarChart(data, draw_mode);
+    }
+    req.send(null);
+    var update_str;
+    var req2 = new XMLHttpRequest();
+    filePath = "https://api.github.com/repos/sanpei3/covid19jp/commits?path=time_series_covid19_confirmed_Japan.csv&page=1&per_page=1"
+    req2.open("GET", filePath, true);
+    req2.onload = function() {
+	update_str = JSON.parse(req2.responseText)[0].commit.committer.date;
+	var ts = Date.parse(update_str);
+	ts = parseInt(ts) + getTzOffset() * 60 * 60;
+	const dt = new Date(ts);
+	var update_date = document.getElementById("update_date");
+	update_date.innerHTML = dt;
+    }
+    req2.send(null);
 }
 
 
 var draw_mode = 0;
 var start_day = 130;
-main();
 
 document.getElementById('daily_new_cases').addEventListener('click', function() {
     if (draw_mode != 0) {
@@ -328,11 +324,20 @@ document.getElementById('total_cases').addEventListener('click', function() {
 	var element = document.getElementById("total_cases");element.style.backgroundColor = 'red';	 
     }
 });
+
+function func2() {
+    var input_message = document.getElementById("calendar").value;
+    var ts = Date.parse(input_message);
+    var ts_start = Date.parse(dataStartDay);
+    ts = parseInt((ts - ts_start) /1000 / 60 / 60 / 24) + 4; // 4 is pre cell
+    start_day = parseInt(ts);
+    updateBarChart(data, draw_mode);
+}
+
 document.getElementById("calendar")
     .addEventListener("change", function(event) {
 	func2();
     });
-
 
 pref_table.forEach(function(val) {
     const pref = val.pref;
@@ -360,3 +365,16 @@ pref_table.forEach(function(val) {
 	updateBarChart(data, draw_mode);
     }, false);
 });
+
+document.getElementById('AllClear').addEventListener('click', function() {
+    pref_table.forEach(function(val) {
+	const pref = val.pref;
+	if (showFlag[pref]) {
+	    var element = document.getElementById(pref);
+	    element.style.backgroundColor = 'white';
+	    showFlag[pref] = false;
+	}
+    });
+    updateBarChart(data, draw_mode);
+});
+main();

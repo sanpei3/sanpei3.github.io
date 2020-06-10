@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+<title>COVID19jp chart</title>
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js"></script>
+<script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+
+</head>
+    <body>
 <button id="daily_new_cases" style="background-color:red">Daily New cases</button>
 <button id="double_days"  style="background-color:white">Double Days</button>
 <button id="k_value"  style="background-color:white">K value</button>
 <button id="total_cases"  style="background-color:white">Total cases</button>
 <br>
-		 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <p>
 <form id="form1" action="#">
-      <input id="calendar" data-mindate=today type="text" />
+      Start Date:<input id="calendar" data-mindate=today type="text" />
       <input type="button" onclick="func2()" value="Update Graph">
 </form>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js"></script>
-<script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+<button id="AllClear" style="background-color:white">All Clear</button>
 <script src="covid19jp.js"></script>
 
-    <title>chart of results</title>
-    </head>
-    <body>
-    <!--ここにグラフが挿入されます-->
+<!--ここにグラフが挿入されます-->
     <div style="width: 100%; height: 100%;">
         <canvas id="myChart" style="width: 100%; height: auto;"></canvas>
     </div>
