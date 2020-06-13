@@ -20,6 +20,7 @@ function csv2Array(str) {
     }
     return;
 }
+
 function csv2ArrayGlobal(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
@@ -28,10 +29,8 @@ function csv2ArrayGlobal(str) {
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
 	    targetStartDay = mmddyy2yymmmdd(cells[4]);
-	    console.log(dataStartDay);
 	    offsetdays = (Date.parse(targetStartDay) -
 			  Date.parse(dataStartDay)) / 1000/ 60 / 60 /24;
-	    console.log(offsetdays);
 	}
 	if (cells[0] != "Province/State") {
 	    cells[0] = cells[1];
@@ -43,6 +42,54 @@ function csv2ArrayGlobal(str) {
     }
     return;
 }
+
+function csv2ArrayUSState(str) {
+    var lines = str.split("\n");
+    var offsetdays = 0;
+    for (var i = 0; i < lines.length; ++i) {
+	var cells = lines[i].split(",");
+	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
+	if (cells[0] == "Province/State") {
+	    targetStartDay = mmddyy2yymmmdd(cells[4]);
+	    offsetdays = (Date.parse(targetStartDay) -
+			  Date.parse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    continue;
+	}
+	if (cells[0] != "Province/State") {
+	    cells[0] = cells[0] + "_US";
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0)
+	    }
+	}
+	data.push(cells);
+    }
+    return;
+}
+
+function csv2ArrayUSCounty(str) {
+    var lines = str.split("\n");
+    var offsetdays = 0;
+    for (var i = 0; i < lines.length; ++i) {
+	var cells = lines[i].split(",");
+	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
+	if (cells[0] == "UID") {
+	    targetStartDay = mmddyy2yymmmdd(cells[11]);
+	    offsetdays = (Date.parse(targetStartDay) -
+			  Date.parse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    continue;
+	}
+	if (cells[0] != "UID") {
+	    cells[0] = cells[5] + "_" + cells[6] + "_US";
+	    cells.splice(4, 11 - 1, "0")
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0)
+	    }
+	}
+	data.push(cells);
+    }
+    return;
+}
+
 function getTzOffset() {
     var date = new Date();
     return tzoff = (date.getHours() - date.getUTCHours() + 24) % 24;
@@ -115,6 +162,41 @@ pref_table =
 	    defaultenable: true,
 	    color: window.chartColors.blue,
 	},
+	{
+	    pref: "India",
+	    defaultenable: true,
+	    color: window.chartColors.blue,
+	},
+	{
+	    pref: "Brazil",
+	    defaultenable: true,
+	    color: window.chartColors.blue,
+	},
+	{
+	    pref: "Serbia",
+	    defaultenable: false,
+	    color: window.chartColors.blue,
+	},
+	{
+	    pref: "Philippines",
+	    defaultenable: false,
+	    color: window.chartColors.blue,
+	},
+	{
+	    pref: "Minnesota_US",
+	    defaultenable: true,
+	    color: window.chartColors.blue,
+	},
+	{
+	    pref: "Rice_Minnesota_US",
+	    defaultenable: false,
+	    color: window.chartColors.blue,
+	},
+	{
+	    pref: "Hennepin_Minnesota_US",
+	    defaultenable: false,
+	    color: window.chartColors.blue,
+	},
     ];
 
 var showFlag = {};
@@ -125,9 +207,6 @@ pref_table.forEach(function(val) {
     showFlag[pref] = defaultenable;
     prefColor[pref] = val.color;
 });
-   
-
-
 
 var color = Chart.helpers.color;
 var tmpLabels = [], tmpData = [];
@@ -197,7 +276,7 @@ function updateData(draw_mode) {
 	    }
 	});	    		// 
     }
-    if (draw_mode == 3) {
+    if (draw_mode == 4) {
 	var newCases = 10;
 	for (var i = start_i; i < data[0].length; i++) {
 	    newCases = newCases * 1.41421356237309504880;
@@ -258,7 +337,6 @@ function drawBarChart(draw_mode) {
     myChartOptions = {
 	scales: myChartOptionsLinear
     };
-    console.log("IN drawBarChart");
     // 4)chart.jsで描画
     var ctx = document.getElementById("myChart").getContext("2d");
     window.myChart = new Chart(ctx, {
@@ -290,6 +368,20 @@ flatpickr('#calendar', {
 }
 	 );
 
+function getUpdateDate(url, elementId) {
+    var req = new XMLHttpRequest();
+    req.open("GET", url, true);
+    req.onload = function() {
+	update_str = JSON.parse(req.responseText)[0].commit.committer.date;
+	var ts = Date.parse(update_str);
+	ts = parseInt(ts) + getTzOffset() * 60 * 60;
+	const dt = new Date(ts);
+	var update_date = document.getElementById(elementId);
+	update_date.innerHTML = dt;
+    }
+    req.send(null);
+}
+
 function readJapan() {
     return new Promise(function (resolve, reject) {
 	var req = new XMLHttpRequest();
@@ -301,10 +393,11 @@ function readJapan() {
 	    resolve();
 	}
 	req.send(null);
+	getUpdateDate("https://api.github.com/repos/sanpei3/covid19jp/commits?path=time_series_covid19_confirmed_Japan.csv&page=1&per_page=1", "update_date_jp");
     });
 }
 
-function readUS() {
+function readGlobal() {
     return new Promise(function (resolve, reject) {
 	var req = new XMLHttpRequest();
 	var filePath = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
@@ -315,30 +408,47 @@ function readUS() {
 	    resolve();
 	}
 	req.send(null);
+	getUpdateDate("https://api.github.com/repos/CSSEGISandData/COVID-19/commits?path=csse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_confirmed_global.csv&page=1&per_page=1", "update_date_global");
+    });
+}
+
+function readUS_State() {
+    return new Promise(function (resolve, reject) {
+	var req = new XMLHttpRequest();
+	var filePath = 'https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_US_State.csv'
+	req.open("GET", filePath, true);
+	req.onload = function() {
+	    // 2) CSVデータ変換の呼び出し
+	    csv2ArrayUSState(req.responseText);
+	    resolve();
+	}
+	req.send(null);
+	getUpdateDate("https://api.github.com/repos/sanpei3/covid19jp/commits?path=time_series_covid19_confirmed_US_State.csv&page=1&per_page=1", "update_date_us_state");
+    });
+}
+function readUS_County() {
+    return new Promise(function (resolve, reject) {
+	var req = new XMLHttpRequest();
+	var filePath = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv';
+	req.open("GET", filePath, true);
+	req.onload = function() {
+	    // 2) CSVデータ変換の呼び出し
+	    csv2ArrayUSCounty(req.responseText);
+	    resolve();
+	}
+	req.send(null);
+	getUpdateDate("https://api.github.com/repos/CSSEGISandData/COVID-19/commits?path=csse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_confirmed_US.csv&page=1&per_page=1", "update_date_us_county");
     });
 }
 
 async function main() {
     // 1) ajaxでCSVファイルをロード
     await readJapan();
-    console.log("after readJapan");
-    await readUS();
-    console.log("after readUS");
+    await readGlobal();
+    await readUS_State();
+    await readUS_County();
     await drawBarChart(draw_mode);
-    console.log("after drawBarChart");
     var update_str;
-    var req2 = new XMLHttpRequest();
-    filePath = "https://api.github.com/repos/sanpei3/covid19jp/commits?path=time_series_covid19_confirmed_Japan.csv&page=1&per_page=1"
-    req2.open("GET", filePath, true);
-    req2.onload = function() {
-	update_str = JSON.parse(req2.responseText)[0].commit.committer.date;
-	var ts = Date.parse(update_str);
-	ts = parseInt(ts) + getTzOffset() * 60 * 60;
-	const dt = new Date(ts);
-	var update_date = document.getElementById("update_date");
-	update_date.innerHTML = dt;
-    }
-    req2.send(null);
 }
 
 
