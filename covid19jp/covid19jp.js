@@ -1,21 +1,54 @@
 // 2) CSVから２次元配列に変換
 
-var dataStartDay = "2020-01-15";
+var dataStartDay;
+var data = [];
+
+function mmddyy2yymmmdd(str) {
+    var s = str.split("/");
+    return  "20" + s[2] + "-" + s[0] + "-" + s[1];
+}
+
 function csv2Array(str) {
-  var csvData = [];
-  var lines = str.split("\n");
-  for (var i = 0; i < lines.length; ++i) {
-    var cells = lines[i].split(",");
-    csvData.push(cells);
-  }
-  return csvData;
+    var lines = str.split("\n");
+    for (var i = 0; i < lines.length; ++i) {
+	// dataStartDay を自動計算したい
+	var cells = lines[i].split(",");
+	if (cells[0] == "Province/State") {
+	    dataStartDay = mmddyy2yymmmdd(cells[4]);
+	}
+	data.push(cells);
+    }
+    return;
+}
+function csv2ArrayGlobal(str) {
+    var lines = str.split("\n");
+    var offsetdays = 0;
+    for (var i = 0; i < lines.length; ++i) {
+	var cells = lines[i].split(",");
+	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
+	if (cells[0] == "Province/State") {
+	    targetStartDay = mmddyy2yymmmdd(cells[4]);
+	    console.log(dataStartDay);
+	    offsetdays = (Date.parse(targetStartDay) -
+			  Date.parse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    console.log(offsetdays);
+	}
+	if (cells[0] != "Province/State") {
+	    cells[0] = cells[1];
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0)
+	    }
+	}
+	data.push(cells);
+    }
+    return;
 }
 function getTzOffset() {
     var date = new Date();
     return tzoff = (date.getHours() - date.getUTCHours() + 24) % 24;
 }
 
-function calculate(data, row, i, draw_mode) {
+function calculate(row, i, draw_mode) {
     if (draw_mode == 0) {
 	// Daily New cases
 	// XX add average graph
@@ -79,7 +112,7 @@ pref_table =
 	},
 	{
 	    pref: "US",
-	    defaultenable: false,
+	    defaultenable: true,
 	    color: window.chartColors.blue,
 	},
     ];
@@ -102,7 +135,7 @@ var tmpData_avgCases = [];
 var tmpDoubleEvery = [], tmpDouble2Days = [], tmpDouble3Days = [],
     tmpDoubleOneWeek =[];
 
-function updateData(data, draw_mode) {
+function updateData(draw_mode) {
     var start_i = start_day;
     myChartData.datasets = [];
     tmpLabels = [];
@@ -110,12 +143,14 @@ function updateData(data, draw_mode) {
     tmpDouble2Days = [];
     tmpDouble3Days = [];
     tmpDoubleOneWeek =[];
+    headerFlag = false;
     for (var row in data) {
-	if (data[row][0] == "Province/State") {
+	if (data[row][0] == "Province/State" && headerFlag == false) {
 	    for (var i = start_i; i < data[row].length; i++) {
 		tmpLabels.push(data[row][i]);
 	    }
 	    myChartData.labels = tmpLabels;
+	    headerFlag = true;
 	}
 	pref_table.forEach(function(val) {
 	    const pref = val.pref;
@@ -125,7 +160,7 @@ function updateData(data, draw_mode) {
 		tmpData = [];
 		tmpData_avgCases = [];
 		for (var i = start_i; i < data[row].length; i++) {
-		    a = calculate(data, row, i, draw_mode);
+		    a = calculate(row, i, draw_mode);
 		    if ( a >=0) {
 			tmpData.push(a)
 		    } else {
@@ -212,17 +247,18 @@ const  myChartOptionsLinear =
 
 var myChartData;
 var myChartOptions;
-function drawBarChart(data, draw_mode) {
+function drawBarChart(draw_mode) {
     // 3)chart.jsのdataset用の配列を用意
     myChartData =
 	{
 	    labels: [],
 	    datasets: []
 	};
-    updateData(data, draw_mode)
+    updateData(draw_mode)
     myChartOptions = {
 	scales: myChartOptionsLinear
     };
+    console.log("IN drawBarChart");
     // 4)chart.jsで描画
     var ctx = document.getElementById("myChart").getContext("2d");
     window.myChart = new Chart(ctx, {
@@ -233,9 +269,9 @@ function drawBarChart(data, draw_mode) {
 }
 
 
-function updateBarChart(data, draw_mode) {
+function updateBarChart(draw_mode) {
   // 3)chart.jsのdataset用の配列を用意
-    updateData(data, draw_mode)
+    updateData(draw_mode)
     if (draw_mode == 3) {
 	myChartOptions.scales = myChartOptionsLogarithmic;
 	console.log(myChartOptions.scales);
@@ -253,18 +289,43 @@ flatpickr('#calendar', {
     defaultDate: "2020-05-20",
 }
 	 );
-function main() {
+
+function readJapan() {
+    return new Promise(function (resolve, reject) {
+	var req = new XMLHttpRequest();
+	var filePath = 'https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv';
+	req.open("GET", filePath, true);
+	req.onload = function() {
+	    // 2) CSVデータ変換の呼び出し
+	    csv2Array(req.responseText);
+	    resolve();
+	}
+	req.send(null);
+    });
+}
+
+function readUS() {
+    return new Promise(function (resolve, reject) {
+	var req = new XMLHttpRequest();
+	var filePath = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
+	req.open("GET", filePath, true);
+	req.onload = function() {
+	    // 2) CSVデータ変換の呼び出し
+	    csv2ArrayGlobal(req.responseText);
+	    resolve();
+	}
+	req.send(null);
+    });
+}
+
+async function main() {
     // 1) ajaxでCSVファイルをロード
-    var req = new XMLHttpRequest();
-    var filePath = 'https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv';
-    req.open("GET", filePath, true);
-    req.onload = function() {
-	// 2) CSVデータ変換の呼び出し
-	data = csv2Array(req.responseText);
-	// 3) chart.jsデータ準備、4) chart.js描画の呼び出し
-	drawBarChart(data, draw_mode);
-    }
-    req.send(null);
+    await readJapan();
+    console.log("after readJapan");
+    await readUS();
+    console.log("after readUS");
+    await drawBarChart(draw_mode);
+    console.log("after drawBarChart");
     var update_str;
     var req2 = new XMLHttpRequest();
     filePath = "https://api.github.com/repos/sanpei3/covid19jp/commits?path=time_series_covid19_confirmed_Japan.csv&page=1&per_page=1"
@@ -287,7 +348,7 @@ var start_day = 130;
 document.getElementById('daily_new_cases').addEventListener('click', function() {
     if (draw_mode != 0) {
 	draw_mode = 0;
-	updateBarChart(data, draw_mode);
+	updateBarChart(draw_mode);
 	var element = document.getElementById("daily_new_cases");element.style.backgroundColor = 'red';	 
 	var element = document.getElementById("double_days");element.style.backgroundColor = 'white';	 
 	var element = document.getElementById("k_value");element.style.backgroundColor = 'white';	 
@@ -297,7 +358,7 @@ document.getElementById('daily_new_cases').addEventListener('click', function() 
 document.getElementById('double_days').addEventListener('click', function() {
     if (draw_mode != 1) {
 	draw_mode = 1;
-	updateBarChart(data, draw_mode);
+	updateBarChart(draw_mode);
 	var element = document.getElementById("daily_new_cases");element.style.backgroundColor = 'white';	 
 	var element = document.getElementById("double_days");element.style.backgroundColor = 'red';	 
 	var element = document.getElementById("k_value");element.style.backgroundColor = 'white';	 
@@ -307,7 +368,7 @@ document.getElementById('double_days').addEventListener('click', function() {
 document.getElementById('k_value').addEventListener('click', function() {
     if (draw_mode != 2) {
 	draw_mode = 2;
-	updateBarChart(data, draw_mode);
+	updateBarChart(draw_mode);
 	var element = document.getElementById("daily_new_cases");element.style.backgroundColor = 'white';	 
 	var element = document.getElementById("double_days");element.style.backgroundColor = 'white';	 
 	var element = document.getElementById("k_value");element.style.backgroundColor = 'red';	 
@@ -317,7 +378,7 @@ document.getElementById('k_value').addEventListener('click', function() {
 document.getElementById('total_cases').addEventListener('click', function() {
     if (draw_mode != 3) {
 	draw_mode = 3;
-	updateBarChart(data, draw_mode);
+	updateBarChart(draw_mode);
 	var element = document.getElementById("daily_new_cases");element.style.backgroundColor = 'white';	 
 	var element = document.getElementById("double_days");element.style.backgroundColor = 'white';	 
 	var element = document.getElementById("k_value");element.style.backgroundColor = 'white';	 
@@ -331,7 +392,7 @@ function func2() {
     var ts_start = Date.parse(dataStartDay);
     ts = parseInt((ts - ts_start) /1000 / 60 / 60 / 24) + 4; // 4 is pre cell
     start_day = parseInt(ts);
-    updateBarChart(data, draw_mode);
+    updateBarChart(draw_mode);
 }
 
 document.getElementById("calendar")
@@ -362,7 +423,7 @@ pref_table.forEach(function(val) {
 	    element.style.backgroundColor = prefColor[pref];
 	}
 	showFlag[pref] = !(showFlag[pref]);
-	updateBarChart(data, draw_mode);
+	updateBarChart(draw_mode);
     }, false);
 });
 
@@ -375,6 +436,6 @@ document.getElementById('AllClear').addEventListener('click', function() {
 	    showFlag[pref] = false;
 	}
     });
-    updateBarChart(data, draw_mode);
+    updateBarChart(draw_mode);
 });
 main();
