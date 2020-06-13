@@ -246,7 +246,7 @@ function updateData(draw_mode) {
 			tmpData.push(0)
 		    }
 		    if (draw_mode == 0) {
-			if ((data[row][i] - data[row][i - 1]) == 0) {
+			if (i + 1 == data[row].length && (data[row][i] - data[row][i - 1]) == 0) {
 			    tmpData_avgCases.push("NULL")
 			} else {
 			    b = (data[row][i] - data[row][i - 6]) / 7;
