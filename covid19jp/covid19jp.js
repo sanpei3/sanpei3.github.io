@@ -246,11 +246,15 @@ function updateData(draw_mode) {
 			tmpData.push(0)
 		    }
 		    if (draw_mode == 0) {
-			b = (data[row][i] - data[row][i - 6]) / 7;
-			if ( b >=0) {
-			    tmpData_avgCases.push(b)
+			if ((data[row][i] - data[row][i - 1]) == 0) {
+			    tmpData_avgCases.push("NULL")
 			} else {
-			    tmpData_avgCases.push(0)
+			    b = (data[row][i] - data[row][i - 6]) / 7;
+			    if ( b >=0) {
+				tmpData_avgCases.push(b)
+			    } else {
+				tmpData_avgCases.push(0)
+			    }
 			}
 		    }
 		}
