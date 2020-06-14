@@ -2,6 +2,7 @@
 
 var dataStartDay;
 var data = [];
+var yaxesType = "Linear";
 
 function mmddyy2yymmmdd(str) {
     var s = str.split("/");
@@ -154,6 +155,11 @@ pref_table =
 	},
 	{
 	    pref: "Saitama",
+	    defaultenable: false,
+	    color: window.chartColors.blue,
+	},
+	{
+	    pref: "Hokkaido",
 	    defaultenable: false,
 	    color: window.chartColors.blue,
 	},
@@ -339,16 +345,17 @@ const  myChartOptionsLogarithmic =
       {
 	  yAxes: [{
 	      type: 'logarithmic',
-	      ticks: {
-		  min: 10, //minimum tick
-		  max: 1000, //maximum tick
-	      },
+//	      ticks: {
+//		  min: 10, //minimum tick
+//		  max: 1000, //maximum tick
+//	      },
 	  }],
       };
 
 const  myChartOptionsLinear =
       {
 	  yAxes: [{
+//	      type: 'logarithmic',
 	      type: 'linear',
 	      ticks: {
 		  beginAtZero: true,
@@ -367,9 +374,15 @@ function drawBarChart(draw_mode) {
 	    datasets: []
 	};
     updateData(draw_mode)
-    myChartOptions = {
-	scales: myChartOptionsLinear
-    };
+    if (yaxesType == "Logarithmic") {
+	myChartOptions = {
+	    scales: myChartOptionsLogarithmic,
+	};
+    } else {
+	myChartOptions = {
+	    scales: myChartOptionsLinear,
+	};
+    }
     // 4)chart.jsで描画
     var ctx = document.getElementById("myChart").getContext("2d");
     window.myChart = new Chart(ctx, {
@@ -383,12 +396,6 @@ function drawBarChart(draw_mode) {
 function updateBarChart(draw_mode) {
   // 3)chart.jsのdataset用の配列を用意
     updateData(draw_mode)
-    if (draw_mode == 3) {
-	myChartOptions.scales = myChartOptionsLogarithmic;
-	console.log(myChartOptions.scales);
-    } else {
-    	myChartOptions.scales = myChartOptionsLinear;
-    }
     // 4)chart.jsで描画
     window.myChart.update();
 }
@@ -403,6 +410,7 @@ flatpickr('#calendar', {
 
 function getUpdateDate(url, elementId) {
     var req = new XMLHttpRequest();
+    var update_str;
     req.open("GET", url, true);
     req.onload = function() {
 	update_str = JSON.parse(req.responseText)[0].commit.committer.date;
@@ -481,7 +489,6 @@ async function main() {
     await readUS_State();
     await readUS_County();
     await drawBarChart(draw_mode);
-    var update_str;
 }
 
 
@@ -581,4 +588,28 @@ document.getElementById('AllClear').addEventListener('click', function() {
     });
     updateBarChart(draw_mode);
 });
+document.getElementById('linear').addEventListener('click', function() {
+    if (yaxesType != "Linear") {
+	myChart.destroy();
+	yaxesType = "Linear";
+	var element = document.getElementById("linear");
+	element.style.backgroundColor = 'skyblue';
+	var element = document.getElementById("logarithmic");
+	element.style.backgroundColor = 'white';
+	drawBarChart(draw_mode);
+    }
+});
+
+document.getElementById('logarithmic').addEventListener('click', function() {
+    if (yaxesType != "Logarithmic") {
+	myChart.destroy();
+	yaxesType = "Logarithmic";
+	var element = document.getElementById("logarithmic");
+	element.style.backgroundColor = 'skyblue';
+	var element = document.getElementById("linear");
+	element.style.backgroundColor = 'white';
+	drawBarChart(draw_mode);
+    }
+});
+
 main();
