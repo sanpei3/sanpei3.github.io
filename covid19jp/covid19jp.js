@@ -188,6 +188,31 @@ pref_table =
 	    color: window.chartColors.blue,
 	},
 	{
+	    pref: "New York_US",
+	    defaultenable: false,
+	    color: window.chartColors.blue,
+	},
+	{
+	    pref: "California_US",
+	    defaultenable: false,
+	    color: window.chartColors.blue,
+	},
+	{
+	    pref: "Washington_US",
+	    defaultenable: false,
+	    color: window.chartColors.blue,
+	},
+	{
+	    pref: "Florida_US",
+	    defaultenable: false,
+	    color: window.chartColors.blue,
+	},
+	{
+	    pref: "Georgia_US",
+	    defaultenable: false,
+	    color: window.chartColors.blue,
+	},
+	{
 	    pref: "Rice_Minnesota_US",
 	    defaultenable: false,
 	    color: window.chartColors.blue,
@@ -325,6 +350,10 @@ const  myChartOptionsLinear =
       {
 	  yAxes: [{
 	      type: 'linear',
+	      ticks: {
+		  beginAtZero: true,
+		  min: 0,
+	      }
 	  }],
       };
 
