@@ -4,6 +4,15 @@ var dataStartDay;
 var data = [];
 var yaxesType = "Linear";
 
+const colorTable = [
+    "purple",
+    "grey",
+    "blue",
+    "orange",
+//    "navy",
+    "silver",
+];
+
 function mmddyy2yymmmdd(str) {
     var s = str.split("/");
     return  "20" + s[2] + "-" + s[0] + "-" + s[1];
@@ -140,103 +149,91 @@ pref_table =
 	},
 	{
 	    pref: "Fukuoka",
-	    defaultenable: true,
-	    color: window.chartColors.blue,
+	    defaultenable: false
 	},
 	{
 	    pref: "Ibaraki",
 	    defaultenable: false,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "Chiba",
 	    defaultenable: false,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "Saitama",
 	    defaultenable: false,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "Hokkaido",
 	    defaultenable: false,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "US",
 	    defaultenable: true,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "India",
 	    defaultenable: true,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "Brazil",
 	    defaultenable: true,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "Serbia",
 	    defaultenable: false,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "Philippines",
 	    defaultenable: false,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "Minnesota_US",
 	    defaultenable: true,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "New York_US",
 	    defaultenable: false,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "California_US",
 	    defaultenable: false,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "Washington_US",
 	    defaultenable: false,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "Florida_US",
 	    defaultenable: false,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "Georgia_US",
 	    defaultenable: false,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "Rice_Minnesota_US",
 	    defaultenable: false,
-	    color: window.chartColors.blue,
 	},
 	{
 	    pref: "Hennepin_Minnesota_US",
 	    defaultenable: false,
-	    color: window.chartColors.blue,
 	},
     ];
 
 var showFlag = {};
 var prefColor = {};
+var colorIndex = 0;
 pref_table.forEach(function(val) {
     const pref = val.pref;
     const defaultenable = val.defaultenable;
     showFlag[pref] = defaultenable;
-    prefColor[pref] = val.color;
+    if (val.color != undefined) {
+	prefColor[pref] = val.color;
+    } else {
+	prefColor[pref] = colorTable[colorIndex % colorTable.length];
+	colorIndex = colorIndex + 1;
+    }
 });
 
 var color = Chart.helpers.color;
@@ -265,7 +262,7 @@ function updateData(draw_mode) {
 	pref_table.forEach(function(val) {
 	    const pref = val.pref;
 	    const defaultenable = val.defaultenable;
-	    const gcolor = val.color;
+	    const gcolor = prefColor[pref];
 	    if (data[row][0] == pref && showFlag[pref]) {
 		tmpData = [];
 		tmpData_avgCases = [];
@@ -560,7 +557,7 @@ pref_table.forEach(function(val) {
     addButton.id = pref;
     addButton.value = pref;
     if (defaultenable) {
-	addButton.style.backgroundColor = gcolor;
+	addButton.style.backgroundColor = prefColor[pref];
     } else {
 	addButton.style.backgroundColor = 'white';
     }
