@@ -21,7 +21,6 @@ function mmddyy2yymmmdd(str) {
 function csv2Array(str) {
     var lines = str.split("\n");
     for (var i = 0; i < lines.length; ++i) {
-	// dataStartDay を自動計算したい
 	var cells = lines[i].split(",");
 	if (cells[0] == "Province/State") {
 	    dataStartDay = mmddyy2yymmmdd(cells[4]);
@@ -306,7 +305,7 @@ function updateData(draw_mode) {
 			  borderColor: gcolor})
 		}
 	    }
-	});	    		// 
+	});
     }
     if (draw_mode == 4) {
 	var newCases = 10;
@@ -352,7 +351,6 @@ const  myChartOptionsLogarithmic =
 const  myChartOptionsLinear =
       {
 	  yAxes: [{
-//	      type: 'logarithmic',
 	      type: 'linear',
 	      ticks: {
 		  beginAtZero: true,
@@ -396,6 +394,7 @@ function updateBarChart(draw_mode) {
     // 4)chart.jsで描画
     window.myChart.update();
 }
+
 flatpickr('#calendar', {
 //    mode: "range",
     minDate: dataStartDay,
@@ -461,45 +460,38 @@ async function main() {
 var draw_mode = 0;
 var start_day = 130;
 
-document.getElementById('daily_new_cases').addEventListener('click', function() {
-    if (draw_mode != 0) {
-	draw_mode = 0;
-	updateBarChart(draw_mode);
-	var element = document.getElementById("daily_new_cases");element.style.backgroundColor = 'red';	 
-	var element = document.getElementById("double_days");element.style.backgroundColor = 'white';	 
-	var element = document.getElementById("k_value");element.style.backgroundColor = 'white';	 
-	var element = document.getElementById("total_cases");element.style.backgroundColor = 'white';	 
+const graphTable = ["daily_new_cases",
+		    "double_days",
+		    "k_value",
+		    "total_cases",
+		   ];
+
+function updateGraphButtons(draw_mode, new_draw_mode) {
+    var color = "";
+    for (i = 0; i < graphTable.length; i++) {
+	if (new_draw_mode == i) {
+	    color = 'red';
+	} else if (draw_mode == i) {
+	    color = 'white';
+	} else {
+	    continue;
+	}
+	var element = document.getElementById(graphTable[i]);element.style.backgroundColor = color;
     }
-});
-document.getElementById('double_days').addEventListener('click', function() {
-    if (draw_mode != 1) {
-	draw_mode = 1;
-	updateBarChart(draw_mode);
-	var element = document.getElementById("daily_new_cases");element.style.backgroundColor = 'white';	 
-	var element = document.getElementById("double_days");element.style.backgroundColor = 'red';	 
-	var element = document.getElementById("k_value");element.style.backgroundColor = 'white';	 
-	var element = document.getElementById("total_cases");element.style.backgroundColor = 'white';	 
-    }
-});
-document.getElementById('k_value').addEventListener('click', function() {
-    if (draw_mode != 2) {
-	draw_mode = 2;
-	updateBarChart(draw_mode);
-	var element = document.getElementById("daily_new_cases");element.style.backgroundColor = 'white';	 
-	var element = document.getElementById("double_days");element.style.backgroundColor = 'white';	 
-	var element = document.getElementById("k_value");element.style.backgroundColor = 'red';	 
-	var element = document.getElementById("total_cases");element.style.backgroundColor = 'white';	 
-    }
-});
-document.getElementById('total_cases').addEventListener('click', function() {
-    if (draw_mode != 3) {
-	draw_mode = 3;
-	updateBarChart(draw_mode);
-	var element = document.getElementById("daily_new_cases");element.style.backgroundColor = 'white';	 
-	var element = document.getElementById("double_days");element.style.backgroundColor = 'white';	 
-	var element = document.getElementById("k_value");element.style.backgroundColor = 'white';	 
-	var element = document.getElementById("total_cases");element.style.backgroundColor = 'red';	 
-    }
+}
+
+graphTable.forEach(function(val) {
+    document.getElementById(val).addEventListener('click', ()=> {
+	for (var i = 0; i < graphTable.length; i++) {
+	    if (graphTable[i] == val) {
+		if (draw_mode != i) {
+		    updateGraphButtons(draw_mode, i)
+		    draw_mode = i;
+		    updateBarChart(draw_mode);
+		}
+	    }
+	}
+    });
 });
 
 function func2() {
