@@ -408,7 +408,7 @@ flatpickr('#calendar', {
 function getUpdateDate(url, elementId) {
     var req = new XMLHttpRequest();
     var update_str;
-    req.open("GET", url, true);
+    req.open("GET", rawUrl2UpdateDate(url), true);
     req.onload = function() {
 	update_str = JSON.parse(req.responseText)[0].commit.committer.date;
 	var ts = Date.parse(update_str);
@@ -420,71 +420,40 @@ function getUpdateDate(url, elementId) {
     req.send(null);
 }
 
-function readJapan() {
-    return new Promise(function (resolve, reject) {
-	var req = new XMLHttpRequest();
-	var filePath = 'https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv';
-	req.open("GET", filePath, true);
-	req.onload = function() {
-	    // 2) CSVデータ変換の呼び出し
-	    csv2Array(req.responseText);
-	    resolve();
-	}
-	req.send(null);
-	getUpdateDate("https://api.github.com/repos/sanpei3/covid19jp/commits?path=time_series_covid19_confirmed_Japan.csv&page=1&per_page=1", "update_date_jp");
-    });
+function rawUrl2UpdateDate(url) {
+    var s = url.split("/", 7);
+    return  "https://api.github.com/repos/" + s[3] + "/" + s[4] +"/commits?path=" + s[6].replace("/", "%2F") + "&page=1&per_page=1";
 }
 
-function readGlobal() {
+function readCsv(filePath, csvFunc, id) {
     return new Promise(function (resolve, reject) {
 	var req = new XMLHttpRequest();
-	var filePath = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
 	req.open("GET", filePath, true);
 	req.onload = function() {
 	    // 2) CSVデータ変換の呼び出し
-	    csv2ArrayGlobal(req.responseText);
+	    csvFunc(req.responseText);
 	    resolve();
 	}
 	req.send(null);
-	getUpdateDate("https://api.github.com/repos/CSSEGISandData/COVID-19/commits?path=csse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_confirmed_global.csv&page=1&per_page=1", "update_date_global");
-    });
-}
-
-function readUS_State() {
-    return new Promise(function (resolve, reject) {
-	var req = new XMLHttpRequest();
-	var filePath = 'https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_US_State.csv'
-	req.open("GET", filePath, true);
-	req.onload = function() {
-	    // 2) CSVデータ変換の呼び出し
-	    csv2ArrayUSState(req.responseText);
-	    resolve();
-	}
-	req.send(null);
-	getUpdateDate("https://api.github.com/repos/sanpei3/covid19jp/commits?path=time_series_covid19_confirmed_US_State.csv&page=1&per_page=1", "update_date_us_state");
-    });
-}
-function readUS_County() {
-    return new Promise(function (resolve, reject) {
-	var req = new XMLHttpRequest();
-	var filePath = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv';
-	req.open("GET", filePath, true);
-	req.onload = function() {
-	    // 2) CSVデータ変換の呼び出し
-	    csv2ArrayUSCounty(req.responseText);
-	    resolve();
-	}
-	req.send(null);
-	getUpdateDate("https://api.github.com/repos/CSSEGISandData/COVID-19/commits?path=csse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_confirmed_US.csv&page=1&per_page=1", "update_date_us_county");
+	console.log();
+	getUpdateDate(filePath, id);
     });
 }
 
 async function main() {
     // 1) ajaxでCSVファイルをロード
-    await readJapan();
-    await readGlobal();
-    await readUS_State();
-    await readUS_County();
+    await readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv',
+		  csv2Array,
+		  "update_date_jp")
+    await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
+		  csv2ArrayGlobal,
+		  "update_date_global");
+    await readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_US_State.csv',
+		  csv2ArrayUSState,
+		  "update_date_us_state");
+    await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv',
+		  csv2ArrayUSCounty,
+		  "update_date_us_county");
     await drawBarChart(draw_mode);
 }
 
