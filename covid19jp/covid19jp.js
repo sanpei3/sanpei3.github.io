@@ -2,6 +2,8 @@
 
 var dataStartDay;
 var data = [];
+var dataCases = [];
+var dataDeath = [];
 var yaxesType = "Linear";
 
 const colorTable = [
@@ -25,7 +27,7 @@ function csv2Array(str) {
 	if (cells[0] == "Province/State") {
 	    dataStartDay = mmddyy2yymmmdd(cells[4]);
 	}
-	data.push(cells);
+	dataCases.push(cells);
     }
     return;
 }
@@ -47,7 +49,29 @@ function csv2ArrayGlobal(str) {
 		cells.splice(4, 0, 0)
 	    }
 	}
-	data.push(cells);
+	dataCases.push(cells);
+    }
+    return;
+}
+
+function csv2ArrayGlobalDeath(str) {
+    var lines = str.split("\n");
+    var offsetdays = 0;
+    for (var i = 0; i < lines.length; ++i) {
+	var cells = lines[i].split(",");
+	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
+	if (cells[0] == "Province/State") {
+	    targetStartDay = mmddyy2yymmmdd(cells[4]);
+	    offsetdays = (Date.parse(targetStartDay) -
+			  Date.parse(dataStartDay)) / 1000/ 60 / 60 /24;
+	}
+	if (cells[0] != "Province/State") {
+	    cells[0] = cells[1];
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0)
+	    }
+	}
+	dataDeath.push(cells);
     }
     return;
 }
@@ -70,7 +94,30 @@ function csv2ArrayUSState(str) {
 		cells.splice(4, 0, 0)
 	    }
 	}
-	data.push(cells);
+	dataCases.push(cells);
+    }
+    return;
+}
+
+function csv2ArrayUSStateDeath(str) {
+    var lines = str.split("\n");
+    var offsetdays = 0;
+    for (var i = 0; i < lines.length; ++i) {
+	var cells = lines[i].split(",");
+	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
+	if (cells[0] == "Province/State") {
+	    targetStartDay = mmddyy2yymmmdd(cells[4]);
+	    offsetdays = (Date.parse(targetStartDay) -
+			  Date.parse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    continue;
+	}
+	if (cells[0] != "Province/State") {
+	    cells[0] = cells[0] + "_US";
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0)
+	    }
+	}
+	dataDeath.push(cells);
     }
     return;
 }
@@ -94,7 +141,31 @@ function csv2ArrayUSCounty(str) {
 		cells.splice(4, 0, 0)
 	    }
 	}
-	data.push(cells);
+	dataCases.push(cells);
+    }
+    return;
+}
+
+function csv2ArrayUSCountyDeath(str) {
+    var lines = str.split("\n");
+    var offsetdays = 0;
+    for (var i = 0; i < lines.length; ++i) {
+	var cells = lines[i].split(",");
+	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
+	if (cells[0] == "UID") {
+	    targetStartDay = mmddyy2yymmmdd(cells[11]);
+	    offsetdays = (Date.parse(targetStartDay) -
+			  Date.parse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    continue;
+	}
+	if (cells[0] != "UID") {
+	    cells[0] = cells[5] + "_" + cells[6] + "_US";
+	    cells.splice(4, 11 - 1, "0")
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0)
+	    }
+	}
+	dataDeath.push(cells);
     }
     return;
 }
@@ -129,7 +200,14 @@ function calculate(row, i, draw_mode) {
     } else if (draw_mode == 3) {
 	// Total cases
 	return data[row][i] - data[row][start_day];
+    } else if (draw_mode == 4) {
+	// Total cases
+	return data[row][i]- data[row][i- 1];
+    } else if (draw_mode == 5) {
+	// Total cases
+	return data[row][i] - data[row][start_day];
     }
+
 }
 
 //
@@ -165,6 +243,10 @@ pref_table =
 	{
 	    pref: "Hokkaido",
 	    defaultenable: false,
+	},
+	{
+	    pref: "Japan",
+	    defaultenable: true,
 	},
 	{
 	    pref: "US",
@@ -250,6 +332,11 @@ function updateData(draw_mode) {
     tmpDouble3Days = [];
     tmpDoubleOneWeek =[];
     headerFlag = false;
+    if (draw_mode <= 3) {
+	data = dataCases;
+    } else if (draw_mode > 3) {
+	data = dataDeath;
+    }
     for (var row in data) {
 	if (data[row][0] == "Province/State" && headerFlag == false) {
 	    for (var i = start_i; i < data[row].length; i++) {
@@ -307,7 +394,7 @@ function updateData(draw_mode) {
 	    }
 	});
     }
-    if (draw_mode == 4) {
+    if (false) {
 	var newCases = 10;
 	for (var i = start_i; i < data[0].length; i++) {
 	    newCases = newCases * 1.41421356237309504880;
@@ -434,7 +521,6 @@ function readCsv(filePath, csvFunc, id) {
 	    resolve();
 	}
 	req.send(null);
-	console.log();
 	getUpdateDate(filePath, id);
     });
 }
@@ -453,6 +539,15 @@ async function main() {
     await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv',
 		  csv2ArrayUSCounty,
 		  "update_date_us_county");
+    await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv',
+		  csv2ArrayGlobalDeath,
+		  "update_date_global_death");
+    await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
+		  csv2ArrayUSCountyDeath,
+		  "update_date_us_county");
+    await readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_deaths_US_State.csv',
+		  csv2ArrayUSStateDeath,
+		  "update_date_us_state");
     await drawBarChart(draw_mode);
 }
 
@@ -464,6 +559,8 @@ const graphTable = ["daily_new_cases",
 		    "double_days",
 		    "k_value",
 		    "total_cases",
+		    "daily_deaths",
+		    "total_deaths",
 		   ];
 
 function updateGraphButtons(draw_mode, new_draw_mode) {
