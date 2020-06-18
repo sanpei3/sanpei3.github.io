@@ -502,7 +502,7 @@ function getUpdateDate(url, elementId) {
     req.open("GET", rawUrl2UpdateDate(url), true);
     req.onload = function() {
 	update_str = JSON.parse(req.responseText)[0].commit.committer.date;
-	var ts = dateParse(update_str);
+	var ts = Date.parse(update_str);
 	ts = parseInt(ts) + getTzOffset() * 60 * 60;
 	const dt = new Date(ts);
 	var update_date = document.getElementById(elementId);
