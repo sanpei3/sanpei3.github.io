@@ -17,7 +17,11 @@ const colorTable = [
 
 function mmddyy2yymmmdd(str) {
     var s = str.split("/");
-    return  "20" + s[2] + "-" + s[0] + "-" + s[1];
+    return  "20" + s[2] + "/" + s[0] + "/" + s[1];
+}
+
+function dateParse(date) {
+    return Date.parse(date.replace(/-/g , "/")  + " 00:00:00");
 }
 
 function csv2Array(str) {
@@ -40,13 +44,14 @@ function csv2ArrayGlobal(str) {
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
 	    targetStartDay = mmddyy2yymmmdd(cells[4]);
-	    offsetdays = (Date.parse(targetStartDay) -
-			  Date.parse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    offsetdays = (dateParse(targetStartDay) -
+			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    console.log(offsetdays);
 	}
 	if (cells[0] != "Province/State") {
 	    cells[0] = cells[1];
 	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0)
+		cells.splice(4, 0, 0);
 	    }
 	}
 	dataCases.push(cells);
@@ -62,8 +67,8 @@ function csv2ArrayGlobalDeath(str) {
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
 	    targetStartDay = mmddyy2yymmmdd(cells[4]);
-	    offsetdays = (Date.parse(targetStartDay) -
-			  Date.parse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    offsetdays = (dateParse(targetStartDay) -
+			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	}
 	if (cells[0] != "Province/State") {
 	    cells[0] = cells[1];
@@ -84,8 +89,8 @@ function csv2ArrayUSState(str) {
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
 	    targetStartDay = mmddyy2yymmmdd(cells[4]);
-	    offsetdays = (Date.parse(targetStartDay) -
-			  Date.parse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    offsetdays = (dateParse(targetStartDay) -
+			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	    continue;
 	}
 	if (cells[0] != "Province/State") {
@@ -107,8 +112,8 @@ function csv2ArrayUSStateDeath(str) {
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
 	    targetStartDay = mmddyy2yymmmdd(cells[4]);
-	    offsetdays = (Date.parse(targetStartDay) -
-			  Date.parse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    offsetdays = (dateParse(targetStartDay) -
+			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	    continue;
 	}
 	if (cells[0] != "Province/State") {
@@ -130,8 +135,8 @@ function csv2ArrayUSCounty(str) {
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "UID") {
 	    targetStartDay = mmddyy2yymmmdd(cells[11]);
-	    offsetdays = (Date.parse(targetStartDay) -
-			  Date.parse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    offsetdays = (dateParse(targetStartDay) -
+			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	    continue;
 	}
 	if (cells[0] != "UID") {
@@ -154,8 +159,8 @@ function csv2ArrayUSCountyDeath(str) {
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "UID") {
 	    targetStartDay = mmddyy2yymmmdd(cells[11]);
-	    offsetdays = (Date.parse(targetStartDay) -
-			  Date.parse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    offsetdays = (dateParse(targetStartDay) -
+			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	    continue;
 	}
 	if (cells[0] != "UID") {
@@ -497,7 +502,7 @@ function getUpdateDate(url, elementId) {
     req.open("GET", rawUrl2UpdateDate(url), true);
     req.onload = function() {
 	update_str = JSON.parse(req.responseText)[0].commit.committer.date;
-	var ts = Date.parse(update_str);
+	var ts = dateParse(update_str);
 	ts = parseInt(ts) + getTzOffset() * 60 * 60;
 	const dt = new Date(ts);
 	var update_date = document.getElementById(elementId);
@@ -593,8 +598,8 @@ graphTable.forEach(function(val) {
 
 function func2() {
     var input_message = document.getElementById("calendar").value;
-    var ts = Date.parse(input_message);
-    var ts_start = Date.parse(dataStartDay);
+    var ts = dateParse(input_message);
+    var ts_start = dateParse(dataStartDay);
     ts = parseInt((ts - ts_start) /1000 / 60 / 60 / 24) + 4; // 4 is pre cell
     start_day = parseInt(ts);
     updateBarChart(draw_mode);
