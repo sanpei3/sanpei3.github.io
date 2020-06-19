@@ -5,6 +5,11 @@ var data = [];
 var dataCases = [];
 var dataDeath = [];
 var yaxesType = "Linear";
+var draw_mode = 0;
+var start_day = 130;
+var start_date = "2020-05-20";
+var showFlag = {};
+var showFlagAlreadySet = false;
 
 const colorTable = [
     "purple",
@@ -14,6 +19,53 @@ const colorTable = [
 //    "navy",
     "silver",
 ];
+
+const graphTable = ["daily_new_cases",
+		    "double_days",
+		    "k_value",
+		    "total_cases",
+		    "daily_deaths",
+		    "total_deaths",
+		   ];
+
+
+var urlHash = location.hash.replace(/^#/, "").split(/&/);
+
+urlHash.forEach(function(i) {
+    var s = i.split(/=/, 2);
+    if (s[0] == "dm") {
+	draw_mode = s[1];
+	updateGraphButtons(0, draw_mode)
+    } else if (s[0] == "sd") {
+	start_date = s[1]
+    } else if (s[0] == "c") {
+	showFlagAlreadySet = true;
+	var cs = s[1].split(/,/);
+	cs.forEach(function(c) {
+	    showFlag[c] = true;
+	});
+    }
+    // logarithm
+    // draw_modeはdraw_mode切り替えボタンを動的に作る必要あり
+});
+
+function updateLocationHash () {
+    var cs = "";
+    if (showFlagAlreadySet) {
+	cs = "&c=";
+	for (let i in showFlag) {
+	    // XX なぜか空白のiがある、原因は別途検討
+	    if (i == "") {
+		continue;
+	    }
+	    if (showFlag[i]) {
+		cs = cs + i + ",";
+	    }
+	}
+	cs = cs.replace(/,$/, "");
+    }
+    window.location.hash = "dm=" + draw_mode + "&sd=" + start_date + cs;
+}
 
 function mmddyy2yymmmdd(str) {
     var s = str.split("/");
@@ -46,7 +98,6 @@ function csv2ArrayGlobal(str) {
 	    targetStartDay = mmddyy2yymmmdd(cells[4]);
 	    offsetdays = (dateParse(targetStartDay) -
 			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
-	    console.log(offsetdays);
 	}
 	if (cells[0] != "Province/State") {
 	    cells[0] = cells[1];
@@ -307,13 +358,14 @@ pref_table =
 	},
     ];
 
-var showFlag = {};
 var prefColor = {};
 var colorIndex = 0;
 pref_table.forEach(function(val) {
     const pref = val.pref;
     const defaultenable = val.defaultenable;
-    showFlag[pref] = defaultenable;
+    if (! (showFlagAlreadySet)) {
+	showFlag[pref] = defaultenable;
+    }
     if (val.color != undefined) {
 	prefColor[pref] = val.color;
     } else {
@@ -484,6 +536,7 @@ function updateBarChart(draw_mode) {
   // 3)chart.jsのdataset用の配列を用意
     updateData(draw_mode)
     // 4)chart.jsで描画
+    updateLocationHash();
     window.myChart.update();
 }
 
@@ -492,7 +545,7 @@ flatpickr('#calendar', {
     minDate: dataStartDay,
     maxDate: "today",
     dateFormat: "Y-m-d",
-    defaultDate: "2020-05-20",
+    defaultDate: start_date,
 }
 	 );
 
@@ -530,6 +583,13 @@ function readCsv(filePath, csvFunc, id) {
     });
 }
 
+function updateStartDay() {
+    var ts = dateParse(start_date);
+    var ts_start = dateParse(dataStartDay);
+    ts = parseInt((ts - ts_start) /1000 / 60 / 60 / 24) + 4; // 4 is pre cell
+    start_day = parseInt(ts);
+}
+
 async function main() {
     // 1) ajaxでCSVファイルをロード
     await readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv',
@@ -553,20 +613,12 @@ async function main() {
     await readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_deaths_US_State.csv',
 		  csv2ArrayUSStateDeath,
 		  "update_date_us_state");
+    await updateStartDay();
     await drawBarChart(draw_mode);
 }
 
 
-var draw_mode = 0;
-var start_day = 130;
 
-const graphTable = ["daily_new_cases",
-		    "double_days",
-		    "k_value",
-		    "total_cases",
-		    "daily_deaths",
-		    "total_deaths",
-		   ];
 
 function updateGraphButtons(draw_mode, new_draw_mode) {
     var color = "";
@@ -597,11 +649,8 @@ graphTable.forEach(function(val) {
 });
 
 function func2() {
-    var input_message = document.getElementById("calendar").value;
-    var ts = dateParse(input_message);
-    var ts_start = dateParse(dataStartDay);
-    ts = parseInt((ts - ts_start) /1000 / 60 / 60 / 24) + 4; // 4 is pre cell
-    start_day = parseInt(ts);
+    start_date = document.getElementById("calendar").value;
+    updateStartDay();
     updateBarChart(draw_mode);
 }
 
@@ -612,14 +661,13 @@ document.getElementById("calendar")
 
 pref_table.forEach(function(val) {
     const pref = val.pref;
-    const defaultenable = val.defaultenable;
     const gcolor = val.color;
     const addButton = document.createElement('input');
     addButton.classList.add('addition');
     addButton.type = 'button';
     addButton.id = pref;
     addButton.value = pref;
-    if (defaultenable) {
+    if (showFlag[pref]) {
 	addButton.style.backgroundColor = prefColor[pref];
     } else {
 	addButton.style.backgroundColor = 'white';
@@ -627,6 +675,8 @@ pref_table.forEach(function(val) {
     document.body.appendChild(addButton);
     document.getElementById(pref).addEventListener('click', ()=> {
 	var element = document.getElementById(pref);
+	showFlagAlreadySet = true;
+	updateLocationHash();
 	if (showFlag[pref]) {
 	    element.style.backgroundColor = 'white';
 	} else {
@@ -640,6 +690,8 @@ pref_table.forEach(function(val) {
 document.getElementById('AllClear').addEventListener('click', function() {
     pref_table.forEach(function(val) {
 	const pref = val.pref;
+	showFlagAlreadySet = true;
+	updateLocationHash();
 	if (showFlag[pref]) {
 	    var element = document.getElementById(pref);
 	    element.style.backgroundColor = 'white';
