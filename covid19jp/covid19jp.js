@@ -101,9 +101,9 @@ function csv2ArrayGlobal(str) {
 	}
 	if (cells[0] != "Province/State") {
 	    cells[0] = cells[1];
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0);
-	    }
+	}
+	for (var j = 1; j <= offsetdays; j++) {
+	    cells.splice(4, 0, 0);
 	}
 	dataCases.push(cells);
     }
@@ -123,9 +123,9 @@ function csv2ArrayGlobalDeath(str) {
 	}
 	if (cells[0] != "Province/State") {
 	    cells[0] = cells[1];
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0)
-	    }
+	}
+	for (var j = 1; j <= offsetdays; j++) {
+	    cells.splice(4, 0, 0)
 	}
 	dataDeath.push(cells);
     }
@@ -146,9 +146,9 @@ function csv2ArrayUSState(str) {
 	}
 	if (cells[0] != "Province/State") {
 	    cells[0] = cells[0] + "_US";
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0)
-	    }
+	}
+	for (var j = 1; j <= offsetdays; j++) {
+	    cells.splice(4, 0, 0)
 	}
 	dataCases.push(cells);
     }
@@ -169,9 +169,9 @@ function csv2ArrayUSStateDeath(str) {
 	}
 	if (cells[0] != "Province/State") {
 	    cells[0] = cells[0] + "_US";
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0)
-	    }
+	}
+	for (var j = 1; j <= offsetdays; j++) {
+	    cells.splice(4, 0, 0)
 	}
 	dataDeath.push(cells);
     }
@@ -193,9 +193,9 @@ function csv2ArrayUSCounty(str) {
 	if (cells[0] != "UID") {
 	    cells[0] = cells[5] + "_" + cells[6] + "_US";
 	    cells.splice(4, 11 - 1, "0")
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0)
-	    }
+	}
+	for (var j = 1; j <= offsetdays; j++) {
+	    cells.splice(4, 0, 0)
 	}
 	dataCases.push(cells);
     }
@@ -217,9 +217,9 @@ function csv2ArrayUSCountyDeath(str) {
 	if (cells[0] != "UID") {
 	    cells[0] = cells[5] + "_" + cells[6] + "_US";
 	    cells.splice(4, 11 - 1, "0")
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0)
-	    }
+	}
+	for (var j = 1; j <= offsetdays; j++) {
+	    cells.splice(4, 0, 0)
 	}
 	dataDeath.push(cells);
     }
@@ -395,6 +395,15 @@ function updateData(draw_mode) {
 	data = dataDeath;
     }
     for (var row in data) {
+	// ここで、header行で、lengthが違ったら、追加する
+	if (data[row][0] == "Province/State" && headerFlag == true) {
+	    if (tmpLabels.length + start_i < data[row].length) {
+		for (var i = tmpLabels.length + start_i; i < data[row].length; i++) {
+		    tmpLabels.push(data[row][i]);
+		}
+		myChartData.labels = tmpLabels;
+	    }
+	}
 	if (data[row][0] == "Province/State" && headerFlag == false) {
 	    for (var i = start_i; i < data[row].length; i++) {
 		tmpLabels.push(data[row][i]);
