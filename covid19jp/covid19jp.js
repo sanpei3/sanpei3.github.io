@@ -356,6 +356,10 @@ pref_table =
 	    pref: "Hennepin_Minnesota_US",
 	    defaultenable: false,
 	},
+	{
+	    pref: "San Francisco_California_US",
+	    defaultenable: false,
+	},
     ];
 
 var prefColor = {};
