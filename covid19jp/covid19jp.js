@@ -321,6 +321,10 @@ pref_table =
 	    defaultenable: false,
 	},
 	{
+	    pref: "Greece",
+	    defaultenable: false,
+	},
+	{
 	    pref: "Philippines",
 	    defaultenable: false,
 	},
