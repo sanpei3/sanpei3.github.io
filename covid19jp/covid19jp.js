@@ -29,25 +29,187 @@ const graphTable = ["daily_new_cases",
 		   ];
 
 
-var urlHash = location.hash.replace(/^#/, "").split(/&/);
+//
+// create table
+pref_table = 
+    [
+	{
+	    pref: "Tokyo",
+	    defaultenable: true,
+	    color: window.chartColors.red
+	},
+	{
+	    pref: "Kanagawa",
+	    defaultenable: true,
+	    color: window.chartColors.yellow,
+	},
+	{
+	    pref: "Fukuoka",
+	    defaultenable: false
+	},
+	{
+	    pref: "Ibaraki",
+	    defaultenable: false,
+	},
+	{
+	    pref: "Chiba",
+	    defaultenable: false,
+	},
+	{
+	    pref: "Saitama",
+	    defaultenable: false,
+	},
+	{
+	    pref: "Hokkaido",
+	    defaultenable: false,
+	},
+	{
+	    pref: "Japan",
+	    defaultenable: true,
+	},
+	{
+	    pref: "US",
+	    defaultenable: true,
+	},
+	{
+	    pref: "India",
+	    defaultenable: true,
+	},
+	{
+	    pref: "Brazil",
+	    defaultenable: true,
+	},
+	{
+	    pref: "Serbia",
+	    defaultenable: false,
+	},
+	{
+	    pref: "Greece",
+	    defaultenable: false,
+	},
+	{
+	    pref: "Philippines",
+	    defaultenable: false,
+	},
+	{
+	    pref: "Minnesota_US",
+	    defaultenable: true,
+	},
+	{
+	    pref: "New York_US",
+	    defaultenable: false,
+	},
+	{
+	    pref: "California_US",
+	    defaultenable: false,
+	},
+	{
+	    pref: "Washington_US",
+	    defaultenable: false,
+	},
+	{
+	    pref: "Florida_US",
+	    defaultenable: false,
+	},
+	{
+	    pref: "Georgia_US",
+	    defaultenable: false,
+	},
+	{
+	    pref: "Rice_Minnesota_US",
+	    defaultenable: false,
+	},
+	{
+	    pref: "Hennepin_Minnesota_US",
+	    defaultenable: false,
+	},
+	{
+	    pref: "San Francisco_California_US",
+	    defaultenable: false,
+	},
+    ];
+var prefColor = {};
+var colorIndex = 0;
 
-urlHash.forEach(function(i) {
-    var s = i.split(/=/, 2);
-    if (s[0] == "dm") {
-	draw_mode = s[1];
-	updateGraphButtons(0, draw_mode)
-    } else if (s[0] == "sd") {
-	start_date = s[1]
-    } else if (s[0] == "c") {
-	showFlagAlreadySet = true;
-	var cs = s[1].split(/,/);
-	cs.forEach(function(c) {
-	    showFlag[c] = true;
-	});
+async function initialize() {
+    var urlHash = location.hash.replace(/^#/, "").split(/&/);
+    
+    await urlHash.forEach(function(i) {
+	var s = i.split(/=/, 2);
+	if (s[0] == "dm") {
+	    draw_mode = s[1];
+	    updateGraphButtons(0, draw_mode)
+	} else if (s[0] == "sd") {
+	    start_date = s[1]
+	} else if (s[0] == "c") {
+	    showFlagAlreadySet = true;
+	    var cs = s[1].split(/,/);
+	    cs.forEach(function(c) {
+		var findFlag = false;
+		showFlag[c] = true;
+		pref_table.forEach(function(val) {
+		    const pref = val.pref;
+	    	    if (c == pref) {
+			findFlag = true;
+		    }
+		});
+		if (findFlag == false) {
+		    pref_table.push(
+			{
+			    pref: c,
+			    defaultenable: true,
+			},
+		    );
+		}
+	    });
+	}
+	// logarithm
+	// draw_modeはdraw_mode切り替えボタンを動的に作る必要あり
+    });
+    console.log(pref_table);
+    await pref_table.forEach(function(val) {
+	console.log("in create showFlag");
+	const pref = val.pref;
+	const defaultenable = val.defaultenable;
+	if (! (showFlagAlreadySet)) {
+	    showFlag[pref] = defaultenable;
+	}
+	if (val.color != undefined) {
+	    prefColor[pref] = val.color;
+	} else {
+	    prefColor[pref] = colorTable[colorIndex % colorTable.length];
+	    colorIndex = colorIndex + 1;
+	}
+    });
+await pref_table.forEach(function(val) {
+    const pref = val.pref;
+    const gcolor = val.color;
+    const addButton = document.createElement('input');
+    addButton.classList.add('addition');
+    addButton.type = 'button';
+    addButton.id = pref;
+    addButton.value = pref;
+    if (showFlag[pref]) {
+	addButton.style.backgroundColor = prefColor[pref];
+    } else {
+	addButton.style.backgroundColor = 'white';
     }
-    // logarithm
-    // draw_modeはdraw_mode切り替えボタンを動的に作る必要あり
+    document.body.appendChild(addButton);
+    document.getElementById(pref).addEventListener('click', ()=> {
+	var element = document.getElementById(pref);
+	showFlagAlreadySet = true;
+	updateLocationHash();
+	if (showFlag[pref]) {
+	    element.style.backgroundColor = 'white';
+	} else {
+	    element.style.backgroundColor = prefColor[pref];
+	}
+	showFlag[pref] = !(showFlag[pref]);
+	updateBarChart(draw_mode);
+    }, false);
 });
+}
+initialize();
 
 function updateLocationHash () {
     var cs = "";
@@ -99,13 +261,13 @@ function csv2ArrayGlobal(str) {
 	    offsetdays = (dateParse(targetStartDay) -
 			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	}
-	if (cells[0] != "Province/State") {
+	if (cells[0] == "") {
 	    cells[0] = cells[1];
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0);
+	    }
+	    dataCases.push(cells);
 	}
-	for (var j = 1; j <= offsetdays; j++) {
-	    cells.splice(4, 0, 0);
-	}
-	dataCases.push(cells);
     }
     return;
 }
@@ -121,13 +283,13 @@ function csv2ArrayGlobalDeath(str) {
 	    offsetdays = (dateParse(targetStartDay) -
 			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	}
-	if (cells[0] != "Province/State") {
+	if (cells[0] == "") {
 	    cells[0] = cells[1];
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0)
+	    }
+	    dataDeath.push(cells);
 	}
-	for (var j = 1; j <= offsetdays; j++) {
-	    cells.splice(4, 0, 0)
-	}
-	dataDeath.push(cells);
     }
     return;
 }
@@ -266,121 +428,7 @@ function calculate(row, i, draw_mode) {
 
 }
 
-//
-// create table
-pref_table = 
-    [
-	{
-	    pref: "Tokyo",
-	    defaultenable: true,
-	    color: window.chartColors.red
-	},
-	{
-	    pref: "Kanagawa",
-	    defaultenable: true,
-	    color: window.chartColors.yellow,
-	},
-	{
-	    pref: "Fukuoka",
-	    defaultenable: false
-	},
-	{
-	    pref: "Ibaraki",
-	    defaultenable: false,
-	},
-	{
-	    pref: "Chiba",
-	    defaultenable: false,
-	},
-	{
-	    pref: "Saitama",
-	    defaultenable: false,
-	},
-	{
-	    pref: "Hokkaido",
-	    defaultenable: false,
-	},
-	{
-	    pref: "Japan",
-	    defaultenable: true,
-	},
-	{
-	    pref: "US",
-	    defaultenable: true,
-	},
-	{
-	    pref: "India",
-	    defaultenable: true,
-	},
-	{
-	    pref: "Brazil",
-	    defaultenable: true,
-	},
-	{
-	    pref: "Serbia",
-	    defaultenable: false,
-	},
-	{
-	    pref: "Greece",
-	    defaultenable: false,
-	},
-	{
-	    pref: "Philippines",
-	    defaultenable: false,
-	},
-	{
-	    pref: "Minnesota_US",
-	    defaultenable: true,
-	},
-	{
-	    pref: "New York_US",
-	    defaultenable: false,
-	},
-	{
-	    pref: "California_US",
-	    defaultenable: false,
-	},
-	{
-	    pref: "Washington_US",
-	    defaultenable: false,
-	},
-	{
-	    pref: "Florida_US",
-	    defaultenable: false,
-	},
-	{
-	    pref: "Georgia_US",
-	    defaultenable: false,
-	},
-	{
-	    pref: "Rice_Minnesota_US",
-	    defaultenable: false,
-	},
-	{
-	    pref: "Hennepin_Minnesota_US",
-	    defaultenable: false,
-	},
-	{
-	    pref: "San Francisco_California_US",
-	    defaultenable: false,
-	},
-    ];
 
-var prefColor = {};
-var colorIndex = 0;
-pref_table.forEach(function(val) {
-    const pref = val.pref;
-    const defaultenable = val.defaultenable;
-    if (! (showFlagAlreadySet)) {
-	showFlag[pref] = defaultenable;
-    }
-    if (val.color != undefined) {
-	prefColor[pref] = val.color;
-    } else {
-	prefColor[pref] = colorTable[colorIndex % colorTable.length];
-	colorIndex = colorIndex + 1;
-    }
-});
 
 var color = Chart.helpers.color;
 var tmpLabels = [], tmpData = [];
@@ -676,33 +724,6 @@ document.getElementById("calendar")
 	func2();
     });
 
-pref_table.forEach(function(val) {
-    const pref = val.pref;
-    const gcolor = val.color;
-    const addButton = document.createElement('input');
-    addButton.classList.add('addition');
-    addButton.type = 'button';
-    addButton.id = pref;
-    addButton.value = pref;
-    if (showFlag[pref]) {
-	addButton.style.backgroundColor = prefColor[pref];
-    } else {
-	addButton.style.backgroundColor = 'white';
-    }
-    document.body.appendChild(addButton);
-    document.getElementById(pref).addEventListener('click', ()=> {
-	var element = document.getElementById(pref);
-	showFlagAlreadySet = true;
-	updateLocationHash();
-	if (showFlag[pref]) {
-	    element.style.backgroundColor = 'white';
-	} else {
-	    element.style.backgroundColor = prefColor[pref];
-	}
-	showFlag[pref] = !(showFlag[pref]);
-	updateBarChart(draw_mode);
-    }, false);
-});
 
 document.getElementById('AllClear').addEventListener('click', function() {
     pref_table.forEach(function(val) {
