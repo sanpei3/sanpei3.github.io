@@ -446,11 +446,7 @@ function updateData(draw_mode) {
     tmpDouble3Days = [];
     tmpDoubleOneWeek =[];
     headerFlag = false;
-    if (draw_mode <= 3) {
-	data = dataCases;
-    } else if (draw_mode > 3) {
-	data = dataDeath;
-    }
+    data = dataCases;
     for (var row in data) {
 	// ここで、header行で、lengthが違ったら、追加する
 	if (data[row][0] == "Province/State" && headerFlag == true) {
@@ -468,6 +464,13 @@ function updateData(draw_mode) {
 	    myChartData.labels = tmpLabels;
 	    headerFlag = true;
 	}
+    }
+    if (draw_mode <= 3) {
+	data = dataCases;
+    } else if (draw_mode > 3) {
+	data = dataDeath;
+    }
+    for (var row in data) {
 	pref_table.forEach(function(val) {
 	    const pref = val.pref;
 	    const defaultenable = val.defaultenable;
@@ -482,7 +485,7 @@ function updateData(draw_mode) {
 		    } else {
 			tmpData.push(0)
 		    }
-		    if (draw_mode == 0) {
+		    if (draw_mode == 0 || draw_mode == 4) {
 			if (i + 1 == data[row].length && (data[row][i] - data[row][i - 1]) == 0) {
 			    tmpData_avgCases.push("NULL")
 			} else {
@@ -495,7 +498,7 @@ function updateData(draw_mode) {
 			}
 		    }
 		}
-		if (draw_mode == 0) {
+		if (draw_mode == 0 ||draw_mode == 4) {
 		    myChartData.datasets.push(
 			{ label: pref,
 			  type: "bar",
