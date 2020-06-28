@@ -141,6 +141,9 @@ async function initialize() {
 	    updateGraphButtons(0, draw_mode)
 	} else if (s[0] == "sd") {
 	    start_date = s[1]
+	} else if (s[0] == "ya") {
+	    yaxesType = s[1];
+	    updateYAxesButtons();
 	} else if (s[0] == "c") {
 	    showFlagAlreadySet = true;
 	    var cs = s[1].split(/,/);
@@ -166,9 +169,7 @@ async function initialize() {
 	// logarithm
 	// draw_modeはdraw_mode切り替えボタンを動的に作る必要あり
     });
-    console.log(pref_table);
     await pref_table.forEach(function(val) {
-	console.log("in create showFlag");
 	const pref = val.pref;
 	const defaultenable = val.defaultenable;
 	if (! (showFlagAlreadySet)) {
@@ -226,7 +227,7 @@ function updateLocationHash () {
 	}
 	cs = cs.replace(/,$/, "");
     }
-    window.location.hash = "dm=" + draw_mode + "&sd=" + start_date + cs;
+    window.location.hash = "dm=" + draw_mode + "&sd=" + start_date + "&ya=" + yaxesType + cs;
 }
 
 function mmddyy2yymmmdd(str) {
@@ -516,16 +517,18 @@ function updateData(draw_mode) {
 	    }
 	});
     }
-    if (false) {
-	var newCases = 10;
-	for (var i = start_i; i < data[0].length; i++) {
-	    newCases = newCases * 1.41421356237309504880;
-	    tmpDouble2Days.push(newCases);
+    if (draw_mode == 3) {
+	if (false) {
+	    var newCases = 100;
+	    for (var i = start_i; i < data[0].length; i++) {
+		newCases = newCases * 1.41421356237309504880;
+		tmpDouble2Days.push(newCases);
+	    }
+	    myChartData.datasets.push(
+		{ label: "CASES DOUBLE 2 DAYS", data: tmpDouble2Days,fill: false,
+		  type: "line",
+		  borderColor: window.chartColors.gray});
 	}
-	myChartData.datasets.push(
-	    { label: "CASES DOUBLE 2 DAYS", data: tmpDouble2Days,fill: false,
-	      type: "line",
-	      borderColor: window.chartColors.gray});
 	var newCases = 10;
 	for (var i = start_i; i < data[0].length; i++) {
 	    newCases = newCases * 1.2599210498;
@@ -699,6 +702,19 @@ function updateGraphButtons(draw_mode, new_draw_mode) {
     }
 }
 
+function updateYAxesButtons() {
+    if (yaxesType == "Linear") {
+	var element = document.getElementById("linear");
+	element.style.backgroundColor = 'skyblue';
+	var element = document.getElementById("logarithmic");
+	element.style.backgroundColor = 'white';
+    } else {
+	var element = document.getElementById("logarithmic");
+	element.style.backgroundColor = 'skyblue';
+	var element = document.getElementById("linear");
+	element.style.backgroundColor = 'white';
+    }
+}
 graphTable.forEach(function(val) {
     document.getElementById(val).addEventListener('click', ()=> {
 	for (var i = 0; i < graphTable.length; i++) {
@@ -742,10 +758,8 @@ document.getElementById('linear').addEventListener('click', function() {
     if (yaxesType != "Linear") {
 	myChart.destroy();
 	yaxesType = "Linear";
-	var element = document.getElementById("linear");
-	element.style.backgroundColor = 'skyblue';
-	var element = document.getElementById("logarithmic");
-	element.style.backgroundColor = 'white';
+	updateLocationHash();
+	updateYAxesButtons();
 	drawBarChart(draw_mode);
     }
 });
@@ -754,10 +768,8 @@ document.getElementById('logarithmic').addEventListener('click', function() {
     if (yaxesType != "Logarithmic") {
 	myChart.destroy();
 	yaxesType = "Logarithmic";
-	var element = document.getElementById("logarithmic");
-	element.style.backgroundColor = 'skyblue';
-	var element = document.getElementById("linear");
-	element.style.backgroundColor = 'white';
+	updateLocationHash();
+	updateYAxesButtons();
 	drawBarChart(draw_mode);
     }
 });
