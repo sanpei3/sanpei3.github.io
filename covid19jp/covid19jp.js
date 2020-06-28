@@ -10,6 +10,7 @@ var start_day = 130;
 var start_date = "2020-05-20";
 var showFlag = {};
 var showFlagAlreadySet = false;
+var addPref = [];
 
 const colorTable = [
     "purple",
@@ -163,6 +164,29 @@ async function initialize() {
 			    defaultenable: true,
 			},
 		    );
+		    addPref.push(c);
+		}
+	    });
+	} else if (s[0] == "d") {
+	    showFlagAlreadySet = true;
+	    var cs = s[1].split(/,/);
+	    cs.forEach(function(c) {
+		var findFlag = false;
+		showFlag[c] = false;
+		pref_table.forEach(function(val) {
+		    const pref = val.pref;
+	    	    if (c == pref) {
+			findFlag = true;
+		    }
+		});
+		if (findFlag == false) {
+		    pref_table.push(
+			{
+			    pref: c,
+			    defaultenable: false,
+			},
+		    );
+		    addPref.push(c);
 		}
 	    });
 	}
@@ -214,6 +238,7 @@ initialize();
 
 function updateLocationHash () {
     var cs = "";
+    var ds = "";
     if (showFlagAlreadySet) {
 	cs = "&c=";
 	for (let i in showFlag) {
@@ -227,7 +252,25 @@ function updateLocationHash () {
 	}
 	cs = cs.replace(/,$/, "");
     }
-    window.location.hash = "dm=" + draw_mode + "&sd=" + start_date + "&ya=" + yaxesType + cs;
+    var dsFlag = false;
+    if (addPref.length >= 1) {
+	ds = "&d=";
+	for (const i of addPref) {
+	    // XX なぜか空白のiがある、原因は別途検討
+	    if (i == "") {
+		continue;
+	    }
+	    if (showFlag[i] == false) {
+		ds = ds + i + ",";
+		dsFlag = true;
+	    }
+	}
+	ds = ds.replace(/,$/, "");
+    }
+    if (!dsFlag) {
+	ds = "";
+    }
+    window.location.hash = "dm=" + draw_mode + "&sd=" + start_date + "&ya=" + yaxesType + cs + ds;
 }
 
 function mmddyy2yymmmdd(str) {
