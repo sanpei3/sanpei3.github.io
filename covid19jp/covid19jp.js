@@ -297,6 +297,9 @@ function csv2Array(str) {
 function csv2ArrayGlobal(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
+    var cellsChina = [];
+    var cellsCanada = [];
+    var cellsAustralia = [];
     for (var i = 0; i < lines.length; ++i) {
 	var cells = lines[i].split(",");
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
@@ -312,13 +315,59 @@ function csv2ArrayGlobal(str) {
 	    }
 	    dataCases.push(cells);
 	}
+	if (cells[1] == "China") {
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0);
+	    }
+	    if (cellsChina.length == 0) {
+		cells[0] = cells[1];
+		cellsChina = cells;
+	    } else {
+		for (var j = 4; j < cells.length; j++) {
+		    cellsChina[j] = parseInt(cellsChina[j]) + parseInt(cells[j]);
+		}
+	    }
+	}
+	if (cells[1] == "Canada") {
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0);
+	    }
+	    if (cellsCanada.length == 0) {
+		cells[0] = cells[1];
+		cellsCanada = cells;
+	    } else {
+		for (var j = 4; j < cells.length; j++) {
+		    cellsCanada[j] = parseInt(cellsCanada[j]) + parseInt(cells[j]);
+		}
+	    }
+	}
+	if (cells[1] == "Australia") {
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0);
+	    }
+	    if (cellsAustralia.length == 0) {
+		cells[0] = cells[1];
+		cellsAustralia= cells;
+	    } else {
+		for (var j = 4; j < cells.length; j++) {
+		    cellsAustralia[j] = parseInt(cellsAustralia[j]) + parseInt(cells[j]);
+		}
+	    }
+	}
+	    
     }
+    dataCases.push(cellsChina);
+    dataCases.push(cellsCanada);
+    dataCases.push(cellsAustralia);
     return;
 }
 
 function csv2ArrayGlobalDeath(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
+    var cellsChina = [];
+    var cellsCanada = [];
+    var cellsAustralia = [];
     for (var i = 0; i < lines.length; ++i) {
 	var cells = lines[i].split(",");
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
@@ -334,7 +383,49 @@ function csv2ArrayGlobalDeath(str) {
 	    }
 	    dataDeath.push(cells);
 	}
+	if (cells[1] == "China") {
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0);
+	    }
+	    if (cellsChina.length == 0) {
+		cells[0] = cells[1];
+		cellsChina = cells;
+	    } else {
+		for (var j = 4; j < cells.length; j++) {
+		    cellsChina[j] = parseInt(cellsChina[j]) + parseInt(cells[j]);
+		}
+	    }
+	}
+	if (cells[1] == "Canada") {
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0);
+	    }
+	    if (cellsCanada.length == 0) {
+		cells[0] = cells[1];
+		cellsCanada = cells;
+	    } else {
+		for (var j = 4; j < cells.length; j++) {
+		    cellsCanada[j] = parseInt(cellsCanada[j]) + parseInt(cells[j]);
+		}
+	    }
+	}
+	if (cells[1] == "Australia") {
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0);
+	    }
+	    if (cellsAustralia.length == 0) {
+		cells[0] = cells[1];
+		cellsAustralia= cells;
+	    } else {
+		for (var j = 4; j < cells.length; j++) {
+		    cellsAustralia[j] = parseInt(cellsAustralia[j]) + parseInt(cells[j]);
+		}
+	    }
+	}
     }
+    dataDeath.push(cellsChina);
+    dataDeath.push(cellsCanada);
+    dataDeath.push(cellsAustralia);
     return;
 }
 
@@ -546,7 +637,6 @@ function updateData(draw_mode) {
 		if (draw_mode == 3 && doubleInitial < (data[row][start_i + 1] - data[row][start_i])) {
 		    doubleInitial = data[row][start_i + 1] - data[row][start_i];
 		}
-		console.log((data[row][data[row].length - 1] - data[row][start_i]));
 		if (draw_mode == 3 && maxY < (data[row][data[row].length - 1] - data[row][start_i])) {
 		    maxY = (data[row][data[row].length - 1] - data[row][start_i]);
 		}
