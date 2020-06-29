@@ -513,6 +513,8 @@ function updateData(draw_mode) {
     } else if (draw_mode > 3) {
 	data = dataDeath;
     }
+    var doubleInitial = 0;
+    var maxY = 0;
     for (var row in data) {
 	pref_table.forEach(function(val) {
 	    const pref = val.pref;
@@ -541,7 +543,14 @@ function updateData(draw_mode) {
 			}
 		    }
 		}
-		if (draw_mode == 0 ||draw_mode == 4) {
+		if (draw_mode == 3 && doubleInitial < (data[row][start_i + 1] - data[row][start_i])) {
+		    doubleInitial = data[row][start_i + 1] - data[row][start_i];
+		}
+		console.log((data[row][data[row].length - 1] - data[row][start_i]));
+		if (draw_mode == 3 && maxY < (data[row][data[row].length - 1] - data[row][start_i])) {
+		    maxY = (data[row][data[row].length - 1] - data[row][start_i]);
+		}
+		if (draw_mode == 0 || draw_mode == 4) {
 		    myChartData.datasets.push(
 			{ label: pref,
 			  type: "bar",
@@ -564,30 +573,36 @@ function updateData(draw_mode) {
 	});
     }
     if (draw_mode == 3) {
-	if (false) {
-	    var newCases = 100;
+	if (true) {
+	    var newCases = doubleInitial;
 	    for (var i = start_i; i < data[0].length; i++) {
 		newCases = newCases * 1.41421356237309504880;
-		tmpDouble2Days.push(newCases);
+		if (newCases < maxY) {
+		    tmpDouble2Days.push(newCases);
+		}
 	    }
 	    myChartData.datasets.push(
 		{ label: "CASES DOUBLE 2 DAYS", data: tmpDouble2Days,fill: false,
 		  type: "line",
 		  borderColor: window.chartColors.gray});
 	}
-	var newCases = 10;
+	var newCases = doubleInitial;
 	for (var i = start_i; i < data[0].length; i++) {
 	    newCases = newCases * 1.2599210498;
-	    tmpDouble3Days.push(newCases);
+	    if (newCases < maxY) {
+		tmpDouble3Days.push(newCases);
+	    }
 	}
 	myChartData.datasets.push(
 	    { label: "CASES DOUBLE 3 DAYS", data: tmpDouble3Days,fill: false,
 	      type: "line",
 	      borderColor: window.chartColors.gray});
-	var newCases = 10;
+	var newCases = doubleInitial;
 	for (var i = start_i; i < data[0].length; i++) {
 	    newCases = newCases * 1.1040895136738;
-	    tmpDoubleOneWeek.push(newCases);
+	    if (newCases < maxY) {
+		tmpDoubleOneWeek.push(newCases);
+	    }
 	}
 	myChartData.datasets.push(
 	    { label: "CASES DOUBLE 1 Week", data: tmpDoubleOneWeek,fill: false,
