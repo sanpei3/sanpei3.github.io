@@ -535,12 +535,17 @@ function calculate(row, i, draw_mode) {
 	return data[row][i]- data[row][i- 1];
     } else if (draw_mode == 1) {
 	// Double Days
-	const days = 6;
-	var d = days * Math.log(2.0, 2.0) / Math.log((data[row][i] - data[row][start_day])/ (data[row][i - days]- data[row][start_day]), 2.0);
-	if (isNaN(d) || d == Infinity) {
+	var avgD = 0;
+	for (var j = 0; j >= -6; j--){
+	    const days = 6;
+	    var d = days * Math.log(2.0, 2.0) / Math.log((data[row][i + j] - data[row][start_day + j])/ (data[row][i - days + j]- data[row][start_day + j]), 2.0);
+	    avgD = avgD + d;
+	}
+	avgD = avgD / 7;
+	if (isNaN(avgD) || avgD == Infinity) {
 	    return 0;
 	} else {
-	    return d;
+	    return avgD;
 	}
     } else if (draw_mode == 2) {
 	// K value
