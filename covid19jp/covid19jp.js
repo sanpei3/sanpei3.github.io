@@ -904,13 +904,13 @@ async function main() {
 		  "update_date_us_state");
     await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv',
 		  csv2ArrayUSCounty,
-		  "update_date_us_county");
+		  "update_date_global");
     await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv',
 		  csv2ArrayGlobalDeath,
 		  "update_date_global");
     await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
 		  csv2ArrayUSCountyDeath,
-		  "update_date_us_county");
+		  "update_date_global");
     await readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_deaths_US_State.csv',
 		  csv2ArrayUSStateDeath,
 		  "update_date_us_state");
