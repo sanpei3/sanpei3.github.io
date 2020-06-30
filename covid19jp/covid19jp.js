@@ -648,7 +648,11 @@ function calculate(row, i, draw_mode) {
 	return data[row][i] - data[row][start_day];
     } else if (draw_mode == 8) {
 	// Total cases
-	return dataCases[row][i] - dataDeath[rowForDataDeath][i] - dataRecoverd[rowForDataRecoverd][i];
+	if (rowForDataDeath != 0 && rowForDataRecoverd != 0) {
+	    return dataCases[row][i] - dataDeath[rowForDataDeath][i] - dataRecoverd[rowForDataRecoverd][i];
+	} else {
+	    return 0;
+	}
     }
 
 }
@@ -710,6 +714,8 @@ function updateData(draw_mode) {
 		tmpData_avgCases = [];
 		if (draw_mode == 8) {
 		    // find row for dataDeath and detaRecoverd
+		    rowForDataDeath = 0;
+		    rowForDataRecoverd = 0;
 		    for (var r in dataDeath) {
 			if (dataDeath[r][0] == pref) {
 			    rowForDataDeath = r;
