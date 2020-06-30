@@ -12,6 +12,8 @@ var start_date = "2020-05-20";
 var showFlag = {};
 var showFlagAlreadySet = false;
 var addPref = [];
+var rowForDataDeath = 0;
+var rowForDataRecoverd = 0;
 
 const colorTable = [
     "purple",
@@ -30,6 +32,7 @@ const graphTable = ["daily_new_cases",
 		    "total_deaths",
 		    "daily_recoverd",
 		    "total_recoverd",
+		    "current_number_of_patients",
 		   ];
 
 
@@ -74,6 +77,10 @@ pref_table =
 	{
 	    pref: "US",
 	    defaultenable: true,
+	},
+	{
+	    pref: "Chaina",
+	    defaultenable: false,
 	},
 	{
 	    pref: "India",
@@ -639,6 +646,9 @@ function calculate(row, i, draw_mode) {
     } else if (draw_mode == 7) {
 	// Total cases
 	return data[row][i] - data[row][start_day];
+    } else if (draw_mode == 8) {
+	// Total cases
+	return dataCases[row][i] - dataDeath[rowForDataDeath][i] - dataRecoverd[rowForDataRecoverd][i];
     }
 
 }
@@ -685,6 +695,8 @@ function updateData(draw_mode) {
 	data = dataDeath;
     } else if (draw_mode >= 6 && draw_mode <= 7) {
 	data = dataRecoverd;
+    } else if (draw_mode == 8) {
+	data = data;
     }
     var doubleInitial = 1;
     var maxY = 0;
@@ -696,6 +708,21 @@ function updateData(draw_mode) {
 	    if (data[row][0] == pref && showFlag[pref]) {
 		tmpData = [];
 		tmpData_avgCases = [];
+		if (draw_mode == 8) {
+		    // find row for dataDeath and detaRecoverd
+		    for (var r in dataDeath) {
+			if (dataDeath[r][0] == pref) {
+			    rowForDataDeath = r;
+			    break;
+			}
+		    }
+		    for (var r in dataRecoverd) {
+			if (dataRecoverd[r][0] == pref) {
+			    rowForDataRecoverd = r;
+			    break;
+			}
+		    }
+		}
 		for (var i = start_i; i < data[row].length; i++) {
 		    a = calculate(row, i, draw_mode);
 		    if ( a >=0) {
@@ -715,6 +742,23 @@ function updateData(draw_mode) {
 			    }
 			}
 		    }
+		    if (draw_mode == 9) {
+//			if (i + 1 == data[row].length && (data[row][i] - data[row][i - 1]) == 0) {
+//			    tmpData_avgCases.push("NULL")
+			//			} else {
+			{
+			    b = 
+				((dataCases[row][i] - dataDeath[row][i] - dataRecoverd[row][i]) - 
+				 (dataCases[row][i - 6] - dataDeath[row][i - 6] - dataRecoverd[row][i - 6])) /7;
+			    
+
+			    if ( b >=0) {
+				tmpData_avgCases.push(b)
+			    } else {
+				tmpData_avgCases.push(0)
+			    }
+			}
+		    }
 		}
 		if (draw_mode == 3 && doubleInitial < (data[row][start_i + 1] - data[row][start_i])) {
 		    doubleInitial = data[row][start_i + 1] - data[row][start_i];
@@ -722,7 +766,7 @@ function updateData(draw_mode) {
 		if (draw_mode == 3 && maxY < (data[row][data[row].length - 1] - data[row][start_i])) {
 		    maxY = (data[row][data[row].length - 1] - data[row][start_i]);
 		}
-		if (draw_mode == 0 || draw_mode == 4 || draw_mode == 6) {
+		if (draw_mode == 0 || draw_mode == 4 || draw_mode == 6 || draw_mode == 9) {
 		    myChartData.datasets.push(
 			{ label: pref,
 			  type: "bar",
