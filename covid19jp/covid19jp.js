@@ -604,7 +604,7 @@ function updateData(draw_mode) {
     } else if (draw_mode > 3) {
 	data = dataDeath;
     }
-    var doubleInitial = 0;
+    var doubleInitial = 1;
     var maxY = 0;
     for (var row in data) {
 	pref_table.forEach(function(val) {
