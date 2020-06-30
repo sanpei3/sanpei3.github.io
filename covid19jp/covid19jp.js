@@ -4,6 +4,7 @@ var dataStartDay;
 var data = [];
 var dataCases = [];
 var dataDeath = [];
+var dataRecoverd = [];
 var yaxesType = "Linear";
 var draw_mode = 0;
 var start_day = 130;
@@ -27,6 +28,8 @@ const graphTable = ["daily_new_cases",
 		    "total_cases",
 		    "daily_deaths",
 		    "total_deaths",
+		    "daily_recoverd",
+		    "total_recoverd",
 		   ];
 
 
@@ -522,6 +525,72 @@ function csv2ArrayUSCountyDeath(str) {
     }
     return;
 }
+function csv2ArrayGlobalRecoverd(str) {
+    var lines = str.split("\n");
+    var offsetdays = 0;
+    var cellsChina = [];
+    var cellsCanada = [];
+    var cellsAustralia = [];
+    for (var i = 0; i < lines.length; ++i) {
+	var cells = lines[i].split(",");
+	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
+	if (cells[0] == "Province/State") {
+	    targetStartDay = mmddyy2yymmmdd(cells[4]);
+	    offsetdays = (dateParse(targetStartDay) -
+			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
+	}
+	if (cells[0] == "") {
+	    cells[0] = cells[1];
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0)
+	    }
+	    dataRecoverd.push(cells);
+	}
+	if (cells[1] == "China") {
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0);
+	    }
+	    if (cellsChina.length == 0) {
+		cells[0] = cells[1];
+		cellsChina = cells;
+	    } else {
+		for (var j = 4; j < cells.length; j++) {
+		    cellsChina[j] = parseInt(cellsChina[j]) + parseInt(cells[j]);
+		}
+	    }
+	}
+	if (cells[1] == "Canada") {
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0);
+	    }
+	    if (cellsCanada.length == 0) {
+		cells[0] = cells[1];
+		cellsCanada = cells;
+	    } else {
+		for (var j = 4; j < cells.length; j++) {
+		    cellsCanada[j] = parseInt(cellsCanada[j]) + parseInt(cells[j]);
+		}
+	    }
+	}
+	if (cells[1] == "Australia") {
+	    for (var j = 1; j <= offsetdays; j++) {
+		cells.splice(4, 0, 0);
+	    }
+	    if (cellsAustralia.length == 0) {
+		cells[0] = cells[1];
+		cellsAustralia= cells;
+	    } else {
+		for (var j = 4; j < cells.length; j++) {
+		    cellsAustralia[j] = parseInt(cellsAustralia[j]) + parseInt(cells[j]);
+		}
+	    }
+	}
+    }
+    dataRecoverd.push(cellsChina);
+    dataRecoverd.push(cellsCanada);
+    dataRecoverd.push(cellsAustralia);
+    return;
+}
 
 function getTzOffset() {
     var date = new Date();
@@ -562,6 +631,12 @@ function calculate(row, i, draw_mode) {
 	// Total cases
 	return data[row][i]- data[row][i- 1];
     } else if (draw_mode == 5) {
+	// Total cases
+	return data[row][i] - data[row][start_day];
+    } else if (draw_mode == 6) {
+	// Total cases
+	return data[row][i]- data[row][i- 1];
+    } else if (draw_mode == 7) {
 	// Total cases
 	return data[row][i] - data[row][start_day];
     }
@@ -606,8 +681,10 @@ function updateData(draw_mode) {
     }
     if (draw_mode <= 3) {
 	data = dataCases;
-    } else if (draw_mode > 3) {
+    } else if (draw_mode >= 4 && draw_mode <= 5) {
 	data = dataDeath;
+    } else if (draw_mode >= 6 && draw_mode <= 7) {
+	data = dataRecoverd;
     }
     var doubleInitial = 1;
     var maxY = 0;
@@ -626,7 +703,7 @@ function updateData(draw_mode) {
 		    } else {
 			tmpData.push(0)
 		    }
-		    if (draw_mode == 0 || draw_mode == 4) {
+		    if (draw_mode == 0 || draw_mode == 4 || draw_mode == 6) {
 			if (i + 1 == data[row].length && (data[row][i] - data[row][i - 1]) == 0) {
 			    tmpData_avgCases.push("NULL")
 			} else {
@@ -645,7 +722,7 @@ function updateData(draw_mode) {
 		if (draw_mode == 3 && maxY < (data[row][data[row].length - 1] - data[row][start_i])) {
 		    maxY = (data[row][data[row].length - 1] - data[row][start_i]);
 		}
-		if (draw_mode == 0 || draw_mode == 4) {
+		if (draw_mode == 0 || draw_mode == 4 || draw_mode == 6) {
 		    myChartData.datasets.push(
 			{ label: pref,
 			  type: "bar",
@@ -830,13 +907,16 @@ async function main() {
 		  "update_date_us_county");
     await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv',
 		  csv2ArrayGlobalDeath,
-		  "update_date_global_death");
+		  "update_date_global");
     await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
 		  csv2ArrayUSCountyDeath,
 		  "update_date_us_county");
     await readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_deaths_US_State.csv',
 		  csv2ArrayUSStateDeath,
 		  "update_date_us_state");
+    await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv',
+		  csv2ArrayGlobalRecoverd,
+		  "update_date_global");
     await updateStartDay();
     await drawBarChart(draw_mode);
 }
