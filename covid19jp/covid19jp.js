@@ -79,7 +79,7 @@ pref_table =
 	    defaultenable: true,
 	},
 	{
-	    pref: "Chaina",
+	    pref: "China",
 	    defaultenable: false,
 	},
 	{
