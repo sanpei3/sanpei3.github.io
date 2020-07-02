@@ -36,7 +36,12 @@ YAxis: <button id="linear"  style="background-color:skyblue">linear</button>
       Start Date:<input id="calendar" data-mindate=today type="text" />
       <input type="button" onclick="func2()" value="Update Graph">
 </form>
+<form id="addbuttonFrom" name="addbuttonFrom" action="#">
+      Add button:<input id="addbutton" type="text"/>
+      <input type="button" onclick="addButtonByFrom()" value="Add Prefecture/State/County/Country">
+</form>
 <button id="AllClear" style="background-color:white">All Clear</button>
+<div id="buttonArea"></div>
 <script src="covid19jp.js"></script>
 <br>
 LAST UPDATE:<br>

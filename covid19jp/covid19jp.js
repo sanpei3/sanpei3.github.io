@@ -14,6 +14,7 @@ var showFlagAlreadySet = false;
 var addPref = [];
 var rowForDataDeath = 0;
 var rowForDataRecoverd = 0;
+var psccKeys = [];
 
 const colorTable = [
     "purple",
@@ -142,6 +143,32 @@ pref_table =
 var prefColor = {};
 var colorIndex = 0;
 
+function createButton(pref, gcolor) {
+    const addButton = document.createElement('input');
+    addButton.classList.add('addition');
+    addButton.type = 'button';
+    addButton.id = pref;
+    addButton.value = pref;
+    if (showFlag[pref]) {
+	addButton.style.backgroundColor = prefColor[pref];
+    } else {
+	addButton.style.backgroundColor = 'white';
+    }
+    document.getElementById('buttonArea').appendChild(addButton);
+    document.getElementById(pref).addEventListener('click', ()=> {
+	var element = document.getElementById(pref);
+	showFlagAlreadySet = true;
+	updateLocationHash();
+	if (showFlag[pref]) {
+	    element.style.backgroundColor = 'white';
+	} else {
+	    element.style.backgroundColor = prefColor[pref];
+	}
+	showFlag[pref] = !(showFlag[pref]);
+	updateBarChart(draw_mode);
+    }, false);
+}
+
 async function initialize() {
     var urlHash = location.hash.replace(/^#/, "").split(/&/);
     
@@ -216,33 +243,11 @@ async function initialize() {
 	    colorIndex = colorIndex + 1;
 	}
     });
-await pref_table.forEach(function(val) {
-    const pref = val.pref;
-    const gcolor = val.color;
-    const addButton = document.createElement('input');
-    addButton.classList.add('addition');
-    addButton.type = 'button';
-    addButton.id = pref;
-    addButton.value = pref;
-    if (showFlag[pref]) {
-	addButton.style.backgroundColor = prefColor[pref];
-    } else {
-	addButton.style.backgroundColor = 'white';
-    }
-    document.body.appendChild(addButton);
-    document.getElementById(pref).addEventListener('click', ()=> {
-	var element = document.getElementById(pref);
-	showFlagAlreadySet = true;
-	updateLocationHash();
-	if (showFlag[pref]) {
-	    element.style.backgroundColor = 'white';
-	} else {
-	    element.style.backgroundColor = prefColor[pref];
-	}
-	showFlag[pref] = !(showFlag[pref]);
-	updateBarChart(draw_mode);
-    }, false);
-});
+    await pref_table.forEach(function(val) {
+	const pref = val.pref;
+	const gcolor = val.color;
+	createButton(pref, gcolor);
+    });
 }
 initialize();
 
@@ -298,6 +303,8 @@ function csv2Array(str) {
 	var cells = lines[i].split(",");
 	if (cells[0] == "Province/State") {
 	    dataStartDay = mmddyy2yymmmdd(cells[4]);
+	} else {
+	    psccKeys.push(cells[0]);
 	}
 	dataCases.push(cells);
     }
@@ -324,6 +331,7 @@ function csv2ArrayGlobal(str) {
 		cells.splice(4, 0, 0);
 	    }
 	    dataCases.push(cells);
+	    psccKeys.push(cells[0]);
 	}
 	if (cells[1] == "China") {
 	    for (var j = 1; j <= offsetdays; j++) {
@@ -369,6 +377,9 @@ function csv2ArrayGlobal(str) {
     dataCases.push(cellsChina);
     dataCases.push(cellsCanada);
     dataCases.push(cellsAustralia);
+    psccKeys.push("China");
+    psccKeys.push("Canada");
+    psccKeys.push("Australia");
     return;
 }
 
@@ -392,6 +403,7 @@ function csv2ArrayGlobalDeath(str) {
 		cells.splice(4, 0, 0)
 	    }
 	    dataDeath.push(cells);
+	    psccKeys.push(cells[0]);
 	}
 	if (cells[1] == "China") {
 	    for (var j = 1; j <= offsetdays; j++) {
@@ -453,6 +465,7 @@ function csv2ArrayUSState(str) {
 	}
 	if (cells[0] != "Province/State") {
 	    cells[0] = cells[0] + "_US";
+	    psccKeys.push(cells[0]);
 	}
 	for (var j = 1; j <= offsetdays; j++) {
 	    cells.splice(4, 0, 0)
@@ -500,6 +513,7 @@ function csv2ArrayUSCounty(str) {
 	if (cells[0] != "UID") {
 	    cells[0] = cells[5] + "_" + cells[6] + "_US";
 	    cells.splice(4, 11 - 1, "0")
+	    psccKeys.push(cells[0]);
 	}
 	for (var j = 1; j <= offsetdays; j++) {
 	    cells.splice(4, 0, 0)
@@ -1024,6 +1038,57 @@ function func2() {
 document.getElementById("calendar")
     .addEventListener("change", function(event) {
 	func2();
+    });
+
+function addButtonByFrom() {
+    var c = document.getElementById("addbutton").value;
+    // table にあるか確認なければアラート
+    var findFlag = false;
+    psccKeys.forEach(function(pscc) {
+	if (pscc == c) {
+	    findFlag = true;
+	    return;
+	}
+    });
+    if (findFlag == false) {
+	alert(c +": no such area(prefecture, state, county, country");
+	return;
+    }
+    findFlag = false;
+    // すでに追加済みならば、アラート
+    pref_table.forEach(function(val) {
+	const pref = val.pref;
+	if (pref == c) {
+	    findFlag = true;
+	    return;
+	}
+    });
+    if (findFlag == true) {
+	alert(c +": Already added");
+	return;
+    }
+    // あれば、ボタン追加して、有効
+    showFlag[c] = true;
+    prefColor[c] = colorTable[colorIndex % colorTable.length];
+    colorIndex = colorIndex + 1;
+    createButton(c, prefColor[c]);
+    pref_table.push(
+		{
+		    pref: c,
+		    defaultenable: true,
+		});
+    addPref.push(c);
+    updateLocationHash();
+    updateBarChart(draw_mode);
+    document.addbuttonFrom.reset();
+}
+
+document.getElementById("addbutton")
+    .addEventListener("keyup", function(event) {
+	event.preventDefault();
+	if (event.keyCode === 13) {
+	    addButtonByFrom();
+	}
     });
 
 
