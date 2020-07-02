@@ -403,7 +403,6 @@ function csv2ArrayGlobalDeath(str) {
 		cells.splice(4, 0, 0)
 	    }
 	    dataDeath.push(cells);
-	    psccKeys.push(cells[0]);
 	}
 	if (cells[1] == "China") {
 	    for (var j = 1; j <= offsetdays; j++) {
@@ -1040,6 +1039,50 @@ document.getElementById("calendar")
 	func2();
     });
 
+var keyupStack = [];
+document.getElementById("addbutton")
+    .addEventListener("keyup", function(event) {
+	keyupStack.push(1);
+	setTimeout(function () {
+	    keyupStack.pop();
+	    if (event.keyCode === 13) {
+		addButtonByFrom();
+		var list = document.getElementById('list');
+		list.textContent = null;
+		return;
+	    }
+
+	    // 最後にkeyupされてから一定時間次の入力がなかったら実行
+	    if (keyupStack.length === 0) {
+		// 部分一致を可能にする(例: .*a.*b.*c.*)
+		var buf = '.*' + this.value.replace(/(.)/g, "$1.*");
+		var reg = new RegExp(buf);
+		
+		var filteredLists = psccKeys.filter(function (d) {
+		    return reg.test(d);
+		});
+		createRow(filteredLists);
+	    }
+	}.bind(this), 300);
+	//	event.preventDefault();
+    });
+document.getElementById("addbutton")
+    .addEventListener( "blur", function(event) {
+	var list = document.getElementById('list');
+	list.textContent = null;
+    });
+
+var createRow = function (lists) {
+    var list = document.getElementById('list');
+    list.textContent = null;
+    lists.forEach(function (l) {
+	var li = document.createElement('li');
+	li.appendChild(document.createTextNode(l));
+	list.appendChild(li);
+    });
+};
+
+
 function addButtonByFrom() {
     var c = document.getElementById("addbutton").value;
     // table にあるか確認なければアラート
@@ -1067,6 +1110,9 @@ function addButtonByFrom() {
 	alert(c +": Already added");
 	return;
     }
+    if (c == "") {
+	return;
+    }
     // あれば、ボタン追加して、有効
     showFlag[c] = true;
     prefColor[c] = colorTable[colorIndex % colorTable.length];
@@ -1083,13 +1129,6 @@ function addButtonByFrom() {
     document.addbuttonFrom.reset();
 }
 
-document.getElementById("addbutton")
-    .addEventListener("keyup", function(event) {
-	event.preventDefault();
-	if (event.keyCode === 13) {
-	    addButtonByFrom();
-	}
-    });
 
 
 document.getElementById('AllClear').addEventListener('click', function() {
