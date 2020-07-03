@@ -1066,25 +1066,43 @@ document.getElementById("addbutton")
 	}.bind(this), 300);
 	//	event.preventDefault();
     });
-document.getElementById("addbutton")
-    .addEventListener( "blur", function(event) {
-	var list = document.getElementById('list');
-	list.textContent = null;
-    });
+
+function clearList() {
+    var list = document.getElementById('list');
+    list.textContent = null;
+    document.addbuttonFrom.reset();
+}
+//document.getElementById("addbuttonFrom")
+//    .addEventListener( "blur", function(event) {
+//	var list = document.getElementById('list');
+//	list.textContent = null;
+//    });
 
 var createRow = function (lists) {
     var list = document.getElementById('list');
     list.textContent = null;
     lists.forEach(function (l) {
 	var li = document.createElement('li');
-	li.appendChild(document.createTextNode(l));
+	const addButton = document.createElement('input');
+	addButton.classList.add('addition');
+	addButton.type = 'button';
+	var addButtonId = l + "_add";
+	addButton.id = addButtonId;
+	addButton.value = l;
+	li.appendChild(addButton);
 	list.appendChild(li);
+	document.getElementById(addButtonId).addEventListener('click', ()=> {
+	    var pref = addButtonId.replace(/_add/, "");
+	    console.log(pref);
+	    addButtonMain(pref);
+	    var list = document.getElementById('list');
+	    list.textContent = null;
+	}, false);
+	
     });
 };
 
-
-function addButtonByFrom() {
-    var c = document.getElementById("addbutton").value;
+function addButtonMain(c) {
     // table にあるか確認なければアラート
     var findFlag = false;
     psccKeys.forEach(function(pscc) {
@@ -1127,6 +1145,12 @@ function addButtonByFrom() {
     updateLocationHash();
     updateBarChart(draw_mode);
     document.addbuttonFrom.reset();
+}
+function addButtonByFrom() {
+    var c = document.getElementById("addbutton").value;
+    addButtonMain(c);
+    var list = document.getElementById('list');
+    list.textContent = null;
 }
 
 
