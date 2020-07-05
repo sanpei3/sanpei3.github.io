@@ -955,33 +955,37 @@ function updateStartDay() {
 }
 
 async function main() {
+    Promise.all([
     // 1) ajaxでCSVファイルをロード
-    await readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv',
-		  csv2Array,
-		  "update_date_jp")
-    await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
-		  csv2ArrayGlobal,
-		  "update_date_global");
-    await readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_US_State.csv',
-		  csv2ArrayUSState,
-		  "update_date_us_state");
-    await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv',
-		  csv2ArrayUSCounty,
-		  "update_date_global");
-    await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv',
-		  csv2ArrayGlobalDeath,
-		  "update_date_global");
-    await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
-		  csv2ArrayUSCountyDeath,
-		  "update_date_global");
-    await readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_deaths_US_State.csv',
-		  csv2ArrayUSStateDeath,
-		  "update_date_us_state");
-    await readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv',
-		  csv2ArrayGlobalRecoverd,
-		  "update_date_global");
-    await updateStartDay();
-    await drawBarChart(draw_mode);
+	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv',
+		csv2Array,
+		"update_date_jp"),
+	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
+		csv2ArrayGlobal,
+		"update_date_global"),
+	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_US_State.csv',
+		csv2ArrayUSState,
+		"update_date_us_state"),
+	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv',
+		csv2ArrayUSCounty,
+		"update_date_global"),
+	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv',
+		csv2ArrayGlobalDeath,
+		"update_date_global"),
+	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
+		csv2ArrayUSCountyDeath,
+		"update_date_global"),
+	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_deaths_US_State.csv',
+		csv2ArrayUSStateDeath,
+		"update_date_us_state"),
+	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv',
+		csv2ArrayGlobalRecoverd,
+		"update_date_global")])
+	.then(results => { 
+	    updateStartDay();
+	}).then(results => {
+	    drawBarChart(draw_mode);
+	});
 }
 
 
@@ -1070,7 +1074,7 @@ document.getElementById("addbutton")
 function clearList() {
     var list = document.getElementById('list');
     list.textContent = null;
-    document.addbuttonFrom.reset();
+//    document.addbuttonFrom.reset();
 }
 //document.getElementById("addbuttonFrom")
 //    .addEventListener( "blur", function(event) {
