@@ -15,6 +15,7 @@ var addPref = [];
 var rowForDataDeath = 0;
 var rowForDataRecoverd = 0;
 var psccKeys = [];
+var dataPopulation = [];
 
 const colorTable = [
     "purple",
@@ -34,6 +35,8 @@ const graphTable = ["daily_new_cases",
 		    "daily_recoverd",
 		    "total_recoverd",
 		    "current_number_of_patients",
+		    "daily_new_cases_per_100000",
+//		    "total_cases_per_100000",
 		   ];
 
 
@@ -184,6 +187,9 @@ async function initialize() {
 	    updateYAxesButtons();
 	} else if (s[0] == "c") {
 	    showFlagAlreadySet = true;
+	    if (s[1] == "") {
+		return;
+	    }
 	    var cs = s[1].split(/,/);
 	    cs.forEach(function(c) {
 		var findFlag = false;
@@ -307,6 +313,15 @@ function csv2Array(str) {
 	    psccKeys.push(cells[0]);
 	}
 	dataCases.push(cells);
+    }
+    return;
+}
+
+function csv2ArrayJpPopulation(str) {
+    var lines = str.split("\n");
+    for (var i = 0; i < lines.length; ++i) {
+	var cells = lines[i].split(",");
+	dataPopulation[cells[0]] = cells[1];
     }
     return;
 }
@@ -618,10 +633,16 @@ function getTzOffset() {
 }
 
 function calculate(row, i, draw_mode) {
-    if (draw_mode == 0) {
+    if (draw_mode == 0 || draw_mode == 9 ) {
 	// Daily New cases
 	// XX add average graph
-	return data[row][i]- data[row][i- 1];
+	var j = data[row][i]- data[row][i- 1];
+	var c = dataPopulation[data[row][0]];
+	if (draw_mode == 9 &&  c != 0) {
+	    return j / c * 100000;
+	} else {
+	    return j;
+	}
     } else if (draw_mode == 1) {
 	// Double Days
 	var avgD = 0;
@@ -761,7 +782,7 @@ function updateData(draw_mode) {
 			    }
 			}
 		    }
-		    if (draw_mode == 9) {
+		    if (draw_mode == 99) {
 //			if (i + 1 == data[row].length && (data[row][i] - data[row][i - 1]) == 0) {
 //			    tmpData_avgCases.push("NULL")
 			//			} else {
@@ -943,7 +964,9 @@ function readCsv(filePath, csvFunc, id) {
 	    resolve();
 	}
 	req.send(null);
-	getUpdateDate(filePath, id);
+	if (id != "") {
+	    getUpdateDate(filePath, id);
+	}
     });
 }
 
@@ -968,19 +991,23 @@ async function main() {
 		"update_date_us_state"),
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv',
 		csv2ArrayUSCounty,
-		"update_date_global"),
+		""),
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv',
 		csv2ArrayGlobalDeath,
-		"update_date_global"),
+		""),
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
 		csv2ArrayUSCountyDeath,
-		"update_date_global"),
+		""),
 	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_deaths_US_State.csv',
 		csv2ArrayUSStateDeath,
-		"update_date_us_state"),
+		""),
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv',
 		csv2ArrayGlobalRecoverd,
-		"update_date_global")])
+		""),
+	readCsv('polulation.csv',
+		csv2ArrayJpPopulation,
+		""),
+    ])
 	.then(results => { 
 	    updateStartDay();
 	}).then(results => {
