@@ -17,7 +17,18 @@ var rowForDataRecoverd = 0;
 var psccKeys = [];
 var dataPopulation = [];
 
-const colorTable = [
+var colorTable = [
+    "purple",
+    "grey",
+    "blue",
+    "orange",
+//    "navy",
+    "silver",
+];
+
+const colorTable_all = [
+    "red",
+    "yellow",
     "purple",
     "grey",
     "blue",
@@ -187,6 +198,8 @@ async function initialize() {
 	    updateYAxesButtons();
 	} else if (s[0] == "c") {
 	    showFlagAlreadySet = true;
+//	    pref_table = [];
+//	    colorTable = colorTable_all;
 	    if (s[1] == "") {
 		return;
 	    }
@@ -939,6 +952,11 @@ function getUpdateDate(url, elementId) {
     var update_str;
     req.open("GET", rawUrl2UpdateDate(url), true);
     req.onload = function() {
+	if (req.status == 403) {
+	    var update_date = document.getElementById(elementId);
+	    update_date.innerHTML = "can't get update time";
+	    return;
+	}
 	update_str = JSON.parse(req.responseText)[0].commit.committer.date;
 	var ts = Date.parse(update_str);
 	ts = parseInt(ts) + getTzOffset() * 60 * 60;
