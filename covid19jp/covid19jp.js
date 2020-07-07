@@ -205,6 +205,7 @@ async function initialize() {
 	    }
 	    var cs = s[1].split(/,/);
 	    cs.forEach(function(c) {
+		c = decodeURI(c);
 		var findFlag = false;
 		showFlag[c] = true;
 		pref_table.forEach(function(val) {
@@ -227,6 +228,7 @@ async function initialize() {
 	    showFlagAlreadySet = true;
 	    var cs = s[1].split(/,/);
 	    cs.forEach(function(c) {
+		c = decodeURI(c);
 		var findFlag = false;
 		showFlag[c] = false;
 		pref_table.forEach(function(val) {
