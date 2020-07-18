@@ -900,12 +900,33 @@ const  myChartOptionsLogarithmic =
 		  chartObj.ticks = [];
 		  chartObj.ticks.push(0.1);
 		  chartObj.ticks.push(1);
+		  chartObj.ticks.push(2);
+		  chartObj.ticks.push(3);
+		  chartObj.ticks.push(5);
 		  chartObj.ticks.push(10);
+		  chartObj.ticks.push(20);
+		  chartObj.ticks.push(30);
+		  chartObj.ticks.push(50);
 		  chartObj.ticks.push(100);
+		  chartObj.ticks.push(200);
+		  chartObj.ticks.push(300);
+		  chartObj.ticks.push(500);
 		  chartObj.ticks.push(1000);
+		  chartObj.ticks.push(2000);
+		  chartObj.ticks.push(3000);
+		  chartObj.ticks.push(5000);
 		  chartObj.ticks.push(10000);
+		  chartObj.ticks.push(20000);
+		  chartObj.ticks.push(30000);
+		  chartObj.ticks.push(50000);
 		  chartObj.ticks.push(100000);
+		  chartObj.ticks.push(200000);
+		  chartObj.ticks.push(300000);
+		  chartObj.ticks.push(500000);
 		  chartObj.ticks.push(1000000);
+		  chartObj.ticks.push(2000000);
+		  chartObj.ticks.push(3000000);
+		  chartObj.ticks.push(5000000);
 	      }
 	  }],
       };
