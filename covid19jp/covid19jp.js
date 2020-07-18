@@ -16,6 +16,7 @@ var rowForDataDeath = 0;
 var rowForDataRecoverd = 0;
 var psccKeys = [];
 var dataPopulation = [];
+var loadFiles = 0;
 
 var colorTable = [
     "purple",
@@ -994,6 +995,10 @@ function readCsv(filePath, csvFunc, id) {
 	req.onload = function() {
 	    // 2) CSVデータ変換の呼び出し
 	    csvFunc(req.responseText);
+	    var loading_str = document.getElementById("loading_str");
+	    loadFiles++;
+	    loading_str.innerHTML = "loading data from GitHub("+loadFiles+"/9)...";
+	    
 	    resolve();
 	}
 	req.send(null);
