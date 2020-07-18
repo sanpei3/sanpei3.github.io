@@ -1011,11 +1011,11 @@ function updateStartDay() {
 }
 
 async function main() {
+    await readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv',
+		csv2Array,
+		  "update_date_jp");
     Promise.all([
     // 1) ajaxでCSVファイルをロード
-	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv',
-		csv2Array,
-		"update_date_jp"),
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
 		csv2ArrayGlobal,
 		"update_date_global"),
