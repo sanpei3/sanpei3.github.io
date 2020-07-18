@@ -886,6 +886,7 @@ const  myChartOptionsLogarithmic =
 	  yAxes: [{
 	      type: 'logarithmic',
 	      ticks: {
+		  min: 0,
 		  callback: function (value, index, values) {
 		      return Number(value.toString());
 	          }
@@ -897,6 +898,9 @@ const  myChartOptionsLogarithmic =
 		  chartObj.ticks.push(10);
 		  chartObj.ticks.push(100);
 		  chartObj.ticks.push(1000);
+		  chartObj.ticks.push(10000);
+		  chartObj.ticks.push(100000);
+		  chartObj.ticks.push(1000000);
 	      }
 	  }],
       };
