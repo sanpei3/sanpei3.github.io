@@ -1022,7 +1022,7 @@ function readCsv(filePath, csvFunc, id) {
 	    csvFunc(req.responseText);
 	    var loading_str = document.getElementById("loading_str");
 	    loadFiles++;
-	    loading_str.innerHTML = "loading data from GitHub("+loadFiles+"/9)...";
+	    loading_str.innerHTML = "loading data from GitHub("+loadFiles+"/8)...";
 	    
 	    resolve();
 	}
