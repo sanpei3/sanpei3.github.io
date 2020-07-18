@@ -789,7 +789,7 @@ function updateData(draw_mode) {
 			if (i + 1 == data[row].length && (data[row][i] - data[row][i - 1]) == 0) {
 			    tmpData_avgCases.push("NULL")
 			} else {
-			    b = (data[row][i] - data[row][i - 6]) / 7;
+			    b = (data[row][i] - data[row][i - 7]) / 7;
 			    if ( b >=0) {
 				tmpData_avgCases.push(b)
 			    } else {
