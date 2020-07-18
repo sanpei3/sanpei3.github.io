@@ -1044,6 +1044,8 @@ async function main() {
 	.then(results => { 
 	    updateStartDay();
 	}).then(results => {
+	    var loadingId = document.getElementById("loading");
+	    loadingId.remove();
 	    drawBarChart(draw_mode);
 	});
 }

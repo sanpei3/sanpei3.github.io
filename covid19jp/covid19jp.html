@@ -9,6 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js"></script>
 <script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+<link rel="stylesheet" href="covid19jp.css">
 
 </head>
     <body>
@@ -30,7 +31,13 @@ YAxis: <button id="linear"  style="background-color:skyblue">linear</button>
 
 
 <p>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <div id="container" style="width: 90%; height: 100%;">
+<center>
+<p class="line-height"">
+     <i id="loading" class="fa fa-circle-o-notch fa-spin fa-4x fa-fw" style="color: cornflowerblue"></i>
+     </p>
+     </center>
    <canvas id="myChart" style="width: 100%; height: auto;"></canvas>
 </div>
 <form id="form1" action="#">
