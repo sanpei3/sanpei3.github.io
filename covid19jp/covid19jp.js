@@ -786,11 +786,15 @@ function updateData(draw_mode) {
 		    } else {
 			tmpData.push(0)
 		    }
-		    if (draw_mode == 0 || draw_mode == 4 || draw_mode == 6) {
+		    if (draw_mode == 0 || draw_mode == 4 || draw_mode == 6 || draw_mode == 9) {
 			if (i + 1 == data[row].length && (data[row][i] - data[row][i - 1]) == 0) {
 			    tmpData_avgCases.push("NULL")
 			} else {
 			    b = (data[row][i] - data[row][i - 7]) / 7;
+			    if (draw_mode == 9 && c != 0) {
+				var c = dataPopulation[data[row][0]];
+				b = b / c * 100000;
+			    }
 			    if ( b >=0) {
 				tmpData_avgCases.push(b)
 			    } else {
