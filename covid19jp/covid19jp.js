@@ -1115,9 +1115,22 @@ graphTable.forEach(function(val) {
 	for (var i = 0; i < graphTable.length; i++) {
 	    if (graphTable[i] == val) {
 		if (draw_mode != i) {
+		    var destroyFlag = false;
+		    if (i == 9 && yaxesType == "Logarithmic") {
+			myChart.destroy();
+			yaxesType = "Linear";
+			updateLocationHash();
+			updateYAxesButtons();
+			destroyFlag = true;
+		    }
 		    updateGraphButtons(draw_mode, i)
 		    draw_mode = i;
-		    updateBarChart(draw_mode);
+		    if (destroyFlag) {
+			drawBarChart(draw_mode);
+		    } else {
+			updateBarChart(draw_mode);
+		    }
+
 		}
 	    }
 	}
