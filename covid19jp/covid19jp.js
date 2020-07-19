@@ -196,6 +196,9 @@ async function initialize() {
 	    start_date = s[1]
 	} else if (s[0] == "ya") {
 	    yaxesType = s[1];
+	    if (yaxesType == "Logarithmic" && draw_mode == 9) {
+		yaxesType = "Linear";
+	    }
 	    updateYAxesButtons();
 	} else if (s[0] == "c") {
 	    showFlagAlreadySet = true;
