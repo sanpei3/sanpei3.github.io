@@ -1275,7 +1275,7 @@ document.getElementById('linear').addEventListener('click', function() {
 });
 
 document.getElementById('logarithmic').addEventListener('click', function() {
-    if (yaxesType != "Logarithmic") {
+    if (yaxesType != "Logarithmic" && draw_mode != 9) {
 	myChart.destroy();
 	yaxesType = "Logarithmic";
 	updateLocationHash();
