@@ -1,6 +1,6 @@
 // 2) CSVから２次元配列に変換
 
-var dataStartDay;
+var dataStartDay = "2020-01-15";
 var data = [];
 var dataCases = [];
 var dataDeath = [];
@@ -327,7 +327,7 @@ function csv2Array(str) {
     for (var i = 0; i < lines.length; ++i) {
 	var cells = lines[i].split(",");
 	if (cells[0] == "Province/State") {
-	    dataStartDay = mmddyy2yymmmdd(cells[4]);
+//	    dataStartDay = mmddyy2yymmmdd(cells[4]);
 	} else {
 	    psccKeys.push(cells[0]);
 	}
@@ -1044,10 +1044,10 @@ function updateStartDay() {
 }
 
 async function main() {
-    await readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv',
-		csv2Array,
-		  "update_date_jp");
     Promise.all([
+	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv',
+		csv2Array,
+		"update_date_jp"),
     // 1) ajaxでCSVファイルをロード
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
 		csv2ArrayGlobal,
