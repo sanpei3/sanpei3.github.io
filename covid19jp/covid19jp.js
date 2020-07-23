@@ -26,6 +26,9 @@ var colorTable = [
     "orange",
 //    "navy",
     "silver",
+    "brown",
+    "darkblue",
+    "darkorange",
 ];
 
 const colorTable_all = [
