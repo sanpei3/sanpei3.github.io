@@ -1201,6 +1201,7 @@ graphTable.forEach(function(val) {
 			destroyFlag = true;
 		    }
 		    if (draw_mode == 3 && yaxesType == "Logarithmic") {
+			myChart.destroy();
 			destroyFlag = true;
 		    }
 		    updateGraphButtons(draw_mode, i)
