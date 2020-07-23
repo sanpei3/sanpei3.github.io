@@ -1255,6 +1255,11 @@ document.getElementById("addbutton")
 	    }
 	    // 最後にkeyupされてから一定時間次の入力がなかったら実行
 	    if (keyupStack.length === 0) {
+		if (this.value == "") {
+		    var list = document.getElementById('list');
+		    list.textContent = null;
+		    return;
+		}
 		// 部分一致を可能にする(例: .*a.*b.*c.*)
 		var buf = '.*' + this.value.replace(/(.)/g, "$1.*");
 		var reg = new RegExp(buf, "i");
