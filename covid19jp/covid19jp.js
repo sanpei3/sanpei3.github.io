@@ -784,17 +784,24 @@ function updateData(draw_mode) {
 		    // find row for dataDeath and detaRecoverd
 		    rowForDataDeath = 0;
 		    rowForDataRecoverd = 0;
+		    var findDeathFlag = false;
 		    for (var r in dataDeath) {
 			if (dataDeath[r][0] == pref) {
 			    rowForDataDeath = r;
+			    findDeathFlag = true;
 			    break;
 			}
 		    }
+		    var findRevocerdFlag = false;
 		    for (var r in dataRecoverd) {
 			if (dataRecoverd[r][0] == pref) {
 			    rowForDataRecoverd = r;
+			    findRevocerdFlag = true;
 			    break;
 			}
+		    }
+		    if (!findDeathFlag || !findRevocerdFlag) {
+			return;
 		    }
 		}
 		for (var i = start_i; i < data[row].length; i++) {
