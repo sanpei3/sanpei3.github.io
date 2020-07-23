@@ -17,6 +17,7 @@ var rowForDataRecoverd = 0;
 var psccKeys = [];
 var dataPopulation = [];
 var loadFiles = 0;
+var doubleInitial = 100;
 
 var colorTable = [
     "purple",
@@ -720,6 +721,7 @@ var tmpDoubleEvery = [], tmpDouble2Days = [], tmpDouble3Days = [],
 
 function updateData(draw_mode) {
     var start_i = start_day;
+    doubleInitial = 100;
     myChartData.datasets = [];
     tmpLabels = [];
     tmpDoubleEvery = [];
@@ -732,15 +734,25 @@ function updateData(draw_mode) {
 	// ここで、header行で、lengthが違ったら、追加する
 	if (data[row][0] == "Province/State" && headerFlag == true) {
 	    if (tmpLabels.length + start_i < data[row].length) {
+		var d = 1;
 		for (var i = tmpLabels.length + start_i; i < data[row].length; i++) {
-		    tmpLabels.push(data[row][i]);
+		    if (draw_mode == 3) {
+			tmpLabels.push(d++);
+		    } else {
+			tmpLabels.push(data[row][i]);
+		    }
 		}
 		myChartData.labels = tmpLabels;
 	    }
 	}
 	if (data[row][0] == "Province/State" && headerFlag == false) {
+	    var d = 1;
 	    for (var i = start_i; i < data[row].length; i++) {
-		tmpLabels.push(data[row][i]);
+		if (draw_mode == 3) {
+		    tmpLabels.push(d++);
+		} else {
+		    tmpLabels.push(data[row][i]);
+		}
 	    }
 	    myChartData.labels = tmpLabels;
 	    headerFlag = true;
@@ -755,7 +767,7 @@ function updateData(draw_mode) {
     } else if (draw_mode == 8) {
 	data = data;
     }
-    var doubleInitial = 1;
+    var doubleDaysGraphOffset = 0;
     var maxY = 0;
     for (var row in data) {
 	pref_table.forEach(function(val) {
@@ -784,10 +796,21 @@ function updateData(draw_mode) {
 		}
 		for (var i = start_i; i < data[row].length; i++) {
 		    a = calculate(row, i, draw_mode);
+		    if (draw_mode == 3) {
+			if (doubleDaysGraphOffset != 0 && a < doubleInitial) {
+			    continue;
+			} else if (a < doubleInitial) {
+			    continue;
+//			    a = doubleInitial;
+			}
+		    }		   
 		    if ( a >=0) {
 			tmpData.push(a)
 		    } else {
 			tmpData.push(0)
+		    }
+		    if (draw_mode == 3 && doubleInitial < (data[row][i] - data[row][start_day]) && doubleDaysGraphOffset == 0) {
+			doubleDaysGraphOffset = i;
 		    }
 		    if (draw_mode == 0 || draw_mode == 4 || draw_mode == 6 || draw_mode == 9) {
 			if (i + 1 == data[row].length && (data[row][i] - data[row][i - 1]) == 0) {
@@ -852,22 +875,22 @@ function updateData(draw_mode) {
 	});
     }
     if (draw_mode == 3) {
-	if (true) {
-	    var newCases = doubleInitial;
-	    for (var i = start_i; i < data[0].length; i++) {
-		newCases = newCases * 1.41421356237309504880;
-		if (newCases < maxY) {
-		    tmpDouble2Days.push(newCases);
-		}
-	    }
-	    myChartData.datasets.push(
-		{ label: "CASES DOUBLE 2 DAYS", data: tmpDouble2Days,fill: false,
-		  type: "line",
-		  borderColor: window.chartColors.gray});
-	}
 	var newCases = doubleInitial;
 	for (var i = start_i; i < data[0].length; i++) {
-	    newCases = newCases * 1.2599210498;
+	    newCases = newCases * 1.41421356237309504880;
+	    if (newCases < maxY) {
+		tmpDouble2Days.push(newCases);
+	    }
+	}
+	myChartData.datasets.push(
+	    { label: "CASES DOUBLE 2 DAYS", data: tmpDouble2Days,fill: false,
+	      type: "line",
+	      borderColor: window.chartColors.gray});
+	var newCases = doubleInitial;
+	for (var i = start_i; i < data[0].length; i++) {
+//	    if (i >= doubleDaysGraphOffset) {
+		newCases = newCases * 1.2599210498;
+//	    }
 	    if (newCases < maxY) {
 		tmpDouble3Days.push(newCases);
 	    }
@@ -889,6 +912,51 @@ function updateData(draw_mode) {
 	      borderColor: window.chartColors.gray});
     }
 }
+const  myChartOptionsLogarithmicTotalCases =
+      {
+	  yAxes: [{
+	      type: 'logarithmic',
+	      ticks: {
+		  min: doubleInitial,
+		  callback: function (value, index, values) {
+		      return Number(value.toString());
+	          }
+	      },
+	      afterBuildTicks: function (chartObj) {
+		  chartObj.ticks = [];
+		  chartObj.ticks.push(0.1);
+		  chartObj.ticks.push(1);
+		  chartObj.ticks.push(2);
+		  chartObj.ticks.push(3);
+		  chartObj.ticks.push(5);
+		  chartObj.ticks.push(10);
+		  chartObj.ticks.push(20);
+		  chartObj.ticks.push(30);
+		  chartObj.ticks.push(50);
+		  chartObj.ticks.push(100);
+		  chartObj.ticks.push(200);
+		  chartObj.ticks.push(300);
+		  chartObj.ticks.push(500);
+		  chartObj.ticks.push(1000);
+		  chartObj.ticks.push(2000);
+		  chartObj.ticks.push(3000);
+		  chartObj.ticks.push(5000);
+		  chartObj.ticks.push(10000);
+		  chartObj.ticks.push(20000);
+		  chartObj.ticks.push(30000);
+		  chartObj.ticks.push(50000);
+		  chartObj.ticks.push(100000);
+		  chartObj.ticks.push(200000);
+		  chartObj.ticks.push(300000);
+		  chartObj.ticks.push(500000);
+		  chartObj.ticks.push(1000000);
+		  chartObj.ticks.push(2000000);
+		  chartObj.ticks.push(3000000);
+		  chartObj.ticks.push(5000000);
+	      }
+	  }],
+      };
+
 const  myChartOptionsLogarithmic =
       {
 	  yAxes: [{
@@ -956,9 +1024,15 @@ function drawBarChart(draw_mode) {
 	};
     updateData(draw_mode)
     if (yaxesType == "Logarithmic") {
-	myChartOptions = {
-	    scales: myChartOptionsLogarithmic,
-	};
+	if (draw_mode == 3) {
+	    myChartOptions = {
+		scales: myChartOptionsLogarithmicTotalCases,
+	    };
+	} else {
+	    myChartOptions = {
+		scales: myChartOptionsLogarithmic,
+	    };
+	}
     } else {
 	myChartOptions = {
 	    scales: myChartOptionsLinear,
@@ -1124,6 +1198,9 @@ graphTable.forEach(function(val) {
 			yaxesType = "Linear";
 			updateLocationHash();
 			updateYAxesButtons();
+			destroyFlag = true;
+		    }
+		    if (draw_mode == 3 && yaxesType == "Logarithmic") {
 			destroyFlag = true;
 		    }
 		    updateGraphButtons(draw_mode, i)
