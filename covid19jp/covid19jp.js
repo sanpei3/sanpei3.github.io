@@ -5,11 +5,12 @@ var data = [];
 var dataCases = [];
 var dataDeath = [];
 var dataRecoverd = [];
-var yaxesType = "Linear";
+var yaxesType = "Logarithmic";
 var draw_mode = 0;
 var start_day = 130;
-var start_date = "2020-05-20";
+var start_date = "2020-05-25";
 var showFlag = {};
+var buttonArea = {};
 var showFlagAlreadySet = false;
 var addPref = [];
 var rowForDataDeath = 0;
@@ -20,6 +21,8 @@ var loadFiles = 0;
 var doubleInitial = 100;
 
 var colorTable = [
+//    "red",
+//    "yellow",
     "purple",
     "grey",
     "blue",
@@ -29,17 +32,6 @@ var colorTable = [
     "brown",
     "darkblue",
     "darkorange",
-];
-
-const colorTable_all = [
-    "red",
-    "yellow",
-    "purple",
-    "grey",
-    "blue",
-    "orange",
-//    "navy",
-    "silver",
 ];
 
 const graphTable = ["daily_new_cases",
@@ -67,16 +59,8 @@ pref_table =
 	},
 	{
 	    pref: "Kanagawa",
-	    defaultenable: true,
-	    color: window.chartColors.yellow,
-	},
-	{
-	    pref: "Fukuoka",
-	    defaultenable: false
-	},
-	{
-	    pref: "Ibaraki",
 	    defaultenable: false,
+	    color: window.chartColors.yellow,
 	},
 	{
 	    pref: "Chiba",
@@ -87,16 +71,28 @@ pref_table =
 	    defaultenable: false,
 	},
 	{
-	    pref: "Hokkaido",
+	    pref: "Ibaraki",
 	    defaultenable: false,
 	},
 	{
+	    pref: "Osaka",
+	    defaultenable: false,
+	},
+		{
+	    pref: "Aichi",
+	    defaultenable: false,
+	},
+	{
+	    pref: "Fukuoka",
+	    defaultenable: false
+	},
+	{
 	    pref: "Japan",
-	    defaultenable: true,
+	    defaultenable: false,
 	},
 	{
 	    pref: "US",
-	    defaultenable: true,
+	    defaultenable: false,
 	},
 	{
 	    pref: "China",
@@ -104,11 +100,11 @@ pref_table =
 	},
 	{
 	    pref: "India",
-	    defaultenable: true,
+	    defaultenable: false,
 	},
 	{
 	    pref: "Brazil",
-	    defaultenable: true,
+	    defaultenable: false,
 	},
 	{
 	    pref: "Serbia",
@@ -124,7 +120,7 @@ pref_table =
 	},
 	{
 	    pref: "Minnesota_US",
-	    defaultenable: true,
+	    defaultenable: false,
 	},
 	{
 	    pref: "New York_US",
@@ -173,7 +169,7 @@ function createButton(pref, gcolor) {
     } else {
 	addButton.style.backgroundColor = 'white';
     }
-    document.getElementById('buttonArea').appendChild(addButton);
+    document.getElementById(buttonArea[pref]).appendChild(addButton);
     document.getElementById(pref).addEventListener('click', ()=> {
 	var element = document.getElementById(pref);
 	showFlagAlreadySet = true;
@@ -206,8 +202,6 @@ async function initialize() {
 	    updateYAxesButtons();
 	} else if (s[0] == "c") {
 	    showFlagAlreadySet = true;
-//	    pref_table = [];
-//	    colorTable = colorTable_all;
 	    if (s[1] == "") {
 		return;
 	    }
@@ -278,7 +272,6 @@ async function initialize() {
 	createButton(pref, gcolor);
     });
 }
-initialize();
 
 function updateLocationHash () {
     var cs = "";
@@ -334,6 +327,7 @@ function csv2Array(str) {
 //	    dataStartDay = mmddyy2yymmmdd(cells[4]);
 	} else {
 	    psccKeys.push(cells[0]);
+	    buttonArea[cells[0]] = "prefecture";
 	}
 	dataCases.push(cells);
     }
@@ -370,6 +364,7 @@ function csv2ArrayGlobal(str) {
 	    }
 	    dataCases.push(cells);
 	    psccKeys.push(cells[0]);
+	    buttonArea[cells[0]] = "country";
 	}
 	if (cells[1] == "China") {
 	    for (var j = 1; j <= offsetdays; j++) {
@@ -416,8 +411,11 @@ function csv2ArrayGlobal(str) {
     dataCases.push(cellsCanada);
     dataCases.push(cellsAustralia);
     psccKeys.push("China");
+    buttonArea["China"] = "country";
     psccKeys.push("Canada");
+    buttonArea["Canada"] = "country";
     psccKeys.push("Australia");
+    buttonArea["Australia"] = "country";
     return;
 }
 
@@ -503,6 +501,7 @@ function csv2ArrayUSState(str) {
 	if (cells[0] != "Province/State") {
 	    cells[0] = cells[0] + "_US";
 	    psccKeys.push(cells[0]);
+	    buttonArea[cells[0]] = "us_state";
 	}
 	for (var j = 1; j <= offsetdays; j++) {
 	    cells.splice(4, 0, 0)
@@ -551,6 +550,7 @@ function csv2ArrayUSCounty(str) {
 	    cells[0] = cells[5] + "_" + cells[6] + "_US";
 	    cells.splice(4, 11 - 1, "0")
 	    psccKeys.push(cells[0]);
+	    buttonArea[cells[0]] = "us_county";
 	}
 	for (var j = 1; j <= offsetdays; j++) {
 	    cells.splice(4, 0, 0)
@@ -1161,6 +1161,8 @@ async function main() {
 	.then(results => { 
 	    updateStartDay();
 	}).then(results => {
+	    initialize();
+	}).then(results => {
 	    var loadingId = document.getElementById("loading");
 	    loadingId.remove();
 	    drawBarChart(draw_mode);
@@ -1292,7 +1294,6 @@ var createRow = function (lists) {
 	list.appendChild(li);
 	document.getElementById(addButtonId).addEventListener('click', ()=> {
 	    var pref = addButtonId.replace(/_add/, "");
-	    console.log(pref);
 	    addButtonMain(pref);
 	    var list = document.getElementById('list');
 	    list.textContent = null;
