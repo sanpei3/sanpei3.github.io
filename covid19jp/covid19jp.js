@@ -1163,12 +1163,11 @@ document.getElementById("addbutton")
 		list.textContent = null;
 		return;
 	    }
-
 	    // 最後にkeyupされてから一定時間次の入力がなかったら実行
 	    if (keyupStack.length === 0) {
 		// 部分一致を可能にする(例: .*a.*b.*c.*)
 		var buf = '.*' + this.value.replace(/(.)/g, "$1.*");
-		var reg = new RegExp(buf);
+		var reg = new RegExp(buf, "i");
 		
 		var filteredLists = psccKeys.filter(function (d) {
 		    return reg.test(d);
