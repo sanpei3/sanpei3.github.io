@@ -322,7 +322,11 @@ function dateParse(date) {
 function csv2Array(str) {
     var lines = str.split("\n");
     for (var i = 0; i < lines.length; ++i) {
-	var cells = lines[i].split(",");
+//	var cells = lines[i].split(",");
+	var cells = Papa.parse(lines[i]).data[0];
+	if (cells == undefined) {
+	    return;
+	}
 	if (cells[0] == "Province/State") {
 //	    dataStartDay = mmddyy2yymmmdd(cells[4]);
 	} else {
@@ -337,8 +341,12 @@ function csv2Array(str) {
 function csv2ArrayJpPopulation(str) {
     var lines = str.split("\n");
     for (var i = 0; i < lines.length; ++i) {
-	var cells = lines[i].split(",");
-	dataPopulation[cells[0]] = cells[1];
+//	var cells = lines[i].split(",");
+	var cells = Papa.parse(lines[i]).data[0];
+	if (cells == undefined) {
+	    return;
+	}
+	dataPopulation[cells[0]] = cells[1].replace(",", "");
     }
     return;
 }
@@ -350,7 +358,11 @@ function csv2ArrayGlobal(str) {
     var cellsCanada = [];
     var cellsAustralia = [];
     for (var i = 0; i < lines.length; ++i) {
-	var cells = lines[i].split(",");
+//	var cells = lines[i].split(",");
+	var cells = Papa.parse(lines[i]).data[0];
+	if (cells == undefined) {
+	    break;
+	}
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
 	    targetStartDay = mmddyy2yymmmdd(cells[4]);
@@ -358,7 +370,7 @@ function csv2ArrayGlobal(str) {
 			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	}
 	if (cells[0] == "") {
-	    cells[0] = cells[1];
+	    cells[0] = cells[1].replace(",", "");
 	    for (var j = 1; j <= offsetdays; j++) {
 		cells.splice(4, 0, 0);
 	    }
@@ -426,7 +438,11 @@ function csv2ArrayGlobalDeath(str) {
     var cellsCanada = [];
     var cellsAustralia = [];
     for (var i = 0; i < lines.length; ++i) {
-	var cells = lines[i].split(",");
+//	var cells = lines[i].split(",");
+	var cells = Papa.parse(lines[i]).data[0];
+	if (cells == undefined) {
+	    break;
+	}
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
 	    targetStartDay = mmddyy2yymmmdd(cells[4]);
@@ -434,7 +450,7 @@ function csv2ArrayGlobalDeath(str) {
 			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	}
 	if (cells[0] == "") {
-	    cells[0] = cells[1];
+	    cells[0] = cells[1].replace(",", "");
 	    for (var j = 1; j <= offsetdays; j++) {
 		cells.splice(4, 0, 0)
 	    }
@@ -490,7 +506,11 @@ function csv2ArrayUSState(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
     for (var i = 0; i < lines.length; ++i) {
-	var cells = lines[i].split(",");
+//	var cells = lines[i].split(",");
+	var cells = Papa.parse(lines[i]).data[0];
+	if (cells == undefined) {
+	    return;
+	}
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
 	    targetStartDay = mmddyy2yymmmdd(cells[4]);
@@ -499,7 +519,7 @@ function csv2ArrayUSState(str) {
 	    continue;
 	}
 	if (cells[0] != "Province/State") {
-	    cells[0] = cells[0] + "_US";
+	    cells[0] = cells[0].replace(",", "") + "_US";
 	    psccKeys.push(cells[0]);
 	    buttonArea[cells[0]] = "us_state";
 	}
@@ -515,7 +535,11 @@ function csv2ArrayUSStateDeath(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
     for (var i = 0; i < lines.length; ++i) {
-	var cells = lines[i].split(",");
+//	var cells = lines[i].split(",");
+	var cells = Papa.parse(lines[i]).data[0];
+	if (cells == undefined) {
+	    return;
+	}
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
 	    targetStartDay = mmddyy2yymmmdd(cells[4]);
@@ -524,7 +548,7 @@ function csv2ArrayUSStateDeath(str) {
 	    continue;
 	}
 	if (cells[0] != "Province/State") {
-	    cells[0] = cells[0] + "_US";
+	    cells[0] = cells[0].replace(",", "") + "_US";
 	}
 	for (var j = 1; j <= offsetdays; j++) {
 	    cells.splice(4, 0, 0)
@@ -538,7 +562,11 @@ function csv2ArrayUSCounty(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
     for (var i = 0; i < lines.length; ++i) {
-	var cells = lines[i].split(",");
+//	var cells = lines[i].split(",");
+	var cells = Papa.parse(lines[i]).data[0];
+	if (cells == undefined) {
+	    return;
+	}
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "UID") {
 	    targetStartDay = mmddyy2yymmmdd(cells[11]);
@@ -547,7 +575,7 @@ function csv2ArrayUSCounty(str) {
 	    continue;
 	}
 	if (cells[0] != "UID") {
-	    cells[0] = cells[5] + "_" + cells[6] + "_US";
+	    cells[0] = cells[5].replace(",", "") + "_" + cells[6].replace(",", "") + "_US";
 	    cells.splice(4, 11 - 1, "0")
 	    psccKeys.push(cells[0]);
 	    buttonArea[cells[0]] = "us_county";
@@ -564,7 +592,11 @@ function csv2ArrayUSCountyDeath(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
     for (var i = 0; i < lines.length; ++i) {
-	var cells = lines[i].split(",");
+//	var cells = lines[i].split(",");
+	var cells = Papa.parse(lines[i]).data[0];
+	if (cells == undefined) {
+	    return;
+	}
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "UID") {
 	    targetStartDay = mmddyy2yymmmdd(cells[11]);
@@ -573,7 +605,7 @@ function csv2ArrayUSCountyDeath(str) {
 	    continue;
 	}
 	if (cells[0] != "UID") {
-	    cells[0] = cells[5] + "_" + cells[6] + "_US";
+	    cells[0] = cells[5].replace(",", "") + "_" + cells[6].replace(",", "") + "_US";
 	    cells.splice(4, 11 - 1, "0")
 	}
 	for (var j = 1; j <= offsetdays; j++) {
@@ -590,7 +622,11 @@ function csv2ArrayGlobalRecoverd(str) {
     var cellsCanada = [];
     var cellsAustralia = [];
     for (var i = 0; i < lines.length; ++i) {
-	var cells = lines[i].split(",");
+//	var cells = lines[i].split(",");
+	var cells = Papa.parse(lines[i]).data[0];
+	if (cells == undefined) {
+	    break;
+	}
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
 	    targetStartDay = mmddyy2yymmmdd(cells[4]);
@@ -598,7 +634,7 @@ function csv2ArrayGlobalRecoverd(str) {
 			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	}
 	if (cells[0] == "") {
-	    cells[0] = cells[1];
+	    cells[0] = cells[1].replace(",", "");
 	    for (var j = 1; j <= offsetdays; j++) {
 		cells.splice(4, 0, 0)
 	    }
