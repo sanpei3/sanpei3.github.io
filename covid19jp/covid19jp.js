@@ -1321,7 +1321,7 @@ document.getElementById("addbutton")
 function clearList() {
     var list = document.getElementById('list');
     list.textContent = null;
-//    document.addbuttonFrom.reset();
+    document.addbuttonFrom.reset();
 }
 //document.getElementById("addbuttonFrom")
 //    .addEventListener( "blur", function(event) {
