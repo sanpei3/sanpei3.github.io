@@ -1392,6 +1392,7 @@ function addButtonMain(c) {
 		    defaultenable: true,
 		});
     addPref.push(c);
+    showFlagAlreadySet = true;
     updateLocationHash();
     updateBarChart(draw_mode);
     document.addbuttonFrom.reset();
