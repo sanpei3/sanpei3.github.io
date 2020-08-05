@@ -1149,6 +1149,15 @@ function readCsv(filePath, csvFunc, id) {
 	    
 	    resolve();
 	}
+	req.timeout = 30*1000;
+	req.onerror = function() {
+	    alert("data loading error.\n eload page");
+	    location.reload();
+	}
+	req.ontimeout = function() {
+	    alert("data loading timeout.\nreload page");
+	    location.reload();
+	}
 	req.send(null);
 	if (id != "") {
 	    getUpdateDate(filePath, id);
