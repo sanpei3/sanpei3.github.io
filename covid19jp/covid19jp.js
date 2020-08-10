@@ -34,16 +34,17 @@ var colorTable = [
     "darkorange",
 ];
 
-const graphTable = ["daily_new_cases",
-		    "double_days",
-		    "k_value",
-		    "total_cases",
-		    "daily_deaths",
-		    "total_deaths",
-		    "daily_recoverd",
-		    "total_recoverd",
-		    "current_number_of_patients",
-		    "daily_new_cases_per_100000",
+const graphTable = ["daily_new_cases", // 0
+		    "double_days",     // 1
+		    "k_value",         // 2
+		    "total_cases",     // 3
+		    "daily_deaths",    // 4
+		    "total_deaths",    // 5
+		    "daily_recoverd",  // 6
+		    "total_recoverd",  // 7
+		    "current_number_of_patients",  // 8
+		    "daily_new_cases_per_100000",  // 9
+		    "E_R_number",                  // 10
 //		    "total_cases_per_100000",
 		   ];
 
@@ -196,7 +197,7 @@ async function initialize() {
 	    start_date = s[1]
 	} else if (s[0] == "ya") {
 	    yaxesType = s[1];
-	    if (yaxesType == "Logarithmic" && draw_mode == 9) {
+	    if (yaxesType == "Logarithmic" && (draw_mode == 9 || draw_mode == 10)) {
 		yaxesType = "Linear";
 	    }
 	    updateYAxesButtons();
@@ -746,6 +747,15 @@ function calculate(row, i, draw_mode) {
 	} else {
 	    return 0;
 	}
+    } else if (draw_mode == 10) {
+	// Effective Reproduction Number
+	var r = ((data[row][i] - data[row][i - 6]) /
+		 (data[row][i - 7] - data[row][i - 7 - 6])) ** (5.0/7.0)
+	if (isNaN(r) || r == Infinity || i - 7 - 6 < start_day) {
+	    return 0;
+	} else {
+	    return r
+	}
     }
 
 }
@@ -1250,7 +1260,7 @@ graphTable.forEach(function(val) {
 	    if (graphTable[i] == val) {
 		if (draw_mode != i) {
 		    var destroyFlag = false;
-		    if (i == 9 && yaxesType == "Logarithmic") {
+		    if ((i == 9 || i == 10) && yaxesType == "Logarithmic") {
 			myChart.destroy();
 			yaxesType = "Linear";
 			updateLocationHash();
@@ -1430,7 +1440,7 @@ document.getElementById('linear').addEventListener('click', function() {
 });
 
 document.getElementById('logarithmic').addEventListener('click', function() {
-    if (yaxesType != "Logarithmic" && draw_mode != 9) {
+    if (yaxesType != "Logarithmic" && (draw_mode != 9 || draw_mode != 10)) {
 	myChart.destroy();
 	yaxesType = "Logarithmic";
 	updateLocationHash();
