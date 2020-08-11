@@ -1103,6 +1103,36 @@ function drawBarChart(draw_mode) {
     });
 }
 
+function reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, type) {
+    var a = tdata["prefectures-data"][i][type]["values"];
+    var s = 0;
+    for (var l = 0; l < a.length; l++) {
+	a[l] = parseInt(a[l]) + s;
+	s = a[l];
+    }
+    var from = tdata["prefectures-data"][i][type]["from"];
+    targetStartDay = from[0] + "/" + from[1] + "/" + from[2];
+    offsetdays = (dateParse(targetStartDay) -
+		  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
+    for (var j = 1; j <= offsetdays; j++) {
+	a.splice(0, 0, 0);
+    }
+    a.splice(0, 0, 0);
+    a.splice(0, 0, 0);
+    a.splice(0, 0, 0);
+    a.splice(0, 0, pref);
+    return a;
+}
+
+function parseToyoKeizaiData(data) {
+    const tdata = JSON.parse(data);
+    tdata["prefectures-map"].forEach(function(p) {
+	const pref = p["en"];
+	var i = p["code"] - 1;
+	dataDeath.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "deaths"));
+	dataRecoverd.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "discharged"));
+    });
+}
 
 function updateBarChart(draw_mode) {
   // 3)chart.jsのdataset用の配列を用意
@@ -1155,7 +1185,36 @@ function readCsv(filePath, csvFunc, id) {
 	    csvFunc(req.responseText);
 	    var loading_str = document.getElementById("loading_str");
 	    loadFiles++;
-	    loading_str.innerHTML = "loading data from GitHub("+loadFiles+"/8)...";
+	    loading_str.innerHTML = "loading data from GitHub("+loadFiles+"/9)...";
+	    
+	    resolve();
+	}
+	req.timeout = 30*1000;
+	req.onerror = function() {
+	    alert("data loading error.\n eload page");
+	    location.reload();
+	}
+	req.ontimeout = function() {
+	    alert("data loading timeout.\nreload page");
+	    location.reload();
+	}
+	req.send(null);
+	if (id != "") {
+	    getUpdateDate(filePath, id);
+	}
+    });
+}
+
+function readToyoKeizai(filePath, id) {
+    return new Promise(function (resolve, reject) {
+	var req = new XMLHttpRequest();
+	req.open("GET", filePath, true);
+	req.onload = function() {
+	    // 2) CSVデータ変換の呼び出し
+	    parseToyoKeizaiData(req.responseText);
+	    var loading_str = document.getElementById("loading_str");
+	    loadFiles++;
+	    loading_str.innerHTML = "loading data from GitHub("+loadFiles+"/9)...";
 	    
 	    resolve();
 	}
@@ -1212,6 +1271,8 @@ async function main() {
 	readCsv('polulation.csv',
 		csv2ArrayJpPopulation,
 		""),
+	readToyoKeizai('https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/data/data.json',
+		       "toyokeizai_data"),
     ])
 	.then(results => { 
 	    updateStartDay();
