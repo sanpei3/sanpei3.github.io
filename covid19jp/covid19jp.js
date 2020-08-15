@@ -1,8 +1,11 @@
 // 2) CSVから２次元配列に変換
 
 var dataStartDay = "2020-01-15";
+var JapanDataSource = "JAG";
 var data = [];
-var dataCases = [];
+var dataCases = {};
+var dataCasesJAG = [];
+var dataCasesToyokeizai = [];
 var dataDeath = [];
 var dataRecoverd = [];
 var yaxesType = "Logarithmic";
@@ -195,6 +198,9 @@ async function initialize() {
 	    updateGraphButtons(0, draw_mode)
 	} else if (s[0] == "sd") {
 	    start_date = s[1]
+	} else if (s[0] == "jd") {
+	    JapanDataSource = s[1]
+	    updateDataSourceButtons();
 	} else if (s[0] == "ya") {
 	    yaxesType = s[1];
 	    if (yaxesType == "Logarithmic" && (draw_mode == 9 || draw_mode == 10)) {
@@ -308,7 +314,7 @@ function updateLocationHash () {
     if (!dsFlag) {
 	ds = "";
     }
-    window.location.hash = "dm=" + draw_mode + "&sd=" + start_date + "&ya=" + yaxesType + cs + ds;
+    window.location.hash = "dm=" + draw_mode + "&sd=" + start_date + "&ya=" + yaxesType + "&jd=" + JapanDataSource + cs + ds;
 }
 
 function mmddyy2yymmmdd(str) {
@@ -334,7 +340,7 @@ function csv2Array(str) {
 	    psccKeys.push(cells[0]);
 	    buttonArea[cells[0]] = "prefecture";
 	}
-	dataCases.push(cells);
+	dataCasesJAG.push(cells);
     }
     return;
 }
@@ -375,7 +381,8 @@ function csv2ArrayGlobal(str) {
 	    for (var j = 1; j <= offsetdays; j++) {
 		cells.splice(4, 0, 0);
 	    }
-	    dataCases.push(cells);
+	    dataCasesJAG.push(cells);
+	    dataCasesToyokeizai.push(cells);
 	    psccKeys.push(cells[0]);
 	    buttonArea[cells[0]] = "country";
 	}
@@ -420,9 +427,12 @@ function csv2ArrayGlobal(str) {
 	}
 	    
     }
-    dataCases.push(cellsChina);
-    dataCases.push(cellsCanada);
-    dataCases.push(cellsAustralia);
+    dataCasesJAG.push(cellsChina);
+    dataCasesJAG.push(cellsCanada);
+    dataCasesJAG.push(cellsAustralia);
+    dataCasesToyokeizai.push(cellsChina);
+    dataCasesToyokeizai.push(cellsCanada);
+    dataCasesToyokeizai.push(cellsAustralia);
     psccKeys.push("China");
     buttonArea["China"] = "country";
     psccKeys.push("Canada");
@@ -527,7 +537,8 @@ function csv2ArrayUSState(str) {
 	for (var j = 1; j <= offsetdays; j++) {
 	    cells.splice(4, 0, 0)
 	}
-	dataCases.push(cells);
+	dataCasesJAG.push(cells);
+	dataCasesToyokeizai.push(cells);
     }
     return;
 }
@@ -584,7 +595,8 @@ function csv2ArrayUSCounty(str) {
 	for (var j = 1; j <= offsetdays; j++) {
 	    cells.splice(4, 0, 0)
 	}
-	dataCases.push(cells);
+	dataCasesJAG.push(cells);
+	dataCasesToyokeizai.push(cells);
     }
     return;
 }
@@ -1131,6 +1143,7 @@ function parseToyoKeizaiData(data) {
 	var i = p["code"] - 1;
 	dataDeath.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "deaths"));
 	dataRecoverd.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "discharged"));
+	dataCasesToyokeizai.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "carriers"));
     });
 }
 
@@ -1274,7 +1287,10 @@ async function main() {
 	readToyoKeizai('https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/data/data.json',
 		       "toyokeizai_data"),
     ])
-	.then(results => { 
+	.then(results => {
+	    // copy header field from dataCaseJAG to dataCasesToyokeizai
+	    dataCasesToyokeizai.unshift(dataCasesJAG[0]);
+	    dataCases = dataCasesJAG;
 	    updateStartDay();
 	}).then(results => {
 	    initialize();
@@ -1506,6 +1522,43 @@ document.getElementById('logarithmic').addEventListener('click', function() {
 	yaxesType = "Logarithmic";
 	updateLocationHash();
 	updateYAxesButtons();
+	drawBarChart(draw_mode);
+    }
+});
+function updateDataSourceButtons() {
+    if (JapanDataSource == "JAG") {
+	var element = document.getElementById("JAG");
+	element.style.backgroundColor = 'skyblue';
+	var element = document.getElementById("ToyoKeizai");
+	element.style.backgroundColor = 'white';
+	dataCases = dataCasesJAG;
+    } else {
+	var element = document.getElementById("JAG");
+	element.style.backgroundColor = 'white';
+	var element = document.getElementById("ToyoKeizai");
+	element.style.backgroundColor = 'skyblue';
+	dataCases = dataCasesToyokeizai;
+    }
+}
+
+document.getElementById('JAG').addEventListener('click', function() {
+    if (JapanDataSource != "JAG") {
+	myChart.destroy();
+	JapanDataSource = "JAG";
+	dataCases = dataCasesJAG;
+	updateLocationHash();
+	updateDataSourceButtons();
+	drawBarChart(draw_mode);
+    }
+});
+
+document.getElementById('ToyoKeizai').addEventListener('click', function() {
+    if (JapanDataSource != "ToyoKeizai") {
+	myChart.destroy();
+	JapanDataSource = "ToyoKeizai";
+	dataCases = dataCasesToyokeizai;
+	updateLocationHash();
+	updateDataSourceButtons();
 	drawBarChart(draw_mode);
     }
 });
