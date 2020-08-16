@@ -8,6 +8,7 @@ var dataCasesJAG = [];
 var dataCasesToyokeizai = [];
 var dataDeath = [];
 var dataRecoverd = [];
+var dataCasesTokyo = [];
 var yaxesType = "Logarithmic";
 var draw_mode = 0;
 var start_day = 130;
@@ -22,6 +23,7 @@ var psccKeys = [];
 var dataPopulation = [];
 var loadFiles = 0;
 var doubleInitial = 100;
+const maxFiles = 10;
 
 var colorTable = [
 //    "red",
@@ -317,7 +319,7 @@ function updateLocationHash () {
     window.location.hash = "dm=" + draw_mode + "&sd=" + start_date + "&ya=" + yaxesType + "&jd=" + JapanDataSource + cs + ds;
 }
 
-function mmddyy2yymmmdd(str) {
+function mmddyy2yyyymmdd(str) {
     var s = str.split("/");
     return  "20" + s[2] + "/" + s[0] + "/" + s[1];
 }
@@ -335,7 +337,7 @@ function csv2Array(str) {
 	    return;
 	}
 	if (cells[0] == "Province/State") {
-//	    dataStartDay = mmddyy2yymmmdd(cells[4]);
+//	    dataStartDay = mmddyy2yyyymmdd(cells[4]);
 	} else {
 	    psccKeys.push(cells[0]);
 	    buttonArea[cells[0]] = "prefecture";
@@ -372,7 +374,7 @@ function csv2ArrayGlobal(str) {
 	}
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
-	    targetStartDay = mmddyy2yymmmdd(cells[4]);
+	    targetStartDay = mmddyy2yyyymmdd(cells[4]);
 	    offsetdays = (dateParse(targetStartDay) -
 			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	}
@@ -456,7 +458,7 @@ function csv2ArrayGlobalDeath(str) {
 	}
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
-	    targetStartDay = mmddyy2yymmmdd(cells[4]);
+	    targetStartDay = mmddyy2yyyymmdd(cells[4]);
 	    offsetdays = (dateParse(targetStartDay) -
 			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	}
@@ -524,7 +526,7 @@ function csv2ArrayUSState(str) {
 	}
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
-	    targetStartDay = mmddyy2yymmmdd(cells[4]);
+	    targetStartDay = mmddyy2yyyymmdd(cells[4]);
 	    offsetdays = (dateParse(targetStartDay) -
 			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	    continue;
@@ -554,7 +556,7 @@ function csv2ArrayUSStateDeath(str) {
 	}
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
-	    targetStartDay = mmddyy2yymmmdd(cells[4]);
+	    targetStartDay = mmddyy2yyyymmdd(cells[4]);
 	    offsetdays = (dateParse(targetStartDay) -
 			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	    continue;
@@ -581,7 +583,7 @@ function csv2ArrayUSCounty(str) {
 	}
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "UID") {
-	    targetStartDay = mmddyy2yymmmdd(cells[11]);
+	    targetStartDay = mmddyy2yyyymmdd(cells[11]);
 	    offsetdays = (dateParse(targetStartDay) -
 			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	    continue;
@@ -612,7 +614,7 @@ function csv2ArrayUSCountyDeath(str) {
 	}
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "UID") {
-	    targetStartDay = mmddyy2yymmmdd(cells[11]);
+	    targetStartDay = mmddyy2yyyymmdd(cells[11]);
 	    offsetdays = (dateParse(targetStartDay) -
 			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	    continue;
@@ -642,7 +644,7 @@ function csv2ArrayGlobalRecoverd(str) {
 	}
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
-	    targetStartDay = mmddyy2yymmmdd(cells[4]);
+	    targetStartDay = mmddyy2yyyymmdd(cells[4]);
 	    offsetdays = (dateParse(targetStartDay) -
 			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
 	}
@@ -1147,6 +1149,37 @@ function parseToyoKeizaiData(data) {
     });
 }
 
+function parseTokyo(str) {
+    var targetStartDay = "";
+    var offsetdays;
+    var lines = str.split("\n");
+    var s = 0;
+    for (var i = 0; i < lines.length; ++i) {
+	var cells = Papa.parse(lines[i]).data[0];
+	if (cells == undefined) {
+	    break;
+	}
+	if (cells[0] == "date") {
+	    continue;
+	}
+	if (targetStartDay == "") {
+	    targetStartDay = cells[0];
+	    offsetdays = (dateParse(targetStartDay) -
+			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
+	}
+	s = parseInt(cells[1]) + s;
+	dataCasesTokyo.push(s);
+    }
+    for (var j = 1; j <= offsetdays; j++) {
+	dataCasesTokyo.splice(0, 0, 0);
+    }
+    dataCasesTokyo.splice(0, 0, 0);
+    dataCasesTokyo.splice(0, 0, 0);
+    dataCasesTokyo.splice(0, 0, 0);
+    dataCasesTokyo.splice(0, 0, "Tokyo");
+}
+
+
 function updateBarChart(draw_mode) {
   // 3)chart.jsのdataset用の配列を用意
     updateData(draw_mode)
@@ -1184,6 +1217,23 @@ function getUpdateDate(url, elementId) {
     req.send(null);
 }
 
+function getUpdateDateTokyo(url, elementId) {
+    var req = new XMLHttpRequest();
+    var update_str;
+    req.open("HEAD", url, true);
+    req.onreadystatechange = function() {
+	if(this.readyState == 2) {
+	    const update_str = req.getResponseHeader("Last-Modified")
+	    var ts = Date.parse(update_str);
+	    ts = parseInt(ts) + getTzOffset() * 60 * 60;
+	    const dt = new Date(ts);
+	    var update_date = document.getElementById(elementId);
+	    update_date.innerHTML = dt;
+	}
+    }
+    req.send(null);
+}
+
 function rawUrl2UpdateDate(url) {
     var s = url.split("/", 7);
     return  "https://api.github.com/repos/" + s[3] + "/" + s[4] +"/commits?path=" + s[6].replace("/", "%2F") + "&page=1&per_page=1";
@@ -1198,18 +1248,16 @@ function readCsv(filePath, csvFunc, id) {
 	    csvFunc(req.responseText);
 	    var loading_str = document.getElementById("loading_str");
 	    loadFiles++;
-	    loading_str.innerHTML = "loading data from GitHub("+loadFiles+"/9)...";
+	    loading_str.innerHTML = "loading data from GitHub("+loadFiles+"/"+maxFiles + ")...";
 	    
 	    resolve();
 	}
 	req.timeout = 30*1000;
 	req.onerror = function() {
-	    alert("data loading error.\n eload page");
-	    location.reload();
+	    downloadAlertMessage(filePath);
 	}
 	req.ontimeout = function() {
-	    alert("data loading timeout.\nreload page");
-	    location.reload();
+	    downloadAlertMessage(filePath);
 	}
 	req.send(null);
 	if (id != "") {
@@ -1218,33 +1266,36 @@ function readCsv(filePath, csvFunc, id) {
     });
 }
 
-function readToyoKeizai(filePath, id) {
+function readTokyo(filePath, id) {
     return new Promise(function (resolve, reject) {
 	var req = new XMLHttpRequest();
 	req.open("GET", filePath, true);
 	req.onload = function() {
 	    // 2) CSVデータ変換の呼び出し
-	    parseToyoKeizaiData(req.responseText);
+	    parseTokyo(req.responseText);
 	    var loading_str = document.getElementById("loading_str");
 	    loadFiles++;
-	    loading_str.innerHTML = "loading data from GitHub("+loadFiles+"/9)...";
+	    loading_str.innerHTML = "loading data from GitHub("+loadFiles+"/"+maxFiles + ")...";
 	    
 	    resolve();
 	}
 	req.timeout = 30*1000;
 	req.onerror = function() {
-	    alert("data loading error.\n eload page");
-	    location.reload();
+	    downloadAlertMessage(filePath);
 	}
 	req.ontimeout = function() {
-	    alert("data loading timeout.\nreload page");
-	    location.reload();
+	    downloadAlertMessage(filePath);
 	}
 	req.send(null);
 	if (id != "") {
-	    getUpdateDate(filePath, id);
+	    getUpdateDateTokyo(filePath, id);
 	}
     });
+}
+
+function downloadAlertMessage(filePath) {
+    alert("data loading error.\n URL: " + filePath + "\n Reload page?");
+    location.reload();
 }
 
 function updateStartDay() {
@@ -1284,14 +1335,30 @@ async function main() {
 	readCsv('polulation.csv',
 		csv2ArrayJpPopulation,
 		""),
-	readToyoKeizai('https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/data/data.json',
+	readCsv('https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/data/data.json',
+		       parseToyoKeizaiData,
 		       "toyokeizai_data"),
+	readTokyo('https://oku.edu.mie-u.ac.jp/~okumura/python/data/COVID-tokyo.csv',
+		  "Tokyo_data"),
     ])
 	.then(results => {
 	    // copy header field from dataCaseJAG to dataCasesToyokeizai
 	    for (var row in dataCasesJAG) {
 		if (dataCasesJAG[row][0] == "Province/State") {
 		    dataCasesToyokeizai.unshift(dataCasesJAG[row]);
+		    break;
+		}
+	    }
+	    // replace Tokyo data by Okumura's data
+	    for (var row in dataCasesJAG) {
+		if (dataCasesJAG[row][0] == "Tokyo") {
+		    dataCasesJAG[row] = dataCasesTokyo;
+		    break;
+		}
+	    }
+	    for (var row in dataCasesToyokeizai) {
+		if (dataCasesToyokeizai[row][0] == "Tokyo") {
+		    dataCasesToyokeizai[row] = dataCasesTokyo;
 		    break;
 		}
 	    }

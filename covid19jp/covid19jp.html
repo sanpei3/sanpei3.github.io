@@ -27,7 +27,7 @@ Graph mode:
 <button id="total_recoverd"  style="background-color:white">Total Recoverd</button>
 <button id="current_number_of_patients"  style="background-color:white">Current number of patients</button>
 <br>
-Japan Data: <button id="JAG"  style="background-color:skyblue">J.A.G Japan</button>
+Japan Data(except Tokyo new cases): <button id="JAG"  style="background-color:skyblue">J.A.G Japan</button>
 <button id="ToyoKeizai"  style="background-color:white">"TOYO KEIZAI ONLINE"</button>
 <br>
 YAxis: <button id="linear"  style="background-color:white">linear</button>
@@ -39,7 +39,7 @@ YAxis: <button id="linear"  style="background-color:white">linear</button>
 <div id="container" style="width: 90%; height: 100%;">
 <center id="loading" >
 <p class="line-height"">
-     <i class="fa fa-circle-o-notch fa-spin fa-4x fa-fw" style="color: cornflowerblue"></i><br><span id="loading_str">loading data from GitHub(1/9)...</span>
+     <i class="fa fa-circle-o-notch fa-spin fa-4x fa-fw" style="color: cornflowerblue"></i><br><span id="loading_str">loading data from GitHub(1/10)...</span>
      </p>
      </center>
    <canvas id="myChart" style="width: 100%; height: auto;"></canvas>
@@ -68,7 +68,7 @@ LAST UPDATE:
 <table border="0">
 <tbody>
 <tr>
-<td>Japan Data:</td><td><span id="update_date_jp"></span></td>
+<td>J.A.G Japan Data:</td><td><span id="update_date_jp"></span></td>
 </tr>
 <tr>
 <td>Global/US_County Data:</td><td><span id="update_date_global"></span></td>
@@ -79,12 +79,16 @@ LAST UPDATE:
 <tr>
 <td>ToyoKeizai Data:</td><td><span id="toyokeizai_data"></span></td>
 </tr>
+<tr>
+<td>Tokyo new cases Data:</td><td><span id="Tokyo_data"></span></td>
+</tr>
 </table>
 </font>
 <hr>
 <font size="1">
 <li> This web page uses data from COVID-19.csv file, <a href="https://gis.jag-japan.com/covid19jp/">J.A.G JAPAN</a> for Japan, and data from <a href="https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series">CSSE at Johns Hopkins University</a> for except Japan countries.</li>
 <li> This web page uses data of deaths, discharged(recovered) for Japanese prefectures from <a href="https://toyokeizai.net/sp/visual/tko/covid19/en.html">"TOYO KEIZAI ONLINE"</a>.
+<li> This web page uses data of Tokyo new cases from <a href="https://oku.edu.mie-u.ac.jp/~okumura/python/COVID-19.html">Professor Okumura's page</a> COVID-tokyo.csv file.
 <li> The calculation formula for Effective Reproduction Number (ERN) is "(number of new cases in the last 7 days / number of new cases in 7 days before that) ^ (average generation time / reporting interval)".(this formula from <a href="https://toyokeizai.net/sp/visual/tko/covid19/en.html">"TOYO KEIZAI ONLINE"</a>.
 <li> The content of this page is licensed under the Creative Commons Attribution 4.0 License, and you can link freely.</li>
 <hr>
