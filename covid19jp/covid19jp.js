@@ -1289,7 +1289,12 @@ async function main() {
     ])
 	.then(results => {
 	    // copy header field from dataCaseJAG to dataCasesToyokeizai
-	    dataCasesToyokeizai.unshift(dataCasesJAG[0]);
+	    for (var row in dataCasesJAG) {
+		if (dataCasesJAG[row][0] == "Province/State") {
+		    dataCasesToyokeizai.unshift(dataCasesJAG[row]);
+		    break;
+		}
+	    }
 	    dataCases = dataCasesJAG;
 	    updateStartDay();
 	}).then(results => {
