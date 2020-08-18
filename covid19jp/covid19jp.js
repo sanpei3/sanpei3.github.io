@@ -712,6 +712,9 @@ function getTzOffset() {
     var date = new Date();
     return tzoff = (date.getHours() - date.getUTCHours() + 24) % 24;
 }
+function normalizeVariable(i) {
+    return Math.floor(i * 100) / 100;
+}
 
 function calculate(row, i, draw_mode) {
     if (draw_mode == 0 || draw_mode == 9 ) {
@@ -720,7 +723,7 @@ function calculate(row, i, draw_mode) {
 	var j = data[row][i]- data[row][i- 1];
 	var c = dataPopulation[data[row][0]];
 	if (draw_mode == 9 &&  c != 0) {
-	    return j / c * 100000;
+	    return normalizeVariable(j / c * 100000);
 	} else {
 	    return j;
 	}
@@ -736,7 +739,7 @@ function calculate(row, i, draw_mode) {
 	if (isNaN(avgD) || avgD == Infinity) {
 	    return 0;
 	} else {
-	    return avgD;
+	    return normalizeVariable(avgD);
 	}
     } else if (draw_mode == 2) {
 	// K value
@@ -770,8 +773,8 @@ function calculate(row, i, draw_mode) {
 	}
     } else if (draw_mode == 10) {
 	// Effective Reproduction Number
-	var r = ((data[row][i] - data[row][i - 6]) /
-		 (data[row][i - 7] - data[row][i - 7 - 6])) ** (5.0/7.0)
+	var r = normalizeVariable(((data[row][i] - data[row][i - 6]) /
+				   (data[row][i - 7] - data[row][i - 7 - 6])) ** (5.0/7.0));
 	if (isNaN(r) || r == Infinity || i - 7 - 6 < start_day) {
 	    return 0;
 	} else {
@@ -893,10 +896,10 @@ function updateData(draw_mode) {
 			if (i + 1 == data[row].length && (data[row][i] - data[row][i - 1]) == 0) {
 			    tmpData_avgCases.push("NULL")
 			} else {
-			    b = (data[row][i] - data[row][i - 7]) / 7;
+			    b = normalizeVariable((data[row][i] - data[row][i - 7]) / 7);
 			    if (draw_mode == 9 && c != 0) {
 				var c = dataPopulation[data[row][0]];
-				b = b / c * 100000;
+				b = normalizeVariable(b / c * 100000);
 			    }
 			    if ( b >=0) {
 				tmpData_avgCases.push(b)
@@ -1262,7 +1265,7 @@ function readCsv(filePath, csvFunc, id) {
 	req.onreadystatechange = function() {
 	    switch (req.readyState) {
 	    case 4: // データ受信完了.
-		if(xhr.status == 407) {
+		if(req.status == 407) {
 		    downloadAlertMessage(filePath);
 		}
 	    };
@@ -1297,7 +1300,7 @@ function readTokyo(filePath, id) {
 	req.onreadystatechange = function() {
 	    switch (req.readyState) {
 	    case 4: // データ受信完了.
-		if(xhr.status == 407) {
+		if(req.status == 407) {
 		    downloadAlertMessage(filePath);
 		}
 	    };
