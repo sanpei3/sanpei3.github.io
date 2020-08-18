@@ -1,6 +1,7 @@
 // 2) CSVから２次元配列に変換
 
 var dataStartDay = "2020-01-15";
+var dataEndDayTokyo = "";
 var JapanDataSource = "JAG";
 var data = [];
 var dataCases = {};
@@ -23,7 +24,8 @@ var psccKeys = [];
 var dataPopulation = [];
 var loadFiles = 0;
 var doubleInitial = 100;
-const maxFiles = 10;
+const maxFiles = 11;
+var loadingFilesElement = document.getElementById("loadingFiles");
 
 var colorTable = [
 //    "red",
@@ -163,6 +165,11 @@ pref_table =
     ];
 var prefColor = {};
 var colorIndex = 0;
+
+function calculateOffsetDays(i, j) {
+    return (dateParse(i) -
+	    dateParse(j)) / 1000/ 60 / 60 / 24;
+}
 
 function createButton(pref, gcolor) {
     const addButton = document.createElement('input');
@@ -375,8 +382,8 @@ function csv2ArrayGlobal(str) {
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
 	    targetStartDay = mmddyy2yyyymmdd(cells[4]);
-	    offsetdays = (dateParse(targetStartDay) -
-			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    offsetdays = calculateOffsetDays(targetStartDay,
+					     dataStartDay);
 	}
 	if (cells[0] == "") {
 	    cells[0] = cells[1].replace(",", "");
@@ -459,8 +466,8 @@ function csv2ArrayGlobalDeath(str) {
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
 	    targetStartDay = mmddyy2yyyymmdd(cells[4]);
-	    offsetdays = (dateParse(targetStartDay) -
-			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    offsetdays = calculateOffsetDays(targetStartDay,
+					     dataStartDay);
 	}
 	if (cells[0] == "") {
 	    cells[0] = cells[1].replace(",", "");
@@ -527,8 +534,8 @@ function csv2ArrayUSState(str) {
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
 	    targetStartDay = mmddyy2yyyymmdd(cells[4]);
-	    offsetdays = (dateParse(targetStartDay) -
-			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    offsetdays = calculateOffsetDays(targetStartDay,
+					     dataStartDay);
 	    continue;
 	}
 	if (cells[0] != "Province/State") {
@@ -557,8 +564,8 @@ function csv2ArrayUSStateDeath(str) {
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
 	    targetStartDay = mmddyy2yyyymmdd(cells[4]);
-	    offsetdays = (dateParse(targetStartDay) -
-			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    offsetdays = calculateOffsetDays(targetStartDay,
+					     dataStartDay);
 	    continue;
 	}
 	if (cells[0] != "Province/State") {
@@ -584,8 +591,8 @@ function csv2ArrayUSCounty(str) {
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "UID") {
 	    targetStartDay = mmddyy2yyyymmdd(cells[11]);
-	    offsetdays = (dateParse(targetStartDay) -
-			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    offsetdays = calculateOffsetDays(targetStartDay,
+					     dataStartDay);
 	    continue;
 	}
 	if (cells[0] != "UID") {
@@ -615,8 +622,8 @@ function csv2ArrayUSCountyDeath(str) {
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "UID") {
 	    targetStartDay = mmddyy2yyyymmdd(cells[11]);
-	    offsetdays = (dateParse(targetStartDay) -
-			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    offsetdays = calculateOffsetDays(targetStartDay,
+					     dataStartDay);
 	    continue;
 	}
 	if (cells[0] != "UID") {
@@ -645,8 +652,8 @@ function csv2ArrayGlobalRecoverd(str) {
 	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 	if (cells[0] == "Province/State") {
 	    targetStartDay = mmddyy2yyyymmdd(cells[4]);
-	    offsetdays = (dateParse(targetStartDay) -
-			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    offsetdays = calculateOffsetDays(targetStartDay,
+					     dataStartDay);
 	}
 	if (cells[0] == "") {
 	    cells[0] = cells[1].replace(",", "");
@@ -1126,8 +1133,8 @@ function reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, type) {
     }
     var from = tdata["prefectures-data"][i][type]["from"];
     targetStartDay = from[0] + "/" + from[1] + "/" + from[2];
-    offsetdays = (dateParse(targetStartDay) -
-		  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
+    offsetdays = calculateOffsetDays(targetStartDay,
+				     dataStartDay);
     for (var j = 1; j <= offsetdays; j++) {
 	a.splice(0, 0, 0);
     }
@@ -1164,11 +1171,12 @@ function parseTokyo(str) {
 	}
 	if (targetStartDay == "") {
 	    targetStartDay = cells[0];
-	    offsetdays = (dateParse(targetStartDay) -
-			  dateParse(dataStartDay)) / 1000/ 60 / 60 /24;
+	    offsetdays = calculateOffsetDays(targetStartDay,
+					     dataStartDay);
 	}
 	s = parseInt(cells[1]) + s;
 	dataCasesTokyo.push(s);
+	dataEndDayTokyo = cells[0];
     }
     for (var j = 1; j <= offsetdays; j++) {
 	dataCasesTokyo.splice(0, 0, 0);
@@ -1246,9 +1254,8 @@ function readCsv(filePath, csvFunc, id) {
 	req.onload = function() {
 	    // 2) CSVデータ変換の呼び出し
 	    csvFunc(req.responseText);
-	    var loading_str = document.getElementById("loading_str");
 	    loadFiles++;
-	    loading_str.innerHTML = "loading data from GitHub("+loadFiles+"/"+maxFiles + ")...";
+	    loadingFilesElement.innerHTML = loadFiles;
 	    
 	    resolve();
 	}
@@ -1275,8 +1282,7 @@ function readTokyo(filePath, id) {
 	    parseTokyo(req.responseText);
 	    var loading_str = document.getElementById("loading_str");
 	    loadFiles++;
-	    loading_str.innerHTML = "loading data from GitHub("+loadFiles+"/"+maxFiles + ")...";
-	    
+	    loadingFilesElement.innerHTML = loadFiles;
 	    resolve();
 	}
 	req.timeout = 30*1000;
@@ -1306,6 +1312,7 @@ function updateStartDay() {
 }
 
 async function main() {
+    
     Promise.all([
 	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv',
 		csv2Array,
@@ -1345,6 +1352,16 @@ async function main() {
 	    // copy header field from dataCaseJAG to dataCasesToyokeizai
 	    for (var row in dataCasesJAG) {
 		if (dataCasesJAG[row][0] == "Province/State") {
+		    // add dataCasesTokyo's date
+		    const dataEndDayJAG = mmddyy2yyyymmdd(dataCasesJAG[row][dataCasesJAG[row].length - 1]);
+		    const offsetdays = calculateOffsetDays(dataEndDayTokyo,
+						     dataEndDayJAG);
+		    for (var j = 1; j <= offsetdays; j++) {
+			var d = new Date(dateParse(dataEndDayJAG));
+			d.setDate(d.getDate() + j);
+			const s = (d.getMonth() + 1) +"/" + d.getDate() +"/" +(parseInt(d.getFullYear()) - 2000);
+			dataCasesJAG[row].push(s);
+		    }
 		    dataCasesToyokeizai.unshift(dataCasesJAG[row]);
 		    break;
 		}
