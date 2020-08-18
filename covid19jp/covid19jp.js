@@ -1259,6 +1259,14 @@ function readCsv(filePath, csvFunc, id) {
 	    
 	    resolve();
 	}
+	req.onreadystatechange = function() {
+	    switch (req.readyState) {
+	    case 4: // データ受信完了.
+		if(xhr.status == 407) {
+		    downloadAlertMessage(filePath);
+		}
+	    };
+	};
 	req.timeout = 30*1000;
 	req.onerror = function() {
 	    downloadAlertMessage(filePath);
@@ -1286,6 +1294,14 @@ function readTokyo(filePath, id) {
 	    resolve();
 	}
 	req.timeout = 30*1000;
+	req.onreadystatechange = function() {
+	    switch (req.readyState) {
+	    case 4: // データ受信完了.
+		if(xhr.status == 407) {
+		    downloadAlertMessage(filePath);
+		}
+	    };
+	};
 	req.onerror = function() {
 	    downloadAlertMessage(filePath);
 	}
