@@ -338,7 +338,6 @@ function dateParse(date) {
 function csv2Array(str) {
     var lines = str.split("\n");
     for (var i = 0; i < lines.length; ++i) {
-//	var cells = lines[i].split(",");
 	var cells = Papa.parse(lines[i]).data[0];
 	if (cells == undefined) {
 	    return;
@@ -357,7 +356,6 @@ function csv2Array(str) {
 function csv2ArrayJpPopulation(str) {
     var lines = str.split("\n");
     for (var i = 0; i < lines.length; ++i) {
-//	var cells = lines[i].split(",");
 	var cells = Papa.parse(lines[i]).data[0];
 	if (cells == undefined) {
 	    return;
@@ -467,33 +465,6 @@ function csv2ArrayGlobalDeath(str) {
     return;
 }
 
-function csv2ArrayUSStateDeath(str) {
-    var lines = str.split("\n");
-    var offsetdays = 0;
-    for (var i = 0; i < lines.length; ++i) {
-//	var cells = lines[i].split(",");
-	var cells = Papa.parse(lines[i]).data[0];
-	if (cells == undefined) {
-	    return;
-	}
-	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
-	if (cells[0] == "Province/State") {
-	    targetStartDay = mmddyy2yyyymmdd(cells[4]);
-	    offsetdays = calculateOffsetDays(targetStartDay,
-					     dataStartDay);
-	    continue;
-	}
-	if (cells[0] != "Province/State") {
-	    cells[0] = cells[0].replace(",", "") + "_US";
-	}
-	for (var j = 1; j <= offsetdays; j++) {
-	    cells.splice(4, 0, 0)
-	}
-	dataDeath.push(cells);
-    }
-    return;
-}
-
 function csv2ArrayUSCounty(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
@@ -519,7 +490,7 @@ function csv2ArrayUSCounty(str) {
 	    buttonArea[cells[0]] = "us_county";
 	}
 	for (var j = 1; j <= offsetdays; j++) {
-	    cells.splice(4, 0, 0)
+	    cells.splice(4, 0, 0);
 	}
 	dataCasesJAG.push(cells);
 	dataCasesToyokeizai.push(cells);
@@ -536,7 +507,6 @@ function csv2ArrayUSCounty(str) {
 	}
     }
     for (var c in states) {
-	console.log(c);
 	dataCasesJAG.push(cellTmp[c]);
 	dataCasesToyokeizai.push(cellTmp[c]);
     }
@@ -566,7 +536,7 @@ function csv2ArrayUSCountyDeath(str) {
 	    cells.splice(4, 11 - 1, "0")
 	}
 	for (var j = 1; j <= offsetdays; j++) {
-	    cells.splice(4, 0, 0)
+	    cells.splice(4, 0, 0);
 	}
 	dataDeath.push(cells);
 	if (states[s] == undefined) {
@@ -580,11 +550,11 @@ function csv2ArrayUSCountyDeath(str) {
 	}
     }
     for (var c in states) {
-	console.log(c);
 	dataDeath.push(cellTmp[c]);
     }
     return;
 }
+
 function csv2ArrayGlobalRecoverd(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
