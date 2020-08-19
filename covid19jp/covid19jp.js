@@ -24,7 +24,7 @@ var psccKeys = [];
 var dataPopulation = [];
 var loadFiles = 0;
 var doubleInitial = 100;
-const maxFiles = 11;
+const maxFiles = 9;
 var loadingFilesElement = document.getElementById("loadingFiles");
 
 var colorTable = [
@@ -467,35 +467,6 @@ function csv2ArrayGlobalDeath(str) {
     return;
 }
 
-function csv2ArrayUSState(str) {
-    var lines = str.split("\n");
-    var offsetdays = 0;
-    for (var i = 0; i < lines.length; ++i) {
-	var cells = Papa.parse(lines[i]).data[0];
-	if (cells == undefined) {
-	    return;
-	}
-	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
-	if (cells[0] == "Province/State") {
-	    targetStartDay = mmddyy2yyyymmdd(cells[4]);
-	    offsetdays = calculateOffsetDays(targetStartDay,
-					     dataStartDay);
-	    continue;
-	}
-	if (cells[0] != "Province/State") {
-	    cells[0] = cells[0].replace(",", "") + "_US";
-	    psccKeys.push(cells[0]);
-	    buttonArea[cells[0]] = "us_state";
-	}
-	for (var j = 1; j <= offsetdays; j++) {
-	    cells.splice(4, 0, 0)
-	}
-	dataCasesJAG.push(cells);
-	dataCasesToyokeizai.push(cells);
-    }
-    return;
-}
-
 function csv2ArrayUSStateDeath(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
@@ -526,8 +497,9 @@ function csv2ArrayUSStateDeath(str) {
 function csv2ArrayUSCounty(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
+    var cellTmp = {};
+    var states = {};
     for (var i = 0; i < lines.length; ++i) {
-//	var cells = lines[i].split(",");
 	var cells = Papa.parse(lines[i]).data[0];
 	if (cells == undefined) {
 	    return;
@@ -539,6 +511,7 @@ function csv2ArrayUSCounty(str) {
 					     dataStartDay);
 	    continue;
 	}
+	const s = cells[6].replace(",", "") + "_US";
 	if (cells[0] != "UID") {
 	    cells[0] = cells[5].replace(",", "") + "_" + cells[6].replace(",", "") + "_US";
 	    cells.splice(4, 11 - 1, "0")
@@ -550,6 +523,22 @@ function csv2ArrayUSCounty(str) {
 	}
 	dataCasesJAG.push(cells);
 	dataCasesToyokeizai.push(cells);
+	if (states[s] == undefined) {
+	    cells[0] = s;
+	    cellTmp[s] = cells;
+	    states[s] = true;
+	    buttonArea[s] = "us_state";
+	    psccKeys.push(c);
+	} else {
+	    for (var j = 4; j < cells.length; j++) {
+		cellTmp[s][j] = parseInt(cellTmp[s][j]) + parseInt(cells[j]);
+	    }
+	}
+    }
+    for (var c in states) {
+	console.log(c);
+	dataCasesJAG.push(cellTmp[c]);
+	dataCasesToyokeizai.push(cellTmp[c]);
     }
     return;
 }
@@ -557,8 +546,9 @@ function csv2ArrayUSCounty(str) {
 function csv2ArrayUSCountyDeath(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
+    var cellTmp = {};
+    var states = {};
     for (var i = 0; i < lines.length; ++i) {
-//	var cells = lines[i].split(",");
 	var cells = Papa.parse(lines[i]).data[0];
 	if (cells == undefined) {
 	    return;
@@ -570,6 +560,7 @@ function csv2ArrayUSCountyDeath(str) {
 					     dataStartDay);
 	    continue;
 	}
+	const s = cells[6].replace(",", "") + "_US";
 	if (cells[0] != "UID") {
 	    cells[0] = cells[5].replace(",", "") + "_" + cells[6].replace(",", "") + "_US";
 	    cells.splice(4, 11 - 1, "0")
@@ -578,6 +569,19 @@ function csv2ArrayUSCountyDeath(str) {
 	    cells.splice(4, 0, 0)
 	}
 	dataDeath.push(cells);
+	if (states[s] == undefined) {
+	    cells[0] = s;
+	    cellTmp[s] = cells;
+	    states[s] = true;
+	} else {
+	    for (var j = 4; j < cells.length; j++) {
+		cellTmp[s][j] = parseInt(cellTmp[s][j]) + parseInt(cells[j]);
+	    }
+	}
+    }
+    for (var c in states) {
+	console.log(c);
+	dataDeath.push(cellTmp[c]);
     }
     return;
 }
@@ -1214,7 +1218,6 @@ function updateStartDay() {
 }
 
 async function main() {
-    
     Promise.all([
 	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv',
 		csv2Array,
@@ -1224,10 +1227,6 @@ async function main() {
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
 		csv2ArrayGlobal,
 		"update_date_global",
-		getUpdateDate),
-	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_US_State.csv',
-		csv2ArrayUSState,
-		"update_date_us_state",
 		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv',
 		csv2ArrayUSCounty,
@@ -1239,10 +1238,6 @@ async function main() {
 		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
 		csv2ArrayUSCountyDeath,
-		"",
-		getUpdateDate),
-	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_deaths_US_State.csv',
-		csv2ArrayUSStateDeath,
 		"",
 		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv',
