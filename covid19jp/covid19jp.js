@@ -1250,7 +1250,7 @@ function rawUrl2UpdateDate(url) {
     return  "https://api.github.com/repos/" + s[3] + "/" + s[4] +"/commits?path=" + s[6].replace("/", "%2F") + "&page=1&per_page=1";
 }
 
-function readCsv(filePath, csvFunc, id) {
+function readCsv(filePath, csvFunc, id, updateFunc) {
     return new Promise(function (resolve, reject) {
 	var req = new XMLHttpRequest();
 	req.open("GET", filePath, true);
@@ -1279,41 +1279,7 @@ function readCsv(filePath, csvFunc, id) {
 	}
 	req.send(null);
 	if (id != "") {
-	    getUpdateDate(filePath, id);
-	}
-    });
-}
-
-function readTokyo(filePath, id) {
-    return new Promise(function (resolve, reject) {
-	var req = new XMLHttpRequest();
-	req.open("GET", filePath, true);
-	req.onload = function() {
-	    // 2) CSVデータ変換の呼び出し
-	    parseTokyo(req.responseText);
-	    var loading_str = document.getElementById("loading_str");
-	    loadFiles++;
-	    loadingFilesElement.innerHTML = loadFiles;
-	    resolve();
-	}
-	req.timeout = 30*1000;
-	req.onreadystatechange = function() {
-	    switch (req.readyState) {
-	    case 4: // データ受信完了.
-		if(req.status == 407) {
-		    downloadAlertMessage(filePath);
-		}
-	    };
-	};
-	req.onerror = function() {
-	    downloadAlertMessage(filePath);
-	}
-	req.ontimeout = function() {
-	    downloadAlertMessage(filePath);
-	}
-	req.send(null);
-	if (id != "") {
-	    getUpdateDateTokyo(filePath, id);
+	    updateFunc(filePath, id);
 	}
     });
 }
@@ -1335,37 +1301,49 @@ async function main() {
     Promise.all([
 	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv',
 		csv2Array,
-		"update_date_jp"),
+		"update_date_jp",
+		getUpdateDate),
     // 1) ajaxでCSVファイルをロード
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
 		csv2ArrayGlobal,
-		"update_date_global"),
+		"update_date_global",
+		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_US_State.csv',
 		csv2ArrayUSState,
-		"update_date_us_state"),
+		"update_date_us_state",
+		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv',
 		csv2ArrayUSCounty,
-		""),
+		"",
+		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv',
 		csv2ArrayGlobalDeath,
-		""),
+		"",
+		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
 		csv2ArrayUSCountyDeath,
-		""),
+		"",
+		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_deaths_US_State.csv',
 		csv2ArrayUSStateDeath,
-		""),
+		"",
+		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv',
 		csv2ArrayGlobalRecoverd,
-		""),
+		"",
+		getUpdateDate),
 	readCsv('polulation.csv',
 		csv2ArrayJpPopulation,
-		""),
+		"",
+		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/data/data.json',
-		       parseToyoKeizaiData,
-		       "toyokeizai_data"),
-	readTokyo('https://oku.edu.mie-u.ac.jp/~okumura/python/data/COVID-tokyo.csv',
-		  "Tokyo_data"),
+		parseToyoKeizaiData,
+		"toyokeizai_data",
+		getUpdateDate),
+	readCsv('https://oku.edu.mie-u.ac.jp/~okumura/python/data/COVID-tokyo.csv',
+		  parseTokyo,
+		  "Tokyo_data",
+		  getUpdateDateTokyo),
     ])
 	.then(results => {
 	    // copy header field from dataCaseJAG to dataCasesToyokeizai
