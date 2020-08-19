@@ -367,14 +367,17 @@ function csv2ArrayJpPopulation(str) {
     return;
 }
 
+specialCountries = [
+    "China",
+    "Canada",
+    "Australia",
+];
+
 function csv2ArrayGlobal(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
-    var cellsChina = [];
-    var cellsCanada = [];
-    var cellsAustralia = [];
+    var cellTmp = {};
     for (var i = 0; i < lines.length; ++i) {
-//	var cells = lines[i].split(",");
 	var cells = Papa.parse(lines[i]).data[0];
 	if (cells == undefined) {
 	    break;
@@ -395,70 +398,36 @@ function csv2ArrayGlobal(str) {
 	    psccKeys.push(cells[0]);
 	    buttonArea[cells[0]] = "country";
 	}
-	if (cells[1] == "China") {
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0);
-	    }
-	    if (cellsChina.length == 0) {
-		cells[0] = cells[1];
-		cellsChina = cells;
-	    } else {
-		for (var j = 4; j < cells.length; j++) {
-		    cellsChina[j] = parseInt(cellsChina[j]) + parseInt(cells[j]);
+	specialCountries.forEach(function(c) {
+	    if (cells[1] == c) {
+		for (var j = 1; j <= offsetdays; j++) {
+		    cells.splice(4, 0, 0);
+		}
+		if (cellTmp[c] == undefined) {
+		    cells[0] = cells[1];
+		    cellTmp[c] = cells;
+		} else {
+		    for (var j = 4; j < cells.length; j++) {
+			cellTmp[c][j] = parseInt(cellTmp[c][j]) + parseInt(cells[j]);
+		    }
 		}
 	    }
-	}
-	if (cells[1] == "Canada") {
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0);
-	    }
-	    if (cellsCanada.length == 0) {
-		cells[0] = cells[1];
-		cellsCanada = cells;
-	    } else {
-		for (var j = 4; j < cells.length; j++) {
-		    cellsCanada[j] = parseInt(cellsCanada[j]) + parseInt(cells[j]);
-		}
-	    }
-	}
-	if (cells[1] == "Australia") {
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0);
-	    }
-	    if (cellsAustralia.length == 0) {
-		cells[0] = cells[1];
-		cellsAustralia= cells;
-	    } else {
-		for (var j = 4; j < cells.length; j++) {
-		    cellsAustralia[j] = parseInt(cellsAustralia[j]) + parseInt(cells[j]);
-		}
-	    }
-	}
-	    
+	});
     }
-    dataCasesJAG.push(cellsChina);
-    dataCasesJAG.push(cellsCanada);
-    dataCasesJAG.push(cellsAustralia);
-    dataCasesToyokeizai.push(cellsChina);
-    dataCasesToyokeizai.push(cellsCanada);
-    dataCasesToyokeizai.push(cellsAustralia);
-    psccKeys.push("China");
-    buttonArea["China"] = "country";
-    psccKeys.push("Canada");
-    buttonArea["Canada"] = "country";
-    psccKeys.push("Australia");
-    buttonArea["Australia"] = "country";
+    specialCountries.forEach(function(c) {
+	dataCasesJAG.push(cellTmp[c]);
+	dataCasesToyokeizai.push(cellTmp[c]);
+	psccKeys.push(c);
+	buttonArea[c] = "country";
+    });
     return;
 }
 
 function csv2ArrayGlobalDeath(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
-    var cellsChina = [];
-    var cellsCanada = [];
-    var cellsAustralia = [];
+    var cellTmp = {};
     for (var i = 0; i < lines.length; ++i) {
-//	var cells = lines[i].split(",");
 	var cells = Papa.parse(lines[i]).data[0];
 	if (cells == undefined) {
 	    break;
@@ -476,49 +445,25 @@ function csv2ArrayGlobalDeath(str) {
 	    }
 	    dataDeath.push(cells);
 	}
-	if (cells[1] == "China") {
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0);
-	    }
-	    if (cellsChina.length == 0) {
-		cells[0] = cells[1];
-		cellsChina = cells;
-	    } else {
-		for (var j = 4; j < cells.length; j++) {
-		    cellsChina[j] = parseInt(cellsChina[j]) + parseInt(cells[j]);
+	specialCountries.forEach(function(c) {
+	    if (cells[1] == c) {
+		for (var j = 1; j <= offsetdays; j++) {
+		    cells.splice(4, 0, 0);
+		}
+		if (cellTmp[c] == undefined) {
+		    cells[0] = cells[1];
+		    cellTmp[c] = cells;
+		} else {
+		    for (var j = 4; j < cells.length; j++) {
+			cellTmp[c][j] = parseInt(cellTmp[c][j]) + parseInt(cells[j]);
+		    }
 		}
 	    }
-	}
-	if (cells[1] == "Canada") {
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0);
-	    }
-	    if (cellsCanada.length == 0) {
-		cells[0] = cells[1];
-		cellsCanada = cells;
-	    } else {
-		for (var j = 4; j < cells.length; j++) {
-		    cellsCanada[j] = parseInt(cellsCanada[j]) + parseInt(cells[j]);
-		}
-	    }
-	}
-	if (cells[1] == "Australia") {
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0);
-	    }
-	    if (cellsAustralia.length == 0) {
-		cells[0] = cells[1];
-		cellsAustralia= cells;
-	    } else {
-		for (var j = 4; j < cells.length; j++) {
-		    cellsAustralia[j] = parseInt(cellsAustralia[j]) + parseInt(cells[j]);
-		}
-	    }
-	}
+	});
     }
-    dataDeath.push(cellsChina);
-    dataDeath.push(cellsCanada);
-    dataDeath.push(cellsAustralia);
+    specialCountries.forEach(function(c) {
+	dataDeath.push(cellTmp[c]);
+    });
     return;
 }
 
@@ -526,7 +471,6 @@ function csv2ArrayUSState(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
     for (var i = 0; i < lines.length; ++i) {
-//	var cells = lines[i].split(",");
 	var cells = Papa.parse(lines[i]).data[0];
 	if (cells == undefined) {
 	    return;
@@ -640,11 +584,8 @@ function csv2ArrayUSCountyDeath(str) {
 function csv2ArrayGlobalRecoverd(str) {
     var lines = str.split("\n");
     var offsetdays = 0;
-    var cellsChina = [];
-    var cellsCanada = [];
-    var cellsAustralia = [];
+    var cellTmp = {};
     for (var i = 0; i < lines.length; ++i) {
-//	var cells = lines[i].split(",");
 	var cells = Papa.parse(lines[i]).data[0];
 	if (cells == undefined) {
 	    break;
@@ -662,49 +603,25 @@ function csv2ArrayGlobalRecoverd(str) {
 	    }
 	    dataRecoverd.push(cells);
 	}
-	if (cells[1] == "China") {
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0);
-	    }
-	    if (cellsChina.length == 0) {
-		cells[0] = cells[1];
-		cellsChina = cells;
-	    } else {
-		for (var j = 4; j < cells.length; j++) {
-		    cellsChina[j] = parseInt(cellsChina[j]) + parseInt(cells[j]);
+	specialCountries.forEach(function(c) {
+	    if (cells[1] == c) {
+		for (var j = 1; j <= offsetdays; j++) {
+		    cells.splice(4, 0, 0);
+		}
+		if (cellTmp[c] == undefined) {
+		    cells[0] = cells[1];
+		    cellTmp[c] = cells;
+		} else {
+		    for (var j = 4; j < cells.length; j++) {
+			cellTmp[c][j] = parseInt(cellTmp[c][j]) + parseInt(cells[j]);
+		    }
 		}
 	    }
-	}
-	if (cells[1] == "Canada") {
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0);
-	    }
-	    if (cellsCanada.length == 0) {
-		cells[0] = cells[1];
-		cellsCanada = cells;
-	    } else {
-		for (var j = 4; j < cells.length; j++) {
-		    cellsCanada[j] = parseInt(cellsCanada[j]) + parseInt(cells[j]);
-		}
-	    }
-	}
-	if (cells[1] == "Australia") {
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0);
-	    }
-	    if (cellsAustralia.length == 0) {
-		cells[0] = cells[1];
-		cellsAustralia= cells;
-	    } else {
-		for (var j = 4; j < cells.length; j++) {
-		    cellsAustralia[j] = parseInt(cellsAustralia[j]) + parseInt(cells[j]);
-		}
-	    }
-	}
+	});
     }
-    dataRecoverd.push(cellsChina);
-    dataRecoverd.push(cellsCanada);
-    dataRecoverd.push(cellsAustralia);
+    specialCountries.forEach(function(c) {
+	dataRecoverd.push(cellTmp[c]);
+    });
     return;
 }
 
