@@ -353,7 +353,7 @@ function csv2Array(str) {
     return;
 }
 
-function csv2ArrayJpPopulation(str) {
+function csv2ArrayPopulation(str) {
     var lines = str.split("\n");
     for (var i = 0; i < lines.length; ++i) {
 	var cells = Papa.parse(lines[i]).data[0];
@@ -1215,7 +1215,7 @@ async function main() {
 		"",
 		getUpdateDate),
 	readCsv('polulation.csv',
-		csv2ArrayJpPopulation,
+		csv2ArrayPopulation,
 		"",
 		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/data/data.json',
