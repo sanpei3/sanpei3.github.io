@@ -403,10 +403,13 @@ function csv2ArrayGlobal(str) {
 		}
 		if (cellTmp[c] == undefined) {
 		    cells[0] = cells[1];
+		    for (var j = 4; j < cells.length; j++) {
+			cells[j] = parseInt(cells[j]);
+		    }
 		    cellTmp[c] = cells;
 		} else {
 		    for (var j = 4; j < cells.length; j++) {
-			cellTmp[c][j] = parseInt(cellTmp[c][j]) + parseInt(cells[j]);
+			cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
 		    }
 		}
 	    }
@@ -450,10 +453,13 @@ function csv2ArrayGlobalDeath(str) {
 		}
 		if (cellTmp[c] == undefined) {
 		    cells[0] = cells[1];
+		    for (var j = 4; j < cells.length; j++) {
+			cells[j] = parseInt(cells[j]);
+		    }
 		    cellTmp[c] = cells;
 		} else {
 		    for (var j = 4; j < cells.length; j++) {
-			cellTmp[c][j] = parseInt(cellTmp[c][j]) + parseInt(cells[j]);
+			cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
 		    }
 		}
 	    }
@@ -496,13 +502,16 @@ function csv2ArrayUSCounty(str) {
 	dataCasesToyokeizai.push(cells);
 	if (states[s] == undefined) {
 	    cells[0] = s;
+	    for (var j = 4; j < cells.length; j++) {
+		cells[j] = parseInt(cells[j]);
+	    }
 	    cellTmp[s] = cells;
 	    states[s] = true;
 	    buttonArea[s] = "us_state";
 	    psccKeys.push(c);
 	} else {
 	    for (var j = 4; j < cells.length; j++) {
-		cellTmp[s][j] = parseInt(cellTmp[s][j]) + parseInt(cells[j]);
+		cellTmp[s][j] = cellTmp[s][j] + parseInt(cells[j]);
 	    }
 	}
     }
@@ -541,11 +550,14 @@ function csv2ArrayUSCountyDeath(str) {
 	dataDeath.push(cells);
 	if (states[s] == undefined) {
 	    cells[0] = s;
+	    for (var j = 4; j < cells.length; j++) {
+		cells[j] = parseInt(cells[j]);
+	    }
 	    cellTmp[s] = cells;
 	    states[s] = true;
 	} else {
 	    for (var j = 4; j < cells.length; j++) {
-		cellTmp[s][j] = parseInt(cellTmp[s][j]) + parseInt(cells[j]);
+		cellTmp[s][j] = cellTmp[s][j] + parseInt(cells[j]);
 	    }
 	}
     }
@@ -584,10 +596,13 @@ function csv2ArrayGlobalRecoverd(str) {
 		}
 		if (cellTmp[c] == undefined) {
 		    cells[0] = cells[1];
+		    for (var j = 4; j < cells.length; j++) {
+			cells[j] = parseInt(cells[j]);
+		    }
 		    cellTmp[c] = cells;
 		} else {
 		    for (var j = 4; j < cells.length; j++) {
-			cellTmp[c][j] = parseInt(cellTmp[c][j]) + parseInt(cells[j]);
+			cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
 		    }
 		}
 	    }
@@ -1193,21 +1208,20 @@ async function main() {
 		csv2Array,
 		"update_date_jp",
 		getUpdateDate),
-    // 1) ajaxでCSVファイルをロード
-	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
-		csv2ArrayGlobal,
-		"update_date_global",
-		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv',
 		csv2ArrayUSCounty,
 		"",
 		getUpdateDate),
-	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv',
-		csv2ArrayGlobalDeath,
-		"",
-		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
 		csv2ArrayUSCountyDeath,
+		"",
+		getUpdateDate),
+	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
+		csv2ArrayGlobal,
+		"update_date_global",
+		getUpdateDate),
+	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv',
+		csv2ArrayGlobalDeath,
 		"",
 		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv',
