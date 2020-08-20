@@ -269,7 +269,8 @@ async function initialize() {
 	// logarithm
 	// draw_modeはdraw_mode切り替えボタンを動的に作る必要あり
     });
-    await pref_table.forEach(function(val) {
+    for (let i in pref_table) {
+	const val = pref_table[i];
 	const pref = val.pref;
 	const defaultenable = val.defaultenable;
 	if (! (showFlagAlreadySet)) {
@@ -281,12 +282,13 @@ async function initialize() {
 	    prefColor[pref] = colorTable[colorIndex % colorTable.length];
 	    colorIndex = colorIndex + 1;
 	}
-    });
-    await pref_table.forEach(function(val) {
+    }
+    for (let i in pref_table) {
+	const val = pref_table[i];
 	const pref = val.pref;
 	const gcolor = val.color;
 	createButton(pref, gcolor);
-    });
+    }
 }
 
 function updateLocationHash () {
@@ -372,11 +374,11 @@ specialCountries = [
 ];
 
 function csv2ArrayGlobal(str) {
-    var lines = str.split("\n");
-    var offsetdays = 0;
-    var cellTmp = {};
-    for (var i = 0; i < lines.length; ++i) {
-	var cells = Papa.parse(lines[i]).data[0];
+    const lines = str.split("\n");
+    let offsetdays = 0;
+    let cellTmp = {};
+    for (let i = 0; i < lines.length; ++i) {
+	let cells = Papa.parse(lines[i]).data[0];
 	if (cells == undefined) {
 	    break;
 	}
@@ -388,7 +390,7 @@ function csv2ArrayGlobal(str) {
 	}
 	if (cells[0] == "") {
 	    cells[0] = cells[1].replace(",", "");
-	    for (var j = 1; j <= offsetdays; j++) {
+	    for (let j = 1; j <= offsetdays; j++) {
 		cells.splice(4, 0, 0);
 	    }
 	    dataCasesJAG.push(cells);
@@ -396,40 +398,42 @@ function csv2ArrayGlobal(str) {
 	    psccKeys.push(cells[0]);
 	    buttonArea[cells[0]] = "country";
 	}
-	specialCountries.forEach(function(c) {
+	for (var k in specialCountries) {
+	    c = specialCountries[k];
 	    if (cells[1] == c) {
-		for (var j = 1; j <= offsetdays; j++) {
+		for (let j = 1; j <= offsetdays; j++) {
 		    cells.splice(4, 0, 0);
 		}
 		if (cellTmp[c] == undefined) {
 		    cells[0] = cells[1];
-		    for (var j = 4; j < cells.length; j++) {
+		    for (let j = 4; j < cells.length; j++) {
 			cells[j] = parseInt(cells[j]);
 		    }
 		    cellTmp[c] = cells;
 		} else {
-		    for (var j = 4; j < cells.length; j++) {
+		    for (let j = 4; j < cells.length; j++) {
 			cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
 		    }
 		}
 	    }
-	});
+	}
     }
-    specialCountries.forEach(function(c) {
+    for (var k in specialCountries) {
+	c = specialCountries[k];
 	dataCasesJAG.push(cellTmp[c]);
 	dataCasesToyokeizai.push(cellTmp[c]);
 	psccKeys.push(c);
 	buttonArea[c] = "country";
-    });
+    }
     return;
 }
 
 function csv2ArrayGlobalDeath(str) {
-    var lines = str.split("\n");
-    var offsetdays = 0;
-    var cellTmp = {};
-    for (var i = 0; i < lines.length; ++i) {
-	var cells = Papa.parse(lines[i]).data[0];
+    const lines = str.split("\n");
+    let offsetdays = 0;
+    let cellTmp = {};
+    for (let i = 0; i < lines.length; ++i) {
+	let cells = Papa.parse(lines[i]).data[0];
 	if (cells == undefined) {
 	    break;
 	}
@@ -441,12 +445,13 @@ function csv2ArrayGlobalDeath(str) {
 	}
 	if (cells[0] == "") {
 	    cells[0] = cells[1].replace(",", "");
-	    for (var j = 1; j <= offsetdays; j++) {
+	    for (let j = 1; j <= offsetdays; j++) {
 		cells.splice(4, 0, 0)
 	    }
 	    dataDeath.push(cells);
 	}
-	specialCountries.forEach(function(c) {
+	for (var k in specialCountries) {
+	    c = specialCountries[k];
 	    if (cells[1] == c) {
 		for (var j = 1; j <= offsetdays; j++) {
 		    cells.splice(4, 0, 0);
@@ -463,21 +468,22 @@ function csv2ArrayGlobalDeath(str) {
 		    }
 		}
 	    }
-	});
+	}
     }
-    specialCountries.forEach(function(c) {
+    for (var k in specialCountries) {
+	c = specialCountries[k];
 	dataDeath.push(cellTmp[c]);
-    });
+    }
     return;
 }
 
 function csv2ArrayUSCounty(str) {
-    var lines = str.split("\n");
-    var offsetdays = 0;
-    var cellTmp = {};
-    var states = {};
-    for (var i = 0; i < lines.length; ++i) {
-	var cells = Papa.parse(lines[i]).data[0];
+    const lines = str.split("\n");
+    let offsetdays = 0;
+    let cellTmp = {};
+    let states = {};
+    for (let i = 0; i < lines.length; ++i) {
+	let cells = Papa.parse(lines[i]).data[0];
 	if (cells == undefined) {
 	    return;
 	}
@@ -495,14 +501,14 @@ function csv2ArrayUSCounty(str) {
 	    psccKeys.push(cells[0]);
 	    buttonArea[cells[0]] = "us_county";
 	}
-	for (var j = 1; j <= offsetdays; j++) {
+	for (let j = 1; j <= offsetdays; j++) {
 	    cells.splice(4, 0, 0);
 	}
 	dataCasesJAG.push(cells);
 	dataCasesToyokeizai.push(cells);
 	if (states[s] == undefined) {
 	    cells[0] = s;
-	    for (var j = 4; j < cells.length; j++) {
+	    for (let j = 4; j < cells.length; j++) {
 		cells[j] = parseInt(cells[j]);
 	    }
 	    cellTmp[s] = cells;
@@ -510,12 +516,12 @@ function csv2ArrayUSCounty(str) {
 	    buttonArea[s] = "us_state";
 	    psccKeys.push(s);
 	} else {
-	    for (var j = 4; j < cells.length; j++) {
+	    for (let j = 4; j < cells.length; j++) {
 		cellTmp[s][j] = cellTmp[s][j] + parseInt(cells[j]);
 	    }
 	}
     }
-    for (var c in states) {
+    for (let c in states) {
 	dataCasesJAG.push(cellTmp[c]);
 	dataCasesToyokeizai.push(cellTmp[c]);
     }
@@ -523,12 +529,12 @@ function csv2ArrayUSCounty(str) {
 }
 
 function csv2ArrayUSCountyDeath(str) {
-    var lines = str.split("\n");
-    var offsetdays = 0;
-    var cellTmp = {};
-    var states = {};
-    for (var i = 0; i < lines.length; ++i) {
-	var cells = Papa.parse(lines[i]).data[0];
+    const lines = str.split("\n");
+    let offsetdays = 0;
+    let cellTmp = {};
+    let states = {};
+    for (let i = 0; i < lines.length; ++i) {
+	let cells = Papa.parse(lines[i]).data[0];
 	if (cells == undefined) {
 	    return;
 	}
@@ -544,24 +550,24 @@ function csv2ArrayUSCountyDeath(str) {
 	    cells[0] = cells[5].replace(",", "") + "_" + cells[6].replace(",", "") + "_US";
 	    cells.splice(4, 11 - 1, "0")
 	}
-	for (var j = 1; j <= offsetdays; j++) {
+	for (let j = 1; j <= offsetdays; j++) {
 	    cells.splice(4, 0, 0);
 	}
 	dataDeath.push(cells);
 	if (states[s] == undefined) {
 	    cells[0] = s;
-	    for (var j = 4; j < cells.length; j++) {
+	    for (let j = 4; j < cells.length; j++) {
 		cells[j] = parseInt(cells[j]);
 	    }
 	    cellTmp[s] = cells;
 	    states[s] = true;
 	} else {
-	    for (var j = 4; j < cells.length; j++) {
+	    for (let j = 4; j < cells.length; j++) {
 		cellTmp[s][j] = cellTmp[s][j] + parseInt(cells[j]);
 	    }
 	}
     }
-    for (var c in states) {
+    for (let c in states) {
 	dataDeath.push(cellTmp[c]);
     }
     return;
@@ -589,7 +595,8 @@ function csv2ArrayGlobalRecoverd(str) {
 	    }
 	    dataRecoverd.push(cells);
 	}
-	specialCountries.forEach(function(c) {
+	for (var k in specialCountries) {
+	    c = specialCountries[k];
 	    if (cells[1] == c) {
 		for (var j = 1; j <= offsetdays; j++) {
 		    cells.splice(4, 0, 0);
@@ -606,11 +613,12 @@ function csv2ArrayGlobalRecoverd(str) {
 		    }
 		}
 	    }
-	});
+	}
     }
-    specialCountries.forEach(function(c) {
+    for (var k in specialCountries) {
+	c = specialCountries[k];
 	dataRecoverd.push(cellTmp[c]);
-    });
+    }
     return;
 }
 
@@ -749,7 +757,8 @@ function updateData(draw_mode) {
     var doubleDaysGraphOffset = 0;
     var maxY = 0;
     for (var row in data) {
-	pref_table.forEach(function(val) {
+	for (let j in pref_table) {
+	    const val = pref_table[j];
 	    const pref = val.pref;
 	    const defaultenable = val.defaultenable;
 	    const gcolor = prefColor[pref];
@@ -858,7 +867,7 @@ function updateData(draw_mode) {
 			  borderColor: gcolor})
 		}
 	    }
-	});
+	}
     }
     if (draw_mode == 3) {
 	var newCases = doubleInitial;
@@ -1056,13 +1065,14 @@ function reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, type) {
 
 function parseToyoKeizaiData(data) {
     const tdata = JSON.parse(data);
-    tdata["prefectures-map"].forEach(function(p) {
+    for (let j in tdata["prefectures-map"]) {
+	const p = tdata["prefectures-map"][j];
 	const pref = p["en"];
 	var i = p["code"] - 1;
 	dataDeath.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "deaths"));
 	dataRecoverd.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "discharged"));
 	dataCasesToyokeizai.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "carriers"));
-    });
+    }
 }
 
 function parseTokyo(str) {
@@ -1472,8 +1482,6 @@ function addButtonByFrom() {
     var list = document.getElementById('list');
     list.textContent = null;
 }
-
-
 
 document.getElementById('AllClear').addEventListener('click', function() {
     pref_table.forEach(function(val) {
