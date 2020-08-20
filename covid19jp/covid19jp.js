@@ -508,7 +508,7 @@ function csv2ArrayUSCounty(str) {
 	    cellTmp[s] = cells;
 	    states[s] = true;
 	    buttonArea[s] = "us_state";
-	    psccKeys.push(c);
+	    psccKeys.push(s);
 	} else {
 	    for (var j = 4; j < cells.length; j++) {
 		cellTmp[s][j] = cellTmp[s][j] + parseInt(cells[j]);
