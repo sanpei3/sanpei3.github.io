@@ -478,99 +478,113 @@ function csv2ArrayGlobalDeath(str) {
 }
 
 function csv2ArrayUSCounty(str) {
-    const lines = str.split("\n");
-    let offsetdays = 0;
-    let cellTmp = {};
-    let states = {};
-    for (let i = 0; i < lines.length; ++i) {
-	let cells = Papa.parse(lines[i]).data[0];
-	if (cells == undefined) {
-	    return;
-	}
-	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
-	if (cells[0] == "UID") {
-	    targetStartDay = mmddyy2yyyymmdd(cells[11]);
-	    offsetdays = calculateOffsetDays(targetStartDay,
-					     dataStartDay);
-	    continue;
-	}
-	const s = cells[6].replace(",", "") + "_US";
-	if (cells[0] != "UID") {
-	    cells[0] = cells[5].replace(",", "") + "_" + cells[6].replace(",", "") + "_US";
-	    cells.splice(4, 11 - 1, "0")
-	    psccKeys.push(cells[0]);
-	    buttonArea[cells[0]] = "us_county";
-	}
-	for (let j = 1; j <= offsetdays; j++) {
-	    cells.splice(4, 0, 0);
-	}
-	dataCasesJAG.push(cells);
-	dataCasesToyokeizai.push(cells);
-	if (states[s] == undefined) {
-	    cells[0] = s;
-	    for (let j = 4; j < cells.length; j++) {
-		cells[j] = parseInt(cells[j]);
+    return new Promise(function (resolve, reject) {
+	let offsetdays = 0;
+	let cellTmp = {};
+	let states = {};
+	Papa.parse(str, {
+	    worker: true,
+	    step: function(row) {
+		let cells = row.data;
+		if (cells[6] == undefined) {
+		    return;
+		}
+		// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
+		if (cells[0] == "UID") {
+		    targetStartDay = mmddyy2yyyymmdd(cells[11]);
+		    offsetdays = calculateOffsetDays(targetStartDay,
+						     dataStartDay);
+		    return;
+		}
+		const s = cells[6].replace(",", "") + "_US";
+		if (cells[0] != "UID") {
+		    cells[0] = cells[5].replace(",", "") + "_" + cells[6].replace(",", "") + "_US";
+		    cells.splice(4, 11 - 1, "0")
+		    psccKeys.push(cells[0]);
+		    buttonArea[cells[0]] = "us_county";
+		}
+		for (let j = 1; j <= offsetdays; j++) {
+		    cells.splice(4, 0, 0);
+		}
+		dataCasesJAG.push(cells);
+		dataCasesToyokeizai.push(cells);
+		if (states[s] == undefined) {
+		    cells[0] = s;
+		    for (let j = 4; j < cells.length; j++) {
+			cells[j] = parseInt(cells[j]);
+		    }
+		    cellTmp[s] = cells;
+		    states[s] = true;
+		    buttonArea[s] = "us_state";
+		    psccKeys.push(s);
+		} else {
+		    for (let j = 4; j < cells.length; j++) {
+			cellTmp[s][j] = cellTmp[s][j] + parseInt(cells[j]);
+		    }
+		}
+	    },
+	    complete: function() {
+		for (let c in states) {
+		    dataCasesJAG.push(cellTmp[c]);
+		    dataCasesToyokeizai.push(cellTmp[c]);
+		}
+		resolve(states);
 	    }
-	    cellTmp[s] = cells;
-	    states[s] = true;
-	    buttonArea[s] = "us_state";
-	    psccKeys.push(s);
-	} else {
-	    for (let j = 4; j < cells.length; j++) {
-		cellTmp[s][j] = cellTmp[s][j] + parseInt(cells[j]);
-	    }
-	}
-    }
-    for (let c in states) {
-	dataCasesJAG.push(cellTmp[c]);
-	dataCasesToyokeizai.push(cellTmp[c]);
-    }
-    return;
+	});
+    });
 }
 
 function csv2ArrayUSCountyDeath(str) {
-    const lines = str.split("\n");
-    let offsetdays = 0;
-    let cellTmp = {};
-    let states = {};
-    for (let i = 0; i < lines.length; ++i) {
-	let cells = Papa.parse(lines[i]).data[0];
-	if (cells == undefined) {
-	    return;
-	}
-	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
-	if (cells[0] == "UID") {
-	    targetStartDay = mmddyy2yyyymmdd(cells[11]);
-	    offsetdays = calculateOffsetDays(targetStartDay,
-					     dataStartDay);
-	    continue;
-	}
-	const s = cells[6].replace(",", "") + "_US";
-	if (cells[0] != "UID") {
-	    cells[0] = cells[5].replace(",", "") + "_" + cells[6].replace(",", "") + "_US";
-	    cells.splice(4, 11 - 1, "0")
-	}
-	for (let j = 1; j <= offsetdays; j++) {
-	    cells.splice(4, 0, 0);
-	}
-	dataDeath.push(cells);
-	if (states[s] == undefined) {
-	    cells[0] = s;
-	    for (let j = 4; j < cells.length; j++) {
-		cells[j] = parseInt(cells[j]);
+    return new Promise(function (resolve, reject) {
+	let offsetdays = 0;
+	let cellTmp = {};
+	let states = {};
+	Papa.parse(str, {
+	    worker: true,
+	    step: function(row) {
+		let cells = row.data;
+		if (cells[6] == undefined) {
+		    return;
+		}
+		// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
+		if (cells[0] == "UID") {
+		    targetStartDay = mmddyy2yyyymmdd(cells[11]);
+		    offsetdays = calculateOffsetDays(targetStartDay,
+						     dataStartDay);
+		    return;
+		}
+		const s = cells[6].replace(",", "") + "_US";
+		if (cells[0] != "UID") {
+		    cells[0] = cells[5].replace(",", "") + "_" + cells[6].replace(",", "") + "_US";
+		    cells.splice(4, 11 - 1, "0")
+		    psccKeys.push(cells[0]);
+		    buttonArea[cells[0]] = "us_county";
+		}
+		for (let j = 1; j <= offsetdays; j++) {
+		    cells.splice(4, 0, 0);
+		}
+		dataDeath.push(cells);
+		if (states[s] == undefined) {
+		    cells[0] = s;
+		    for (let j = 4; j < cells.length; j++) {
+			cells[j] = parseInt(cells[j]);
+		    }
+		    cellTmp[s] = cells;
+		    states[s] = true;
+		} else {
+		    for (let j = 4; j < cells.length; j++) {
+			cellTmp[s][j] = cellTmp[s][j] + parseInt(cells[j]);
+		    }
+		}
+	    },
+	    complete: function() {
+		for (let c in states) {
+		    dataDeath.push(cellTmp[c]);
+		}
+		resolve(states);
 	    }
-	    cellTmp[s] = cells;
-	    states[s] = true;
-	} else {
-	    for (let j = 4; j < cells.length; j++) {
-		cellTmp[s][j] = cellTmp[s][j] + parseInt(cells[j]);
-	    }
-	}
-    }
-    for (let c in states) {
-	dataDeath.push(cellTmp[c]);
-    }
-    return;
+	});
+    });
 }
 
 function csv2ArrayGlobalRecoverd(str) {
@@ -1170,9 +1184,9 @@ function readCsv(filePath, csvFunc, id, updateFunc) {
     return new Promise(function (resolve, reject) {
 	var req = new XMLHttpRequest();
 	req.open("GET", filePath, true);
-	req.onload = function() {
+	req.onload = async function() {
 	    // 2) CSVデータ変換の呼び出し
-	    csvFunc(req.responseText);
+	    await csvFunc(req.responseText);
 	    loadFiles++;
 	    loadingFilesElement.innerHTML = loadFiles;
 	    
