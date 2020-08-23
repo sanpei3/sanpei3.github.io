@@ -374,107 +374,122 @@ specialCountries = [
 ];
 
 function csv2ArrayGlobal(str) {
-    const lines = str.split("\n");
-    let offsetdays = 0;
-    let cellTmp = {};
-    for (let i = 0; i < lines.length; ++i) {
-	let cells = Papa.parse(lines[i]).data[0];
-	if (cells == undefined) {
-	    break;
-	}
-	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
-	if (cells[0] == "Province/State") {
-	    targetStartDay = mmddyy2yyyymmdd(cells[4]);
-	    offsetdays = calculateOffsetDays(targetStartDay,
-					     dataStartDay);
-	}
-	if (cells[0] == "") {
-	    cells[0] = cells[1].replace(",", "");
-	    for (let j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0);
-	    }
-	    dataCasesJAG.push(cells);
-	    dataCasesToyokeizai.push(cells);
-	    psccKeys.push(cells[0]);
-	    buttonArea[cells[0]] = "country";
-	}
-	for (var k in specialCountries) {
-	    c = specialCountries[k];
-	    if (cells[1] == c) {
-		for (let j = 1; j <= offsetdays; j++) {
-		    cells.splice(4, 0, 0);
+    return new Promise(function (resolve, reject) {
+	let offsetdays = 0;
+	let cellTmp = {};
+	Papa.parse(str, {
+	    download: true,
+	    worker: true,
+	    step: function(row) {
+		let cells = row.data;
+		if (cells == undefined || cells[1] == undefined) {
+		    return;
 		}
-		if (cellTmp[c] == undefined) {
-		    cells[0] = cells[1];
-		    for (let j = 4; j < cells.length; j++) {
-			cells[j] = parseInt(cells[j]);
+		// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
+		if (cells[0] == "Province/State") {
+		    targetStartDay = mmddyy2yyyymmdd(cells[4]);
+		    offsetdays = calculateOffsetDays(targetStartDay,
+						     dataStartDay);
+		}
+		if (cells[0] == "") {
+		    cells[0] = cells[1].replace(",", "");
+		    for (let j = 1; j <= offsetdays; j++) {
+			cells.splice(4, 0, 0);
 		    }
-		    cellTmp[c] = cells;
-		} else {
-		    for (let j = 4; j < cells.length; j++) {
-			cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
+		    dataCasesJAG.push(cells);
+		    dataCasesToyokeizai.push(cells);
+		    psccKeys.push(cells[0]);
+		    buttonArea[cells[0]] = "country";
+		}
+		for (var k in specialCountries) {
+		    c = specialCountries[k];
+		    if (cells[1] == c) {
+			for (let j = 1; j <= offsetdays; j++) {
+			    cells.splice(4, 0, 0);
+			}
+			if (cellTmp[c] == undefined) {
+			    cells[0] = cells[1];
+			    for (let j = 4; j < cells.length; j++) {
+				cells[j] = parseInt(cells[j]);
+			    }
+			    cellTmp[c] = cells;
+			} else {
+			    for (let j = 4; j < cells.length; j++) {
+				cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
+			    }
+			}
 		    }
 		}
+	    },
+	    complete: function() {
+		for (var k in specialCountries) {
+		    c = specialCountries[k];
+		    dataCasesJAG.push(cellTmp[c]);
+		    dataCasesToyokeizai.push(cellTmp[c]);
+		    psccKeys.push(c);
+		    buttonArea[c] = "country";
+		}
+		resolve(offsetdays);
 	    }
-	}
-    }
-    for (var k in specialCountries) {
-	c = specialCountries[k];
-	dataCasesJAG.push(cellTmp[c]);
-	dataCasesToyokeizai.push(cellTmp[c]);
-	psccKeys.push(c);
-	buttonArea[c] = "country";
-    }
-    return;
+	});
+    });
 }
 
 function csv2ArrayGlobalDeath(str) {
-    const lines = str.split("\n");
-    let offsetdays = 0;
-    let cellTmp = {};
-    for (let i = 0; i < lines.length; ++i) {
-	let cells = Papa.parse(lines[i]).data[0];
-	if (cells == undefined) {
-	    break;
-	}
-	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
-	if (cells[0] == "Province/State") {
-	    targetStartDay = mmddyy2yyyymmdd(cells[4]);
-	    offsetdays = calculateOffsetDays(targetStartDay,
-					     dataStartDay);
-	}
-	if (cells[0] == "") {
-	    cells[0] = cells[1].replace(",", "");
-	    for (let j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0)
-	    }
-	    dataDeath.push(cells);
-	}
-	for (var k in specialCountries) {
-	    c = specialCountries[k];
-	    if (cells[1] == c) {
-		for (var j = 1; j <= offsetdays; j++) {
-		    cells.splice(4, 0, 0);
+    return new Promise(function (resolve, reject) {
+	let offsetdays = 0;
+	let cellTmp = {};
+ 	Papa.parse(str, {
+	    download: true,
+	    worker: true,
+	    step: function(row) {
+		let cells = row.data;
+		if (cells == undefined || cells[1] == undefined) {
+		    return;
 		}
-		if (cellTmp[c] == undefined) {
-		    cells[0] = cells[1];
-		    for (var j = 4; j < cells.length; j++) {
-			cells[j] = parseInt(cells[j]);
+		// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
+		if (cells[0] == "Province/State") {
+		    targetStartDay = mmddyy2yyyymmdd(cells[4]);
+		    offsetdays = calculateOffsetDays(targetStartDay,
+						     dataStartDay);
+		}
+		if (cells[0] == "") {
+		    cells[0] = cells[1].replace(",", "");
+		    for (let j = 1; j <= offsetdays; j++) {
+			cells.splice(4, 0, 0)
 		    }
-		    cellTmp[c] = cells;
-		} else {
-		    for (var j = 4; j < cells.length; j++) {
-			cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
+		    dataDeath.push(cells);
+		}
+		for (var k in specialCountries) {
+		    c = specialCountries[k];
+		    if (cells[1] == c) {
+			for (var j = 1; j <= offsetdays; j++) {
+			    cells.splice(4, 0, 0);
+			}
+			if (cellTmp[c] == undefined) {
+			    cells[0] = cells[1];
+			    for (var j = 4; j < cells.length; j++) {
+				cells[j] = parseInt(cells[j]);
+			    }
+			    cellTmp[c] = cells;
+			} else {
+			    for (var j = 4; j < cells.length; j++) {
+				cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
+			    }
+			}
 		    }
 		}
+	    },
+	    complete: function() {
+		for (var k in specialCountries) {
+		    c = specialCountries[k];
+		    dataDeath.push(cellTmp[c]);
+		}
+		resolve(offsetdays);
 	    }
-	}
-    }
-    for (var k in specialCountries) {
-	c = specialCountries[k];
-	dataDeath.push(cellTmp[c]);
-    }
-    return;
+	});
+    });
+
 }
 
 function csv2ArrayUSCounty(str) {
@@ -483,6 +498,7 @@ function csv2ArrayUSCounty(str) {
 	let cellTmp = {};
 	let states = {};
 	Papa.parse(str, {
+	    download: true,
 	    worker: true,
 	    step: function(row) {
 		let cells = row.data;
@@ -528,6 +544,7 @@ function csv2ArrayUSCounty(str) {
 		    dataCasesJAG.push(cellTmp[c]);
 		    dataCasesToyokeizai.push(cellTmp[c]);
 		}
+		getUpdateDate(str, "update_date_global");
 		resolve(states);
 	    }
 	});
@@ -540,6 +557,7 @@ function csv2ArrayUSCountyDeath(str) {
 	let cellTmp = {};
 	let states = {};
 	Papa.parse(str, {
+	    download: true,
 	    worker: true,
 	    step: function(row) {
 		let cells = row.data;
@@ -588,52 +606,59 @@ function csv2ArrayUSCountyDeath(str) {
 }
 
 function csv2ArrayGlobalRecoverd(str) {
-    var lines = str.split("\n");
-    var offsetdays = 0;
-    var cellTmp = {};
-    for (var i = 0; i < lines.length; ++i) {
-	var cells = Papa.parse(lines[i]).data[0];
-	if (cells == undefined) {
-	    break;
-	}
-	// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
-	if (cells[0] == "Province/State") {
-	    targetStartDay = mmddyy2yyyymmdd(cells[4]);
-	    offsetdays = calculateOffsetDays(targetStartDay,
-					     dataStartDay);
-	}
-	if (cells[0] == "") {
-	    cells[0] = cells[1].replace(",", "");
-	    for (var j = 1; j <= offsetdays; j++) {
-		cells.splice(4, 0, 0)
-	    }
-	    dataRecoverd.push(cells);
-	}
-	for (var k in specialCountries) {
-	    c = specialCountries[k];
-	    if (cells[1] == c) {
-		for (var j = 1; j <= offsetdays; j++) {
-		    cells.splice(4, 0, 0);
+    return new Promise(function (resolve, reject) {
+	var offsetdays = 0;
+	var cellTmp = {};
+ 	Papa.parse(str, {
+	    download: true,
+	    worker: true,
+	    step: function(row) {
+		let cells = row.data;
+		if (cells == undefined || cells[1] == undefined) {
+		    return;
 		}
-		if (cellTmp[c] == undefined) {
-		    cells[0] = cells[1];
-		    for (var j = 4; j < cells.length; j++) {
-			cells[j] = parseInt(cells[j]);
+		// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
+		if (cells[0] == "Province/State") {
+		    targetStartDay = mmddyy2yyyymmdd(cells[4]);
+		    offsetdays = calculateOffsetDays(targetStartDay,
+						     dataStartDay);
+		}
+		if (cells[0] == "") {
+		    cells[0] = cells[1].replace(",", "");
+		    for (var j = 1; j <= offsetdays; j++) {
+			cells.splice(4, 0, 0)
 		    }
-		    cellTmp[c] = cells;
-		} else {
-		    for (var j = 4; j < cells.length; j++) {
-			cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
+		    dataRecoverd.push(cells);
+		}
+		for (var k in specialCountries) {
+		    c = specialCountries[k];
+		    if (cells[1] == c) {
+			for (var j = 1; j <= offsetdays; j++) {
+			    cells.splice(4, 0, 0);
+			}
+			if (cellTmp[c] == undefined) {
+			    cells[0] = cells[1];
+			    for (var j = 4; j < cells.length; j++) {
+				cells[j] = parseInt(cells[j]);
+			    }
+			    cellTmp[c] = cells;
+			} else {
+			    for (var j = 4; j < cells.length; j++) {
+				cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
+			    }
+			}
 		    }
 		}
+	    },
+	    complete: function() {
+		for (var k in specialCountries) {
+		    c = specialCountries[k];
+		    dataRecoverd.push(cellTmp[c]);
+		}
+		resolve(offsetdays);
 	    }
-	}
-    }
-    for (var k in specialCountries) {
-	c = specialCountries[k];
-	dataRecoverd.push(cellTmp[c]);
-    }
-    return;
+	});
+    });
 }
 
 function getTzOffset() {
@@ -1230,39 +1255,47 @@ async function main() {
     Promise.all([
 	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv',
 		csv2Array,
-		"update_date_jp",
-		getUpdateDate),
-	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv',
-		csv2ArrayUSCounty,
+//		"update_date_jp",
 		"",
 		getUpdateDate),
-	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
-		csv2ArrayUSCountyDeath,
-		"",
-		getUpdateDate),
-	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
-		csv2ArrayGlobal,
-		"update_date_global",
-		getUpdateDate),
-	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv',
-		csv2ArrayGlobalDeath,
-		"",
-		getUpdateDate),
-	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv',
-		csv2ArrayGlobalRecoverd,
-		"",
-		getUpdateDate),
+//	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv',
+//		csv2ArrayUSCounty,
+//		"",
+//		getUpdateDate),
+	csv2ArrayUSCounty('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv'),
+//	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
+//		csv2ArrayUSCountyDeath,
+//		"",
+//		getUpdateDate),
+	csv2ArrayUSCountyDeath('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv'),
+//	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
+//		csv2ArrayGlobal,
+//		"update_date_global",
+//		getUpdateDate),
+	csv2ArrayGlobal('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'),
+//	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv',
+//		csv2ArrayGlobalDeath,
+//		"",
+//		getUpdateDate),
+	csv2ArrayGlobalDeath('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv'),
+//	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv',
+//		csv2ArrayGlobalRecoverd,
+//		"",
+	//		getUpdateDate),
+	csv2ArrayGlobalRecoverd('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv'),
 	readCsv('polulation.csv',
 		csv2ArrayPopulation,
 		"",
 		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/data/data.json',
 		parseToyoKeizaiData,
-		"toyokeizai_data",
+		"",
+//		"toyokeizai_data",
 		getUpdateDate),
 	readCsv('https://oku.edu.mie-u.ac.jp/~okumura/python/data/COVID-tokyo.csv',
 		  parseTokyo,
-		  "Tokyo_data",
+		"",
+//		  "Tokyo_data",
 		  getUpdateDateTokyo),
     ])
 	.then(results => {
