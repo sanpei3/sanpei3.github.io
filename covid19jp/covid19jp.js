@@ -429,6 +429,8 @@ function csv2ArrayGlobal(str) {
 		    psccKeys.push(c);
 		    buttonArea[c] = "country";
 		}
+		loadFiles++;
+		loadingFilesElement.innerHTML = loadFiles;
 		resolve(offsetdays);
 	    }
 	});
@@ -485,6 +487,8 @@ function csv2ArrayGlobalDeath(str) {
 		    c = specialCountries[k];
 		    dataDeath.push(cellTmp[c]);
 		}
+		loadFiles++;
+		loadingFilesElement.innerHTML = loadFiles;
 		resolve(offsetdays);
 	    }
 	});
@@ -545,6 +549,8 @@ function csv2ArrayUSCounty(str) {
 		    dataCasesToyokeizai.push(cellTmp[c]);
 		}
 		getUpdateDate(str, "update_date_global");
+		loadFiles++;
+		loadingFilesElement.innerHTML = loadFiles;
 		resolve(states);
 	    }
 	});
@@ -599,6 +605,8 @@ function csv2ArrayUSCountyDeath(str) {
 		for (let c in states) {
 		    dataDeath.push(cellTmp[c]);
 		}
+		loadFiles++;
+		loadingFilesElement.innerHTML = loadFiles;
 		resolve(states);
 	    }
 	});
@@ -655,6 +663,8 @@ function csv2ArrayGlobalRecoverd(str) {
 		    c = specialCountries[k];
 		    dataRecoverd.push(cellTmp[c]);
 		}
+		loadFiles++;
+		loadingFilesElement.innerHTML = loadFiles;
 		resolve(offsetdays);
 	    }
 	});
@@ -1214,7 +1224,6 @@ function readCsv(filePath, csvFunc, id, updateFunc) {
 	    await csvFunc(req.responseText);
 	    loadFiles++;
 	    loadingFilesElement.innerHTML = loadFiles;
-	    
 	    resolve();
 	}
 	req.onreadystatechange = function() {
@@ -1255,8 +1264,7 @@ async function main() {
     Promise.all([
 	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv',
 		csv2Array,
-//		"update_date_jp",
-		"",
+		"update_date_jp",
 		getUpdateDate),
 //	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv',
 //		csv2ArrayUSCounty,
@@ -1289,13 +1297,11 @@ async function main() {
 		getUpdateDate),
 	readCsv('https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/data/data.json',
 		parseToyoKeizaiData,
-		"",
-//		"toyokeizai_data",
+		"toyokeizai_data",
 		getUpdateDate),
 	readCsv('https://oku.edu.mie-u.ac.jp/~okumura/python/data/COVID-tokyo.csv',
 		  parseTokyo,
-		"",
-//		  "Tokyo_data",
+		  "Tokyo_data",
 		  getUpdateDateTokyo),
     ])
 	.then(results => {
