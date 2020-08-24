@@ -548,7 +548,6 @@ function csv2ArrayUSCounty(str) {
 		    dataCasesJAG.push(cellTmp[c]);
 		    dataCasesToyokeizai.push(cellTmp[c]);
 		}
-		getUpdateDate(str, "update_date_global");
 		loadFiles++;
 		loadingFilesElement.innerHTML = loadFiles;
 		resolve(states);
@@ -1215,7 +1214,7 @@ function rawUrl2UpdateDate(url) {
     return  "https://api.github.com/repos/" + s[3] + "/" + s[4] +"/commits?path=" + s[6].replace("/", "%2F") + "&page=1&per_page=1";
 }
 
-function readCsv(filePath, csvFunc, id, updateFunc) {
+function readCsv(filePath, csvFunc) {
     return new Promise(function (resolve, reject) {
 	var req = new XMLHttpRequest();
 	req.open("GET", filePath, true);
@@ -1242,9 +1241,6 @@ function readCsv(filePath, csvFunc, id, updateFunc) {
 	    downloadAlertMessage(filePath);
 	}
 	req.send(null);
-	if (id != "") {
-	    updateFunc(filePath, id);
-	}
     });
 }
 
@@ -1260,49 +1256,34 @@ function updateStartDay() {
     start_day = parseInt(ts);
 }
 
+const urlJapanConfirmed = 'https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv';
+
+const urlUSConfiremed = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv';
+const urlUSDeath = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv';
+
+const urlGlobalConfirmed = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
+const urlGlobalDeath = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv';
+const urlGlobalRecoverd = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv';
+
+const urlToyoKeizai = 'https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/data/data.json';
+
+const urlTokyoConfirmed = 'https://oku.edu.mie-u.ac.jp/~okumura/python/data/COVID-tokyo.csv';
+
 async function main() {
     Promise.all([
-	readCsv('https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv',
-		csv2Array,
-		"update_date_jp",
-		getUpdateDate),
-//	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv',
-//		csv2ArrayUSCounty,
-//		"",
-//		getUpdateDate),
-	csv2ArrayUSCounty('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv'),
-//	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
-//		csv2ArrayUSCountyDeath,
-//		"",
-//		getUpdateDate),
-	csv2ArrayUSCountyDeath('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv'),
-//	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
-//		csv2ArrayGlobal,
-//		"update_date_global",
-//		getUpdateDate),
-	csv2ArrayGlobal('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'),
-//	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv',
-//		csv2ArrayGlobalDeath,
-//		"",
-//		getUpdateDate),
-	csv2ArrayGlobalDeath('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv'),
-//	readCsv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv',
-//		csv2ArrayGlobalRecoverd,
-//		"",
-	//		getUpdateDate),
-	csv2ArrayGlobalRecoverd('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv'),
+	readCsv(urlJapanConfirmed,
+		csv2Array),
+	csv2ArrayUSCounty(urlUSConfiremed),
+	csv2ArrayUSCountyDeath(urlUSDeath),
+	csv2ArrayGlobal(urlGlobalConfirmed),
+	csv2ArrayGlobalDeath(urlGlobalDeath),
+	csv2ArrayGlobalRecoverd(urlGlobalRecoverd),
 	readCsv('polulation.csv',
-		csv2ArrayPopulation,
-		"",
-		getUpdateDate),
-	readCsv('https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/data/data.json',
-		parseToyoKeizaiData,
-		"toyokeizai_data",
-		getUpdateDate),
-	readCsv('https://oku.edu.mie-u.ac.jp/~okumura/python/data/COVID-tokyo.csv',
-		  parseTokyo,
-		  "Tokyo_data",
-		  getUpdateDateTokyo),
+		csv2ArrayPopulation),
+	readCsv(urlToyoKeizai,
+		parseToyoKeizaiData),
+	readCsv(urlTokyoConfirmed,
+		parseTokyo),
     ])
 	.then(results => {
 	    // copy header field from dataCaseJAG to dataCasesToyokeizai
@@ -1343,6 +1324,10 @@ async function main() {
 	    var loadingId = document.getElementById("loading");
 	    loadingId.remove();
 	    drawBarChart(draw_mode);
+	    getUpdateDate(urlGlobalConfirmed, "update_date_global");
+	    getUpdateDate(urlJapanConfirmed, "update_date_jp");
+	    getUpdateDate(urlToyoKeizai, "toyokeizai_data");
+	    getUpdateDateTokyo(urlTokyoConfirmed,  "Tokyo_data");
 	});
 }
 
