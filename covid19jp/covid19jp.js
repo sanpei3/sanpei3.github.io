@@ -338,33 +338,51 @@ function dateParse(date) {
 }
 
 function csv2Array(str) {
-    var lines = str.split("\n");
-    for (var i = 0; i < lines.length; ++i) {
-	var cells = Papa.parse(lines[i]).data[0];
-	if (cells == undefined) {
-	    return;
-	}
-	if (cells[0] == "Province/State") {
-//	    dataStartDay = mmddyy2yyyymmdd(cells[4]);
-	} else {
-	    psccKeys.push(cells[0]);
-	    buttonArea[cells[0]] = "prefecture";
-	}
-	dataCasesJAG.push(cells);
-    }
-    return;
+    return new Promise(function (resolve, reject) {
+ 	Papa.parse(str, {
+	    download: true,
+	    worker: true,
+	    step: function(row) {
+		let cells = row.data;
+		if (cells == undefined || cells[0] == undefined) {
+		    return;
+		}
+		if (cells[0] == "Province/State") {
+		    //	    dataStartDay = mmddyy2yyyymmdd(cells[4]);
+		} else {
+		    psccKeys.push(cells[0]);
+		    buttonArea[cells[0]] = "prefecture";
+		}
+		dataCasesJAG.push(cells);
+	    },
+	    complete: function() {
+		loadFiles++;
+		loadingFilesElement.innerHTML = loadFiles;
+		resolve(str);
+	    }
+	});
+    });
 }
 
 function csv2ArrayPopulation(str) {
-    var lines = str.split("\n");
-    for (var i = 0; i < lines.length; ++i) {
-	var cells = Papa.parse(lines[i]).data[0];
-	if (cells == undefined) {
-	    return;
-	}
-	dataPopulation[cells[0]] = cells[1].replace(",", "");
-    }
-    return;
+    return new Promise(function (resolve, reject) {
+ 	Papa.parse(str, {
+	    download: true,
+	    worker: true,
+	    step: function(row) {
+		const cells = row.data;
+		if (cells == undefined) {
+		    return;
+		}
+		dataPopulation[cells[0]] = cells[1].replace(",", "");
+	    },
+	    complete: function() {
+		loadFiles++;
+		loadingFilesElement.innerHTML = loadFiles;
+		resolve(offsetdays);
+	    }
+	});
+    });
 }
 
 specialCountries = [
@@ -401,8 +419,8 @@ function csv2ArrayGlobal(str) {
 		    psccKeys.push(cells[0]);
 		    buttonArea[cells[0]] = "country";
 		}
-		for (var k in specialCountries) {
-		    c = specialCountries[k];
+		for (let k in specialCountries) {
+		    const c = specialCountries[k];
 		    if (cells[1] == c) {
 			for (let j = 1; j <= offsetdays; j++) {
 			    cells.splice(4, 0, 0);
@@ -422,8 +440,8 @@ function csv2ArrayGlobal(str) {
 		}
 	    },
 	    complete: function() {
-		for (var k in specialCountries) {
-		    c = specialCountries[k];
+		for (let k in specialCountries) {
+		    const c = specialCountries[k];
 		    dataCasesJAG.push(cellTmp[c]);
 		    dataCasesToyokeizai.push(cellTmp[c]);
 		    psccKeys.push(c);
@@ -462,8 +480,8 @@ function csv2ArrayGlobalDeath(str) {
 		    }
 		    dataDeath.push(cells);
 		}
-		for (var k in specialCountries) {
-		    c = specialCountries[k];
+		for (let k in specialCountries) {
+		    const c = specialCountries[k];
 		    if (cells[1] == c) {
 			for (var j = 1; j <= offsetdays; j++) {
 			    cells.splice(4, 0, 0);
@@ -483,8 +501,8 @@ function csv2ArrayGlobalDeath(str) {
 		}
 	    },
 	    complete: function() {
-		for (var k in specialCountries) {
-		    c = specialCountries[k];
+		for (let k in specialCountries) {
+		    const c = specialCountries[k];
 		    dataDeath.push(cellTmp[c]);
 		}
 		loadFiles++;
@@ -637,8 +655,8 @@ function csv2ArrayGlobalRecoverd(str) {
 		    }
 		    dataRecoverd.push(cells);
 		}
-		for (var k in specialCountries) {
-		    c = specialCountries[k];
+		for (let k in specialCountries) {
+		    const c = specialCountries[k];
 		    if (cells[1] == c) {
 			for (var j = 1; j <= offsetdays; j++) {
 			    cells.splice(4, 0, 0);
@@ -658,8 +676,8 @@ function csv2ArrayGlobalRecoverd(str) {
 		}
 	    },
 	    complete: function() {
-		for (var k in specialCountries) {
-		    c = specialCountries[k];
+		for (let k in specialCountries) {
+		    const c = specialCountries[k];
 		    dataRecoverd.push(cellTmp[c]);
 		}
 		loadFiles++;
@@ -682,8 +700,8 @@ function calculate(row, i, draw_mode) {
     if (draw_mode == 0 || draw_mode == 9 ) {
 	// Daily New cases
 	// XX add average graph
-	var j = data[row][i]- data[row][i- 1];
-	var c = dataPopulation[data[row][0]];
+	const j = data[row][i]- data[row][i- 1];
+	const c = dataPopulation[data[row][0]];
 	if (draw_mode == 9 &&  c != 0) {
 	    return normalizeVariable(j / c * 100000);
 	} else {
@@ -1129,7 +1147,7 @@ function parseTokyo(str) {
     var lines = str.split("\n");
     var s = 0;
     for (var i = 0; i < lines.length; ++i) {
-	var cells = Papa.parse(lines[i]).data[0];
+	var cells = lines[i].split(",");
 	if (cells == undefined) {
 	    break;
 	}
@@ -1271,15 +1289,14 @@ const urlTokyoConfirmed = 'https://oku.edu.mie-u.ac.jp/~okumura/python/data/COVI
 
 async function main() {
     Promise.all([
-	readCsv(urlJapanConfirmed,
-		csv2Array),
+	csv2Array(urlJapanConfirmed),
 	csv2ArrayUSCounty(urlUSConfiremed),
 	csv2ArrayUSCountyDeath(urlUSDeath),
 	csv2ArrayGlobal(urlGlobalConfirmed),
 	csv2ArrayGlobalDeath(urlGlobalDeath),
 	csv2ArrayGlobalRecoverd(urlGlobalRecoverd),
-	readCsv('polulation.csv',
-		csv2ArrayPopulation),
+	csv2ArrayPopulation('https://sanpei3.github.io/polulation.csv'),
+
 	readCsv(urlToyoKeizai,
 		parseToyoKeizaiData),
 	readCsv(urlTokyoConfirmed,
