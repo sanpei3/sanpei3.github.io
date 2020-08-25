@@ -1149,7 +1149,7 @@ function parseTokyo(str) {
     let s = 0;
     for (let i = 0; i < lines.length; ++i) {
 	const cells = lines[i].split(",");
-	if (cells == undefined) {
+	if (cells == undefined || cells[0] == "") {
 	    break;
 	}
 	if (cells[0] == "date") {
