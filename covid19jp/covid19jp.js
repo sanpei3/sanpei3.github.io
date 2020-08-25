@@ -25,9 +25,9 @@ var dataPopulation = [];
 var loadFiles = 0;
 var doubleInitial = 100;
 const maxFiles = 9;
-var loadingFilesElement = document.getElementById("loadingFiles");
+const loadingFilesElement = document.getElementById("loadingFiles");
 
-var colorTable = [
+const colorTable = [
 //    "red",
 //    "yellow",
     "purple",
@@ -58,7 +58,7 @@ const graphTable = ["daily_new_cases", // 0
 
 //
 // create table
-pref_table = 
+const pref_table = 
     [
 	{
 	    pref: "Tokyo",
@@ -184,7 +184,7 @@ function createButton(pref, gcolor) {
     }
     document.getElementById(buttonArea[pref]).appendChild(addButton);
     document.getElementById(pref).addEventListener('click', ()=> {
-	var element = document.getElementById(pref);
+	const element = document.getElementById(pref);
 	showFlagAlreadySet = true;
 	updateLocationHash();
 	if (showFlag[pref]) {
@@ -198,10 +198,10 @@ function createButton(pref, gcolor) {
 }
 
 async function initialize() {
-    var urlHash = location.hash.replace(/^#/, "").split(/&/);
+    const urlHash = location.hash.replace(/^#/, "").split(/&/);
     
     await urlHash.forEach(function(i) {
-	var s = i.split(/=/, 2);
+	const s = i.split(/=/, 2);
 	if (s[0] == "dm") {
 	    draw_mode = s[1];
 	    updateGraphButtons(0, draw_mode)
@@ -221,10 +221,10 @@ async function initialize() {
 	    if (s[1] == "") {
 		return;
 	    }
-	    var cs = s[1].split(/,/);
+	    let cs = s[1].split(/,/);
 	    cs.forEach(function(c) {
 		c = decodeURI(c);
-		var findFlag = false;
+		let findFlag = false;
 		showFlag[c] = true;
 		pref_table.forEach(function(val) {
 		    const pref = val.pref;
@@ -244,10 +244,10 @@ async function initialize() {
 	    });
 	} else if (s[0] == "d") {
 	    showFlagAlreadySet = true;
-	    var cs = s[1].split(/,/);
+	    let cs = s[1].split(/,/);
 	    cs.forEach(function(c) {
 		c = decodeURI(c);
-		var findFlag = false;
+		let findFlag = false;
 		showFlag[c] = false;
 		pref_table.forEach(function(val) {
 		    const pref = val.pref;
@@ -292,8 +292,8 @@ async function initialize() {
 }
 
 function updateLocationHash () {
-    var cs = "";
-    var ds = "";
+    let cs = "";
+    let ds = "";
     if (showFlagAlreadySet) {
 	cs = "&c=";
 	for (let i in showFlag) {
@@ -307,7 +307,7 @@ function updateLocationHash () {
 	}
 	cs = cs.replace(/,$/, "");
     }
-    var dsFlag = false;
+    let dsFlag = false;
     if (addPref.length >= 1) {
 	ds = "&d=";
 	for (const i of addPref) {
@@ -329,7 +329,7 @@ function updateLocationHash () {
 }
 
 function mmddyy2yyyymmdd(str) {
-    var s = str.split("/");
+    const s = str.split("/");
     return  "20" + s[2] + "/" + s[0] + "/" + s[1];
 }
 
@@ -379,7 +379,7 @@ function csv2ArrayPopulation(str) {
 	    complete: function() {
 		loadFiles++;
 		loadingFilesElement.innerHTML = loadFiles;
-		resolve(offsetdays);
+		resolve(str);
 	    }
 	});
     });
@@ -405,7 +405,7 @@ function csv2ArrayGlobal(str) {
 		}
 		// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 		if (cells[0] == "Province/State") {
-		    targetStartDay = mmddyy2yyyymmdd(cells[4]);
+		    const targetStartDay = mmddyy2yyyymmdd(cells[4]);
 		    offsetdays = calculateOffsetDays(targetStartDay,
 						     dataStartDay);
 		}
@@ -449,7 +449,7 @@ function csv2ArrayGlobal(str) {
 		}
 		loadFiles++;
 		loadingFilesElement.innerHTML = loadFiles;
-		resolve(offsetdays);
+		resolve(str);
 	    }
 	});
     });
@@ -469,7 +469,7 @@ function csv2ArrayGlobalDeath(str) {
 		}
 		// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 		if (cells[0] == "Province/State") {
-		    targetStartDay = mmddyy2yyyymmdd(cells[4]);
+		    const targetStartDay = mmddyy2yyyymmdd(cells[4]);
 		    offsetdays = calculateOffsetDays(targetStartDay,
 						     dataStartDay);
 		}
@@ -483,17 +483,17 @@ function csv2ArrayGlobalDeath(str) {
 		for (let k in specialCountries) {
 		    const c = specialCountries[k];
 		    if (cells[1] == c) {
-			for (var j = 1; j <= offsetdays; j++) {
+			for (let j = 1; j <= offsetdays; j++) {
 			    cells.splice(4, 0, 0);
 			}
 			if (cellTmp[c] == undefined) {
 			    cells[0] = cells[1];
-			    for (var j = 4; j < cells.length; j++) {
+			    for (let j = 4; j < cells.length; j++) {
 				cells[j] = parseInt(cells[j]);
 			    }
 			    cellTmp[c] = cells;
 			} else {
-			    for (var j = 4; j < cells.length; j++) {
+			    for (let j = 4; j < cells.length; j++) {
 				cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
 			    }
 			}
@@ -507,7 +507,7 @@ function csv2ArrayGlobalDeath(str) {
 		}
 		loadFiles++;
 		loadingFilesElement.innerHTML = loadFiles;
-		resolve(offsetdays);
+		resolve(str);
 	    }
 	});
     });
@@ -529,7 +529,7 @@ function csv2ArrayUSCounty(str) {
 		}
 		// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 		if (cells[0] == "UID") {
-		    targetStartDay = mmddyy2yyyymmdd(cells[11]);
+		    const targetStartDay = mmddyy2yyyymmdd(cells[11]);
 		    offsetdays = calculateOffsetDays(targetStartDay,
 						     dataStartDay);
 		    return;
@@ -568,7 +568,7 @@ function csv2ArrayUSCounty(str) {
 		}
 		loadFiles++;
 		loadingFilesElement.innerHTML = loadFiles;
-		resolve(states);
+		resolve(str);
 	    }
 	});
     });
@@ -589,7 +589,7 @@ function csv2ArrayUSCountyDeath(str) {
 		}
 		// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 		if (cells[0] == "UID") {
-		    targetStartDay = mmddyy2yyyymmdd(cells[11]);
+		    const targetStartDay = mmddyy2yyyymmdd(cells[11]);
 		    offsetdays = calculateOffsetDays(targetStartDay,
 						     dataStartDay);
 		    return;
@@ -624,7 +624,7 @@ function csv2ArrayUSCountyDeath(str) {
 		}
 		loadFiles++;
 		loadingFilesElement.innerHTML = loadFiles;
-		resolve(states);
+		resolve(str);
 	    }
 	});
     });
@@ -632,8 +632,8 @@ function csv2ArrayUSCountyDeath(str) {
 
 function csv2ArrayGlobalRecoverd(str) {
     return new Promise(function (resolve, reject) {
-	var offsetdays = 0;
-	var cellTmp = {};
+	let offsetdays = 0;
+	let cellTmp = {};
  	Papa.parse(str, {
 	    download: true,
 	    worker: true,
@@ -644,13 +644,13 @@ function csv2ArrayGlobalRecoverd(str) {
 		}
 		// dataStartDay との差分だけ、4コメからの先に配列の先頭にダミーを入れる
 		if (cells[0] == "Province/State") {
-		    targetStartDay = mmddyy2yyyymmdd(cells[4]);
+		    const targetStartDay = mmddyy2yyyymmdd(cells[4]);
 		    offsetdays = calculateOffsetDays(targetStartDay,
 						     dataStartDay);
 		}
 		if (cells[0] == "") {
 		    cells[0] = cells[1].replace(",", "");
-		    for (var j = 1; j <= offsetdays; j++) {
+		    for (let j = 1; j <= offsetdays; j++) {
 			cells.splice(4, 0, 0)
 		    }
 		    dataRecoverd.push(cells);
@@ -658,17 +658,17 @@ function csv2ArrayGlobalRecoverd(str) {
 		for (let k in specialCountries) {
 		    const c = specialCountries[k];
 		    if (cells[1] == c) {
-			for (var j = 1; j <= offsetdays; j++) {
+			for (let j = 1; j <= offsetdays; j++) {
 			    cells.splice(4, 0, 0);
 			}
 			if (cellTmp[c] == undefined) {
 			    cells[0] = cells[1];
-			    for (var j = 4; j < cells.length; j++) {
+			    for (let j = 4; j < cells.length; j++) {
 				cells[j] = parseInt(cells[j]);
 			    }
 			    cellTmp[c] = cells;
 			} else {
-			    for (var j = 4; j < cells.length; j++) {
+			    for (let j = 4; j < cells.length; j++) {
 				cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
 			    }
 			}
@@ -682,14 +682,14 @@ function csv2ArrayGlobalRecoverd(str) {
 		}
 		loadFiles++;
 		loadingFilesElement.innerHTML = loadFiles;
-		resolve(offsetdays);
+		resolve(str);
 	    }
 	});
     });
 }
 
 function getTzOffset() {
-    var date = new Date();
+    const date = new Date();
     return tzoff = (date.getHours() - date.getUTCHours() + 24) % 24;
 }
 function normalizeVariable(i) {
@@ -697,11 +697,12 @@ function normalizeVariable(i) {
 }
 
 function calculate(row, i, draw_mode) {
+    let c = 0;
     if (draw_mode == 0 || draw_mode == 9 ) {
 	// Daily New cases
 	// XX add average graph
 	const j = data[row][i]- data[row][i- 1];
-	const c = dataPopulation[data[row][0]];
+	c = dataPopulation[data[row][0]];
 	if (draw_mode == 9 &&  c != 0) {
 	    return normalizeVariable(j / c * 100000);
 	} else {
@@ -709,10 +710,10 @@ function calculate(row, i, draw_mode) {
 	}
     } else if (draw_mode == 1) {
 	// Double Days
-	var avgD = 0;
-	for (var j = 0; j >= -6; j--){
+	let avgD = 0;
+	for (let j = 0; j >= -6; j--){
 	    const days = 6;
-	    var d = days * Math.log(2.0, 2.0) / Math.log((data[row][i + j] - data[row][start_day + j])/ (data[row][i - days + j]- data[row][start_day + j]), 2.0);
+	    let d = days * Math.log(2.0, 2.0) / Math.log((data[row][i + j] - data[row][start_day + j])/ (data[row][i - days + j]- data[row][start_day + j]), 2.0);
 	    avgD = avgD + d;
 	}
 	avgD = avgD / 7;
@@ -723,7 +724,7 @@ function calculate(row, i, draw_mode) {
 	}
     } else if (draw_mode == 2) {
 	// K value
-	var k = 1 - (data[row][i- 7] - data[row][start_day])/(data[row][i] - data[row][start_day]);
+	const k = 1 - (data[row][i- 7] - data[row][start_day])/(data[row][i] - data[row][start_day]);
 	if (isNaN(k) || k == Infinity || i - 7 < start_day) {
 	    return 0;
 	} else {
@@ -753,7 +754,7 @@ function calculate(row, i, draw_mode) {
 	}
     } else if (draw_mode == 10) {
 	// Effective Reproduction Number
-	var r = normalizeVariable(((data[row][i] - data[row][i - 6]) /
+	const r = normalizeVariable(((data[row][i] - data[row][i - 6]) /
 				   (data[row][i - 7] - data[row][i - 7 - 6])) ** (5.0/7.0));
 	if (isNaN(r) || r == Infinity || i - 7 - 6 < start_day) {
 	    return 0;
@@ -773,7 +774,7 @@ var tmpDoubleEvery = [], tmpDouble2Days = [], tmpDouble3Days = [],
     tmpDoubleOneWeek =[];
 
 function updateData(draw_mode) {
-    var start_i = start_day;
+    const start_i = start_day;
     doubleInitial = 100;
     myChartData.datasets = [];
     tmpLabels = [];
@@ -783,12 +784,12 @@ function updateData(draw_mode) {
     tmpDoubleOneWeek =[];
     headerFlag = false;
     data = dataCases;
-    for (var row in data) {
+    for (let row in data) {
 	// ここで、header行で、lengthが違ったら、追加する
 	if (data[row][0] == "Province/State" && headerFlag == true) {
 	    if (tmpLabels.length + start_i < data[row].length) {
-		var d = 1;
-		for (var i = tmpLabels.length + start_i; i < data[row].length; i++) {
+		let d = 1;
+		for (let i = tmpLabels.length + start_i; i < data[row].length; i++) {
 		    if (draw_mode == 3) {
 			tmpLabels.push(d++);
 		    } else {
@@ -799,8 +800,8 @@ function updateData(draw_mode) {
 	    }
 	}
 	if (data[row][0] == "Province/State" && headerFlag == false) {
-	    var d = 1;
-	    for (var i = start_i; i < data[row].length; i++) {
+	    let d = 1;
+	    for (let i = start_i; i < data[row].length; i++) {
 		if (draw_mode == 3) {
 		    tmpLabels.push(d++);
 		} else {
@@ -820,9 +821,9 @@ function updateData(draw_mode) {
     } else if (draw_mode == 8) {
 	data = data;
     }
-    var doubleDaysGraphOffset = 0;
-    var maxY = 0;
-    for (var row in data) {
+    let doubleDaysGraphOffset = 0;
+    let maxY = 0;
+    for (let row in data) {
 	for (let j in pref_table) {
 	    const val = pref_table[j];
 	    const pref = val.pref;
@@ -833,18 +834,18 @@ function updateData(draw_mode) {
 		tmpData_avgCases = [];
 		if (draw_mode == 8) {
 		    // find row for dataDeath and detaRecoverd
-		    rowForDataDeath = 0;
-		    rowForDataRecoverd = 0;
-		    var findDeathFlag = false;
-		    for (var r in dataDeath) {
+		    let rowForDataDeath = 0;
+		    let rowForDataRecoverd = 0;
+		    let findDeathFlag = false;
+		    for (let r in dataDeath) {
 			if (dataDeath[r][0] == pref) {
 			    rowForDataDeath = r;
 			    findDeathFlag = true;
 			    break;
 			}
 		    }
-		    var findRevocerdFlag = false;
-		    for (var r in dataRecoverd) {
+		    let findRevocerdFlag = false;
+		    for (let r in dataRecoverd) {
 			if (dataRecoverd[r][0] == pref) {
 			    rowForDataRecoverd = r;
 			    findRevocerdFlag = true;
@@ -855,8 +856,8 @@ function updateData(draw_mode) {
 			return;
 		    }
 		}
-		for (var i = start_i; i < data[row].length; i++) {
-		    a = calculate(row, i, draw_mode);
+		for (let i = start_i; i < data[row].length; i++) {
+		    const a = calculate(row, i, draw_mode);
 		    if (draw_mode == 3) {
 			if (doubleDaysGraphOffset != 0 && a < doubleInitial) {
 			    continue;
@@ -865,7 +866,7 @@ function updateData(draw_mode) {
 //			    a = doubleInitial;
 			}
 		    }		   
-		    if ( a >=0) {
+		    if (a >= 0) {
 			tmpData.push(a)
 		    } else {
 			tmpData.push(0)
@@ -877,12 +878,12 @@ function updateData(draw_mode) {
 			if (i + 1 == data[row].length && (data[row][i] - data[row][i - 1]) == 0) {
 			    tmpData_avgCases.push("NULL")
 			} else {
-			    b = normalizeVariable((data[row][i] - data[row][i - 7]) / 7);
+			    let b = normalizeVariable((data[row][i] - data[row][i - 7]) / 7);
 			    if (draw_mode == 9 && c != 0) {
-				var c = dataPopulation[data[row][0]];
+				c = dataPopulation[data[row][0]];
 				b = normalizeVariable(b / c * 100000);
 			    }
-			    if ( b >=0) {
+			    if (b >= 0) {
 				tmpData_avgCases.push(b)
 			    } else {
 				tmpData_avgCases.push(0)
@@ -936,8 +937,8 @@ function updateData(draw_mode) {
 	}
     }
     if (draw_mode == 3) {
-	var newCases = doubleInitial;
-	for (var i = start_i; i < data[0].length; i++) {
+	let newCases = doubleInitial;
+	for (let i = start_i; i < data[0].length; i++) {
 	    newCases = newCases * 1.41421356237309504880;
 	    if (newCases < maxY) {
 		tmpDouble2Days.push(newCases);
@@ -947,8 +948,8 @@ function updateData(draw_mode) {
 	    { label: "CASES DOUBLE 2 DAYS", data: tmpDouble2Days,fill: false,
 	      type: "line",
 	      borderColor: window.chartColors.gray});
-	var newCases = doubleInitial;
-	for (var i = start_i; i < data[0].length; i++) {
+	newCases = doubleInitial;
+	for (let i = start_i; i < data[0].length; i++) {
 //	    if (i >= doubleDaysGraphOffset) {
 		newCases = newCases * 1.2599210498;
 //	    }
@@ -960,8 +961,8 @@ function updateData(draw_mode) {
 	    { label: "CASES DOUBLE 3 DAYS", data: tmpDouble3Days,fill: false,
 	      type: "line",
 	      borderColor: window.chartColors.gray});
-	var newCases = doubleInitial;
-	for (var i = start_i; i < data[0].length; i++) {
+	newCases = doubleInitial;
+	for (let i = start_i; i < data[0].length; i++) {
 	    newCases = newCases * 1.1040895136738;
 	    if (newCases < maxY) {
 		tmpDoubleOneWeek.push(newCases);
@@ -1100,7 +1101,7 @@ function drawBarChart(draw_mode) {
 	};
     }
     // 4)chart.jsで描画
-    var ctx = document.getElementById("myChart").getContext("2d");
+    const ctx = document.getElementById("myChart").getContext("2d");
     window.myChart = new Chart(ctx, {
 	type: 'bar',
 	data: myChartData,
@@ -1109,17 +1110,17 @@ function drawBarChart(draw_mode) {
 }
 
 function reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, type) {
-    var a = tdata["prefectures-data"][i][type]["values"];
-    var s = 0;
-    for (var l = 0; l < a.length; l++) {
+    const a = tdata["prefectures-data"][i][type]["values"];
+    let s = 0;
+    for (let l = 0; l < a.length; l++) {
 	a[l] = parseInt(a[l]) + s;
 	s = a[l];
     }
-    var from = tdata["prefectures-data"][i][type]["from"];
-    targetStartDay = from[0] + "/" + from[1] + "/" + from[2];
-    offsetdays = calculateOffsetDays(targetStartDay,
+    const from = tdata["prefectures-data"][i][type]["from"];
+    const targetStartDay = from[0] + "/" + from[1] + "/" + from[2];
+    const offsetdays = calculateOffsetDays(targetStartDay,
 				     dataStartDay);
-    for (var j = 1; j <= offsetdays; j++) {
+    for (let j = 1; j <= offsetdays; j++) {
 	a.splice(0, 0, 0);
     }
     a.splice(0, 0, 0);
@@ -1134,7 +1135,7 @@ function parseToyoKeizaiData(data) {
     for (let j in tdata["prefectures-map"]) {
 	const p = tdata["prefectures-map"][j];
 	const pref = p["en"];
-	var i = p["code"] - 1;
+	const i = p["code"] - 1;
 	dataDeath.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "deaths"));
 	dataRecoverd.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "discharged"));
 	dataCasesToyokeizai.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "carriers"));
@@ -1142,12 +1143,12 @@ function parseToyoKeizaiData(data) {
 }
 
 function parseTokyo(str) {
-    var targetStartDay = "";
-    var offsetdays;
-    var lines = str.split("\n");
-    var s = 0;
-    for (var i = 0; i < lines.length; ++i) {
-	var cells = lines[i].split(",");
+    let targetStartDay = "";
+    let offsetdays;
+    let lines = str.split("\n");
+    let s = 0;
+    for (let i = 0; i < lines.length; ++i) {
+	const cells = lines[i].split(",");
 	if (cells == undefined) {
 	    break;
 	}
@@ -1163,7 +1164,7 @@ function parseTokyo(str) {
 	dataCasesTokyo.push(s);
 	dataEndDayTokyo = cells[0];
     }
-    for (var j = 1; j <= offsetdays; j++) {
+    for (let j = 1; j <= offsetdays; j++) {
 	dataCasesTokyo.splice(0, 0, 0);
     }
     dataCasesTokyo.splice(0, 0, 0);
@@ -1191,36 +1192,34 @@ flatpickr('#calendar', {
 	 );
 
 function getUpdateDate(url, elementId) {
-    var req = new XMLHttpRequest();
-    var update_str;
+    let req = new XMLHttpRequest();
     req.open("GET", rawUrl2UpdateDate(url), true);
     req.onload = function() {
 	if (req.status == 403) {
-	    var update_date = document.getElementById(elementId);
+	    const update_date = document.getElementById(elementId);
 	    update_date.innerHTML = "can't get update time";
 	    return;
 	}
-	update_str = JSON.parse(req.responseText)[0].commit.committer.date;
-	var ts = Date.parse(update_str);
+	const update_str = JSON.parse(req.responseText)[0].commit.committer.date;
+	let ts = Date.parse(update_str);
 	ts = parseInt(ts) + getTzOffset() * 60 * 60;
 	const dt = new Date(ts);
-	var update_date = document.getElementById(elementId);
+	const update_date = document.getElementById(elementId);
 	update_date.innerHTML = dt;
     }
     req.send(null);
 }
 
 function getUpdateDateTokyo(url, elementId) {
-    var req = new XMLHttpRequest();
-    var update_str;
+    let req = new XMLHttpRequest();
     req.open("HEAD", url, true);
     req.onreadystatechange = function() {
 	if(this.readyState == 2) {
 	    const update_str = req.getResponseHeader("Last-Modified")
-	    var ts = Date.parse(update_str);
+	    let ts = Date.parse(update_str);
 	    ts = parseInt(ts) + getTzOffset() * 60 * 60;
 	    const dt = new Date(ts);
-	    var update_date = document.getElementById(elementId);
+	    const update_date = document.getElementById(elementId);
 	    update_date.innerHTML = dt;
 	}
     }
@@ -1228,13 +1227,13 @@ function getUpdateDateTokyo(url, elementId) {
 }
 
 function rawUrl2UpdateDate(url) {
-    var s = url.split("/", 7);
+    const s = url.split("/", 7);
     return  "https://api.github.com/repos/" + s[3] + "/" + s[4] +"/commits?path=" + s[6].replace("/", "%2F") + "&page=1&per_page=1";
 }
 
 function readCsv(filePath, csvFunc) {
     return new Promise(function (resolve, reject) {
-	var req = new XMLHttpRequest();
+	let req = new XMLHttpRequest();
 	req.open("GET", filePath, true);
 	req.onload = async function() {
 	    // 2) CSVデータ変換の呼び出し
@@ -1268,8 +1267,8 @@ function downloadAlertMessage(filePath) {
 }
 
 function updateStartDay() {
-    var ts = dateParse(start_date);
-    var ts_start = dateParse(dataStartDay);
+    let ts = dateParse(start_date);
+    const ts_start = dateParse(dataStartDay);
     ts = parseInt((ts - ts_start) /1000 / 60 / 60 / 24) + 4; // 4 is pre cell
     start_day = parseInt(ts);
 }
@@ -1304,14 +1303,14 @@ async function main() {
     ])
 	.then(results => {
 	    // copy header field from dataCaseJAG to dataCasesToyokeizai
-	    for (var row in dataCasesJAG) {
+	    for (let row in dataCasesJAG) {
 		if (dataCasesJAG[row][0] == "Province/State") {
 		    // add dataCasesTokyo's date
 		    const dataEndDayJAG = mmddyy2yyyymmdd(dataCasesJAG[row][dataCasesJAG[row].length - 1]);
 		    const offsetdays = calculateOffsetDays(dataEndDayTokyo,
 						     dataEndDayJAG);
-		    for (var j = 1; j <= offsetdays; j++) {
-			var d = new Date(dateParse(dataEndDayJAG));
+		    for (let j = 1; j <= offsetdays; j++) {
+			let d = new Date(dateParse(dataEndDayJAG));
 			d.setDate(d.getDate() + j);
 			const s = (d.getMonth() + 1) +"/" + d.getDate() +"/" +(parseInt(d.getFullYear()) - 2000);
 			dataCasesJAG[row].push(s);
@@ -1321,13 +1320,13 @@ async function main() {
 		}
 	    }
 	    // replace Tokyo data by Okumura's data
-	    for (var row in dataCasesJAG) {
+	    for (let row in dataCasesJAG) {
 		if (dataCasesJAG[row][0] == "Tokyo") {
 		    dataCasesJAG[row] = dataCasesTokyo;
 		    break;
 		}
 	    }
-	    for (var row in dataCasesToyokeizai) {
+	    for (let row in dataCasesToyokeizai) {
 		if (dataCasesToyokeizai[row][0] == "Tokyo") {
 		    dataCasesToyokeizai[row] = dataCasesTokyo;
 		    break;
@@ -1338,7 +1337,7 @@ async function main() {
 	}).then(results => {
 	    initialize();
 	}).then(results => {
-	    var loadingId = document.getElementById("loading");
+	    let loadingId = document.getElementById("loading");
 	    loadingId.remove();
 	    drawBarChart(draw_mode);
 	    getUpdateDate(urlGlobalConfirmed, "update_date_global");
@@ -1352,8 +1351,8 @@ async function main() {
 
 
 function updateGraphButtons(draw_mode, new_draw_mode) {
-    var color = "";
-    for (i = 0; i < graphTable.length; i++) {
+    let color = "";
+    for (let i = 0; i < graphTable.length; i++) {
 	if (new_draw_mode == i) {
 	    color = 'red';
 	} else if (draw_mode == i) {
@@ -1361,29 +1360,28 @@ function updateGraphButtons(draw_mode, new_draw_mode) {
 	} else {
 	    continue;
 	}
-	var element = document.getElementById(graphTable[i]);element.style.backgroundColor = color;
+	const element = document.getElementById(graphTable[i]);
+	element.style.backgroundColor = color;
     }
 }
 
 function updateYAxesButtons() {
+    const elementLinear = document.getElementById("linear");
+    const elementLogarithmic = document.getElementById("logarithmic");
     if (yaxesType == "Linear") {
-	var element = document.getElementById("linear");
-	element.style.backgroundColor = 'skyblue';
-	var element = document.getElementById("logarithmic");
-	element.style.backgroundColor = 'white';
+	elementLinear.style.backgroundColor = 'skyblue';
+	elementLogarithmic.style.backgroundColor = 'white';
     } else {
-	var element = document.getElementById("logarithmic");
-	element.style.backgroundColor = 'skyblue';
-	var element = document.getElementById("linear");
-	element.style.backgroundColor = 'white';
+	elementLogarithmic.style.backgroundColor = 'skyblue';
+	elementLinear.style.backgroundColor = 'white';
     }
 }
 graphTable.forEach(function(val) {
     document.getElementById(val).addEventListener('click', ()=> {
-	for (var i = 0; i < graphTable.length; i++) {
+	for (let i = 0; i < graphTable.length; i++) {
 	    if (graphTable[i] == val) {
 		if (draw_mode != i) {
-		    var destroyFlag = false;
+		    let destroyFlag = false;
 		    if ((i == 9 || i == 10) && yaxesType == "Logarithmic") {
 			myChart.destroy();
 			yaxesType = "Linear";
@@ -1428,22 +1426,22 @@ document.getElementById("addbutton")
 	    keyupStack.pop();
 	    if (event.keyCode === 13) {
 		addButtonByFrom();
-		var list = document.getElementById('list');
+		const list = document.getElementById('list');
 		list.textContent = null;
 		return;
 	    }
 	    // 最後にkeyupされてから一定時間次の入力がなかったら実行
 	    if (keyupStack.length === 0) {
 		if (this.value == "") {
-		    var list = document.getElementById('list');
+		    const list = document.getElementById('list');
 		    list.textContent = null;
 		    return;
 		}
 		// 部分一致を可能にする(例: .*a.*b.*c.*)
-		var buf = '.*' + this.value.replace(/(.)/g, "$1.*");
-		var reg = new RegExp(buf, "i");
+		const buf = '.*' + this.value.replace(/(.)/g, "$1.*");
+		let reg = new RegExp(buf, "i");
 		
-		var filteredLists = psccKeys.filter(function (d) {
+		const filteredLists = psccKeys.filter(function (d) {
 		    return reg.test(d);
 		});
 		createRow(filteredLists);
@@ -1453,7 +1451,7 @@ document.getElementById("addbutton")
     });
 
 function clearList() {
-    var list = document.getElementById('list');
+    const list = document.getElementById('list');
     list.textContent = null;
     document.addbuttonFrom.reset();
 }
@@ -1464,22 +1462,22 @@ function clearList() {
 //    });
 
 var createRow = function (lists) {
-    var list = document.getElementById('list');
+    const list = document.getElementById('list');
     list.textContent = null;
     lists.forEach(function (l) {
-	var li = document.createElement('li');
+	const li = document.createElement('li');
 	const addButton = document.createElement('input');
 	addButton.classList.add('addition');
 	addButton.type = 'button';
-	var addButtonId = l + "_add";
+	let addButtonId = l + "_add";
 	addButton.id = addButtonId;
 	addButton.value = l;
 	li.appendChild(addButton);
 	list.appendChild(li);
 	document.getElementById(addButtonId).addEventListener('click', ()=> {
-	    var pref = addButtonId.replace(/_add/, "");
+	    const pref = addButtonId.replace(/_add/, "");
 	    addButtonMain(pref);
-	    var list = document.getElementById('list');
+	    const list = document.getElementById('list');
 	    list.textContent = null;
 	}, false);
 	
@@ -1488,7 +1486,7 @@ var createRow = function (lists) {
 
 function addButtonMain(c) {
     // table にあるか確認なければアラート
-    var findFlag = false;
+    let findFlag = false;
     psccKeys.forEach(function(pscc) {
 	if (pscc == c) {
 	    findFlag = true;
@@ -1532,9 +1530,9 @@ function addButtonMain(c) {
     document.addbuttonFrom.reset();
 }
 function addButtonByFrom() {
-    var c = document.getElementById("addbutton").value;
+    const c = document.getElementById("addbutton").value;
     addButtonMain(c);
-    var list = document.getElementById('list');
+    const list = document.getElementById('list');
     list.textContent = null;
 }
 
@@ -1544,7 +1542,7 @@ document.getElementById('AllClear').addEventListener('click', function() {
 	showFlagAlreadySet = true;
 	updateLocationHash();
 	if (showFlag[pref]) {
-	    var element = document.getElementById(pref);
+	    const element = document.getElementById(pref);
 	    element.style.backgroundColor = 'white';
 	    showFlag[pref] = false;
 	}
@@ -1571,17 +1569,15 @@ document.getElementById('logarithmic').addEventListener('click', function() {
     }
 });
 function updateDataSourceButtons() {
+    const elementJAG = document.getElementById("JAG");
+    const elementToyo = document.getElementById("ToyoKeizai");
     if (JapanDataSource == "JAG") {
-	var element = document.getElementById("JAG");
-	element.style.backgroundColor = 'skyblue';
-	var element = document.getElementById("ToyoKeizai");
-	element.style.backgroundColor = 'white';
+	elementJAG.style.backgroundColor = 'skyblue';
+	elementToyo.style.backgroundColor = 'white';
 	dataCases = dataCasesJAG;
     } else {
-	var element = document.getElementById("JAG");
-	element.style.backgroundColor = 'white';
-	var element = document.getElementById("ToyoKeizai");
-	element.style.backgroundColor = 'skyblue';
+	elementJAG.style.backgroundColor = 'white';
+	elementToyo.style.backgroundColor = 'skyblue';
 	dataCases = dataCasesToyokeizai;
     }
 }
