@@ -856,6 +856,7 @@ function updateData(draw_mode) {
 			return;
 		    }
 		}
+		let c = 0;
 		for (let i = start_i; i < data[row].length; i++) {
 		    const a = calculate(row, i, draw_mode);
 		    if (draw_mode == 3) {
