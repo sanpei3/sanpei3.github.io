@@ -775,14 +775,14 @@ var tmpDoubleEvery = [], tmpDouble2Days = [], tmpDouble3Days = [],
 
 function updateData(draw_mode) {
     const start_i = start_day;
-    doubleInitial = 100;
+    let doubleInitial = 100;
     myChartData.datasets = [];
-    tmpLabels = [];
-    tmpDoubleEvery = [];
-    tmpDouble2Days = [];
-    tmpDouble3Days = [];
-    tmpDoubleOneWeek =[];
-    headerFlag = false;
+    let tmpLabels = [];
+    let tmpDoubleEvery = [];
+    let tmpDouble2Days = [];
+    let tmpDouble3Days = [];
+    let tmpDoubleOneWeek =[];
+    let headerFlag = false;
     data = dataCases;
     for (let row in data) {
 	// ここで、header行で、lengthが違ったら、追加する
@@ -833,9 +833,9 @@ function updateData(draw_mode) {
 		tmpData = [];
 		tmpData_avgCases = [];
 		if (draw_mode == 8) {
-		    // find row for dataDeath and detaRecoverd
-		    let rowForDataDeath = 0;
-		    let rowForDataRecoverd = 0;
+		    // find row for dataDeath and dataRecoverd
+		    rowForDataDeath = 0;
+		    rowForDataRecoverd = 0;
 		    let findDeathFlag = false;
 		    for (let r in dataDeath) {
 			if (dataDeath[r][0] == pref) {
