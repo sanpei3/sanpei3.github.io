@@ -1,6 +1,6 @@
 /* @license
 Papa Parse
-v5.2.0
+v5.3.0
 https://github.com/mholt/PapaParse
 License: MIT
 */
@@ -608,6 +608,7 @@ License: MIT
 		ChunkStreamer.call(this, config);
 
 		var xhr;
+
 		if (IS_WORKER)
 		{
 			this._nextChunk = function()
@@ -644,31 +645,32 @@ License: MIT
 			{
 				xhr.withCredentials = this._config.withCredentials;
 			}
-		    xhr.withCredentials = false;
+
 			if (!IS_WORKER)
 			{
 				xhr.onload = bindFunction(this._chunkLoaded, this);
 				xhr.onerror = bindFunction(this._chunkError, this);
 			}
 
-		    xhr.open(this._config.downloadRequestBody ? 'POST' : 'GET', this._input, !IS_WORKER);
+			xhr.open(this._config.downloadRequestBody ? 'POST' : 'GET', this._input, !IS_WORKER);
 			// Headers can only be set when once the request state is OPENED
 			if (this._config.downloadRequestHeaders)
 			{
 				var headers = this._config.downloadRequestHeaders;
 
 				for (var headerName in headers)
-			    {
+				{
 					xhr.setRequestHeader(headerName, headers[headerName]);
 				}
 			}
+
 			if (this._config.chunkSize)
 			{
 				var end = this._start + this._config.chunkSize - 1;	// minus one because byte range is inclusive
 //				xhr.setRequestHeader('Range', 'bytes=' + this._start + '-' + end);
 			}
 
-		    try {
+			try {
 				xhr.send(this._config.downloadRequestBody);
 			}
 			catch (err) {
