@@ -107,6 +107,10 @@ const pref_table =
 	    defaultenable: false,
 	},
 	{
+	    pref: "Nepal",
+	    defaultenable: false,
+	},
+	{
 	    pref: "India",
 	    defaultenable: false,
 	},
