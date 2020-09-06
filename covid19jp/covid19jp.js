@@ -422,22 +422,23 @@ function csv2ArrayGlobal(str) {
 		    dataCasesToyokeizai.push(cells);
 		    psccKeys.push(cells[0]);
 		    buttonArea[cells[0]] = "country";
-		}
-		for (let k in specialCountries) {
-		    const c = specialCountries[k];
-		    if (cells[1] == c) {
-			for (let j = 1; j <= offsetdays; j++) {
-			    cells.splice(4, 0, 0);
-			}
-			if (cellTmp[c] == undefined) {
-			    cells[0] = cells[1];
-			    for (let j = 4; j < cells.length; j++) {
-				cells[j] = parseInt(cells[j]);
+		} else {
+		    for (let k in specialCountries) {
+			const c = specialCountries[k];
+			if (cells[1] == c) {
+			    for (let j = 1; j <= offsetdays; j++) {
+				cells.splice(4, 0, 0);
 			    }
-			    cellTmp[c] = cells;
-			} else {
-			    for (let j = 4; j < cells.length; j++) {
-				cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
+			    if (cellTmp[c] == undefined) {
+				cells[0] = cells[1];
+				for (let j = 4; j < cells.length; j++) {
+				    cells[j] = parseInt(cells[j]);
+				}
+				cellTmp[c] = cells;
+			    } else {
+				for (let j = 4; j < cells.length; j++) {
+				    cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
+				}
 			    }
 			}
 		    }
@@ -463,7 +464,7 @@ function csv2ArrayGlobalDeath(str) {
     return new Promise(function (resolve, reject) {
 	let offsetdays = 0;
 	let cellTmp = {};
- 	Papa.parse(str, {
+	Papa.parse(str, {
 	    download: true,
 	    worker: true,
 	    step: function(row) {
@@ -480,25 +481,26 @@ function csv2ArrayGlobalDeath(str) {
 		if (cells[0] == "") {
 		    cells[0] = cells[1].replace(",", "");
 		    for (let j = 1; j <= offsetdays; j++) {
-			cells.splice(4, 0, 0)
+			cells.splice(4, 0, 0);
 		    }
 		    dataDeath.push(cells);
-		}
-		for (let k in specialCountries) {
-		    const c = specialCountries[k];
-		    if (cells[1] == c) {
-			for (let j = 1; j <= offsetdays; j++) {
-			    cells.splice(4, 0, 0);
-			}
-			if (cellTmp[c] == undefined) {
-			    cells[0] = cells[1];
-			    for (let j = 4; j < cells.length; j++) {
-				cells[j] = parseInt(cells[j]);
+		} else {
+		    for (let k in specialCountries) {
+			const c = specialCountries[k];
+			if (cells[1] == c) {
+			    for (let j = 1; j <= offsetdays; j++) {
+				cells.splice(4, 0, 0);
 			    }
-			    cellTmp[c] = cells;
-			} else {
-			    for (let j = 4; j < cells.length; j++) {
-				cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
+			    if (cellTmp[c] == undefined) {
+				cells[0] = cells[1];
+				for (let j = 4; j < cells.length; j++) {
+				    cells[j] = parseInt(cells[j]);
+				}
+				cellTmp[c] = cells;
+			    } else {
+				for (let j = 4; j < cells.length; j++) {
+				    cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
+				}
 			    }
 			}
 		    }
@@ -515,7 +517,6 @@ function csv2ArrayGlobalDeath(str) {
 	    }
 	});
     });
-
 }
 
 function csv2ArrayUSCounty(str) {
@@ -539,12 +540,10 @@ function csv2ArrayUSCounty(str) {
 		    return;
 		}
 		const s = cells[6].replace(",", "") + "_US";
-		if (cells[0] != "UID") {
-		    cells[0] = cells[5].replace(",", "") + "_" + cells[6].replace(",", "") + "_US";
-		    cells.splice(4, 11 - 1, "0")
-		    psccKeys.push(cells[0]);
-		    buttonArea[cells[0]] = "us_county";
-		}
+		cells[0] = cells[5].replace(",", "") + "_" + s;
+		psccKeys.push(cells[0]);
+		buttonArea[cells[0]] = "us_county";
+		cells.splice(4, 10, "0")
 		for (let j = 1; j <= offsetdays; j++) {
 		    cells.splice(4, 0, 0);
 		}
@@ -599,12 +598,10 @@ function csv2ArrayUSCountyDeath(str) {
 		    return;
 		}
 		const s = cells[6].replace(",", "") + "_US";
-		if (cells[0] != "UID") {
-		    cells[0] = cells[5].replace(",", "") + "_" + cells[6].replace(",", "") + "_US";
-		    cells.splice(4, 11 - 1, "0")
-		    psccKeys.push(cells[0]);
-		    buttonArea[cells[0]] = "us_county";
-		}
+		cells[0] = cells[5].replace(",", "") + "_" + s;
+		psccKeys.push(cells[0]);
+		buttonArea[cells[0]] = "us_county";
+		cells.splice(4, 10, "0")
 		for (let j = 1; j <= offsetdays; j++) {
 		    cells.splice(4, 0, 0);
 		}
@@ -638,7 +635,7 @@ function csv2ArrayGlobalRecoverd(str) {
     return new Promise(function (resolve, reject) {
 	let offsetdays = 0;
 	let cellTmp = {};
- 	Papa.parse(str, {
+	Papa.parse(str, {
 	    download: true,
 	    worker: true,
 	    step: function(row) {
@@ -655,25 +652,26 @@ function csv2ArrayGlobalRecoverd(str) {
 		if (cells[0] == "") {
 		    cells[0] = cells[1].replace(",", "");
 		    for (let j = 1; j <= offsetdays; j++) {
-			cells.splice(4, 0, 0)
+			cells.splice(4, 0, 0);
 		    }
 		    dataRecoverd.push(cells);
-		}
-		for (let k in specialCountries) {
-		    const c = specialCountries[k];
-		    if (cells[1] == c) {
-			for (let j = 1; j <= offsetdays; j++) {
-			    cells.splice(4, 0, 0);
-			}
-			if (cellTmp[c] == undefined) {
-			    cells[0] = cells[1];
-			    for (let j = 4; j < cells.length; j++) {
-				cells[j] = parseInt(cells[j]);
+		} else {
+		    for (let k in specialCountries) {
+			const c = specialCountries[k];
+			if (cells[1] == c) {
+			    for (let j = 1; j <= offsetdays; j++) {
+				cells.splice(4, 0, 0);
 			    }
-			    cellTmp[c] = cells;
-			} else {
-			    for (let j = 4; j < cells.length; j++) {
-				cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
+			    if (cellTmp[c] == undefined) {
+				cells[0] = cells[1];
+				for (let j = 4; j < cells.length; j++) {
+				    cells[j] = parseInt(cells[j]);
+				}
+				cellTmp[c] = cells;
+			    } else {
+				for (let j = 4; j < cells.length; j++) {
+				    cellTmp[c][j] = cellTmp[c][j] + parseInt(cells[j]);
+				}
 			    }
 			}
 		    }
@@ -682,7 +680,9 @@ function csv2ArrayGlobalRecoverd(str) {
 	    complete: function() {
 		for (let k in specialCountries) {
 		    const c = specialCountries[k];
-		    dataRecoverd.push(cellTmp[c]);
+		    if (cellTmp[c] != undefined) { // check for Canada
+			dataRecoverd.push(cellTmp[c]);
+		    }
 		}
 		loadFiles++;
 		loadingFilesElement.innerHTML = loadFiles;
