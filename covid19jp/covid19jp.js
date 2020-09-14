@@ -550,11 +550,12 @@ function csv2ArrayUSCounty(str) {
 		dataCasesJAG.push(cells);
 		dataCasesToyokeizai.push(cells);
 		if (states[s] == undefined) {
-		    cells[0] = s;
+		    let c = cells.slice();
+		    c[0] = s;
 		    for (let j = 4; j < cells.length; j++) {
-			cells[j] = parseInt(cells[j]);
+			c[j] = parseInt(c[j]);
 		    }
-		    cellTmp[s] = cells;
+		    cellTmp[s] = c;
 		    states[s] = true;
 		    buttonArea[s] = "us_state";
 		    psccKeys.push(s);
@@ -605,11 +606,12 @@ function csv2ArrayUSCountyDeath(str) {
 		}
 		dataDeath.push(cells);
 		if (states[s] == undefined) {
-		    cells[0] = s;
+		    let c = cells.slice();
+		    c[0] = s;
 		    for (let j = 4; j < cells.length; j++) {
-			cells[j] = parseInt(cells[j]);
+			c[j] = parseInt(c[j]);
 		    }
-		    cellTmp[s] = cells;
+		    cellTmp[s] = c;
 		    states[s] = true;
 		} else {
 		    for (let j = 4; j < cells.length; j++) {
@@ -1295,7 +1297,7 @@ const urlToyoKeizai = 'https://raw.githubusercontent.com/kaz-ogiwara/covid19/mas
 const urlTokyoConfirmed = 'https://oku.edu.mie-u.ac.jp/~okumura/python/data/COVID-tokyo.csv';
 
 async function main() {
-    Promise.all([
+  Promise.all([
 	csv2Array(urlJapanConfirmed),
 	csv2ArrayUSCounty(urlUSConfiremed),
 	csv2ArrayUSCountyDeath(urlUSDeath),
