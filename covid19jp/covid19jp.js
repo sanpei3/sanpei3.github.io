@@ -599,8 +599,6 @@ function csv2ArrayUSCountyDeath(str) {
 		}
 		const s = cells[6].replace(",", "") + "_US";
 		cells[0] = cells[5].replace(",", "") + "_" + s;
-		psccKeys.push(cells[0]);
-		buttonArea[cells[0]] = "us_county";
 		cells.splice(4, 10, "0")
 		for (let j = 1; j <= offsetdays; j++) {
 		    cells.splice(4, 0, 0);
@@ -1090,18 +1088,23 @@ function drawBarChart(draw_mode) {
 	    datasets: []
 	};
     updateData(draw_mode)
+    let animationFlag = {};
+//    let animationFlag = false;
     if (yaxesType == "Logarithmic") {
 	if (draw_mode == 3) {
 	    myChartOptions = {
+		animation: animationFlag,
 		scales: myChartOptionsLogarithmicTotalCases,
 	    };
 	} else {
 	    myChartOptions = {
+		animation: animationFlag,
 		scales: myChartOptionsLogarithmic,
 	    };
 	}
     } else {
 	myChartOptions = {
+	    animation: animationFlag,
 	    scales: myChartOptionsLinear,
 	};
     }
