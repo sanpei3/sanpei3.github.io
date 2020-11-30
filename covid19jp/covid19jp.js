@@ -884,8 +884,8 @@ function updateData(draw_mode) {
 			    tmpData_avgCases.push("NULL")
 			} else {
 			    let b = normalizeVariable((data[row][i] - data[row][i - 7]) / 7);
+			    c = dataPopulation[data[row][0]];
 			    if (draw_mode == 9 && c != 0) {
-				c = dataPopulation[data[row][0]];
 				b = normalizeVariable(b / c * 100000);
 			    }
 			    if (b >= 0) {
@@ -1304,7 +1304,7 @@ async function main() {
 	csv2ArrayGlobal(urlGlobalConfirmed),
 	csv2ArrayGlobalDeath(urlGlobalDeath),
 	csv2ArrayGlobalRecoverd(urlGlobalRecoverd),
-	csv2ArrayPopulation('https://sanpei3.github.io/polulation.csv'),
+	csv2ArrayPopulation('https://sanpei3.github.io/covid19jp/polulation.csv'),
 
 	readCsv(urlToyoKeizai,
 		parseToyoKeizaiData),
