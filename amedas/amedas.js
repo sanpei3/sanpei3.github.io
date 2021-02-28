@@ -1,8 +1,9 @@
 
+// XX前の設定を覚える
+// XX 気象庁がweb pageでもデーター欠落しているか確認
+
 // // cityを選べるようにする
 // // hum, pressureもできるようにする (ない都市はその旨表示)
-// 前の設定を覚える
-// XX 気象庁がweb pageでもデーター欠落しているか確認
 
 var point = "44132" // Tokyo
 var point = "44116" // Fuchu
@@ -315,7 +316,7 @@ function updatePointButtons() {
 }
 
 document.getElementById('Tokyo').addEventListener('click', function() {
-    if (dataMode != "Tokyo" && pressure != []) {
+    if (point != "44132" && pressure != []) {
 	point = "44132";
 	updatePointButtons();
 	myChart.destroy();
@@ -324,7 +325,7 @@ document.getElementById('Tokyo').addEventListener('click', function() {
 });
 
 document.getElementById('Fuchu').addEventListener('click', function() {
-    if (dataMode != "Fuchu" && pressure != []) {
+    if (point != "44116" && pressure != []) {
 	point = "44116";
 	updatePointButtons();
 	myChart.destroy();
@@ -333,7 +334,7 @@ document.getElementById('Fuchu').addEventListener('click', function() {
 });
 
 document.getElementById('Yokohama').addEventListener('click', function() {
-    if (dataMode != "Yokohama" && pressure != []) {
+    if (point != "46106" && pressure != []) {
 	point = "46106";
 	updatePointButtons();
 	myChart.destroy();
@@ -341,7 +342,7 @@ document.getElementById('Yokohama').addEventListener('click', function() {
     }
 });
 document.getElementById('Haneda').addEventListener('click', function() {
-    if (dataMode != "Haneda" && pressure != []) {
+    if (point != "44166" && pressure != []) {
 	point = "44166";
 	updatePointButtons();
 	myChart.destroy();
