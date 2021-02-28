@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta name="viewport"
+  content="width=device-width, height=device-height,initial-scale=0.9">
+  <title>Amedas</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js"></script>
+<script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+    <body>
+Graph mode:
+<button id="temp" style="background-color:red">temperature</button>
+<button id="hum" style="background-color:white">humidity</button>
+<button id="pressure" style="background-color:white">pressure</button>
+<br>
+Location:
+<button id="Tokyo" style="background-color:red">Tokyo</button>
+<button id="Fuchu" style="background-color:white">Fuchu</button>
+<button id="Yokohama" style="background-color:white">Yokohama</button>
+<button id="Haneda" style="background-color:white">Haneda</button>
+
+
+
+<div id="container" style="width: 90%; height: 100%;">
+<center id="loading" >
+<p class="line-height"">
+     <i class="fa fa-circle-o-notch fa-spin fa-4x fa-fw" style="color: cornflowerblue"></i><br>loading data from Japan Meteorological Agency...
+     </p>
+     </center>
+</div>
+ <div class="chart-container" style="position: relative; height:80vh; width:80vw">
+   <canvas id="myChart" style="width: device-width, height=device-height, initial-scale=100%;" width="device-width" height="device-height"></canvas>
+  </div>
+<script src="amedas.js"></script>
+<hr>
