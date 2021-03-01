@@ -9,9 +9,31 @@
 // // cityを選べるようにする
 // // hum, pressureもできるようにする (ない都市はその旨表示)
 
-var point = "44132" // Tokyo
+var point = "44132" // default point, Tokyo
 
 const graphDays = 4;
+
+const points =
+      [
+	  {
+	      location: "Tokyo",
+	      id: "44132"
+	  },
+	  {
+	      location: "Fuchu",
+	      id: "44116"
+	  },
+	  {
+	      location: "Yokohama",
+	      id: "46106"
+	  },
+	  {
+	      location: "Haneda",
+	      id: "44166"
+	  },
+      ];
+
+
 const colorTable = [
     "orange",
     "green",
@@ -26,6 +48,8 @@ const colorTable = [
     "darkblue",
     "darkorange",
 ];
+
+
 
 function downloadAmedasbyDate(date) {
     return new Promise(function (resolve, reject) {
@@ -315,68 +339,50 @@ document.getElementById('pressure').addEventListener('click', function() {
     }
 });
 
-function updatePointButtons() {
-    const elementTokyo = document.getElementById("Tokyo");
-    const elementFuchu = document.getElementById("Fuchu");
-    const elementYokohama = document.getElementById("Yokohama");
-    const elementHaneda = document.getElementById("Haneda");
-    if (point == "44132") {
-	elementTokyo.style.backgroundColor = 'red';
-	elementFuchu.style.backgroundColor = 'white';
-	elementYokohama.style.backgroundColor = 'white';
-	elementHaneda.style.backgroundColor = 'white';
-    } else if (point == "44116") {
-	elementTokyo.style.backgroundColor = 'white';
-	elementFuchu.style.backgroundColor = 'red';
-	elementYokohama.style.backgroundColor = 'white';
-	elementHaneda.style.backgroundColor = 'white';
-    } else if (point == "46106") {
-	elementTokyo.style.backgroundColor = 'white';
-	elementFuchu.style.backgroundColor = 'white';
-	elementYokohama.style.backgroundColor = 'red';
-	elementHaneda.style.backgroundColor = 'white';
+
+for (let i in points) {
+    const val = points[i];
+    const location = val.location;
+    const id = val.id;
+
+    const addButton = document.createElement('input');
+    addButton.classList.add('addition');
+    addButton.type = 'button';
+    addButton.id = location;
+    addButton.value = location;
+    if (id == point) {
+	addButton.style.backgroundColor = 'red';
     } else {
-	elementTokyo.style.backgroundColor = 'white';
-	elementFuchu.style.backgroundColor = 'white';
-	elementYokohama.style.backgroundColor = 'white';
-	elementHaneda.style.backgroundColor = 'red';
+	addButton.style.backgroundColor = 'white';
     }
+    document.getElementById("location").appendChild(addButton);
+
+    document.getElementById(location).addEventListener('click', ()=> {
+	if (point != id && pressure != []) {
+	    point = id;
+	    updatePointButtons();
+	    myChart.destroy();
+	    main();
+	}
+    });
 }
 
-document.getElementById('Tokyo').addEventListener('click', function() {
-    if (point != "44132" && pressure != []) {
-	point = "44132";
-	updatePointButtons();
-	myChart.destroy();
-	main();
-    }
-});
 
-document.getElementById('Fuchu').addEventListener('click', function() {
-    if (point != "44116" && pressure != []) {
-	point = "44116";
-	updatePointButtons();
-	myChart.destroy();
-	main();
-    }
-});
+//<button id="Tokyo" style="background-color:red">Tokyo</button>
 
-document.getElementById('Yokohama').addEventListener('click', function() {
-    if (point != "46106" && pressure != []) {
-	point = "46106";
-	updatePointButtons();
-	myChart.destroy();
-	main();
-    }
-});
-document.getElementById('Haneda').addEventListener('click', function() {
-    if (point != "44166" && pressure != []) {
-	point = "44166";
-	updatePointButtons();
-	myChart.destroy();
-	main();
-    }
-});
 
+function updatePointButtons() {
+    for (let i in points) {
+	const val = points[i];
+	const location = val.location;
+	const id = val.id;
+	const elementLocationButton = document.getElementById(location);
+	if (id == point) {
+	    elementLocationButton.style.backgroundColor = 'red';
+	} else {
+	    elementLocationButton.style.backgroundColor = 'white';
+	}
+    }
+}
 
 main();
