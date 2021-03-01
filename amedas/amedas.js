@@ -1,6 +1,6 @@
 
 // // loading imageを別positionをloadingするときに、doading imageを表示
-// XX commentを入れる
+// // commentを入れる
 
 // XX 前の設定を覚える
 // XX Dynamicにボタンを追加、選べるようにする(pointと名前の対比表)
