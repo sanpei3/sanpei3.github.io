@@ -1,14 +1,14 @@
 
-// XX前の設定を覚える
+// XX loading imageを別positionをloadingするときに、doading imageを表示
+// XX commentを入れる
+// XX 前の設定を覚える
+// XX Dynamicにボタンを追加、選べるようにする(pointと名前の対比表)
 // XX 気象庁がweb pageでもデーター欠落しているか確認
 
 // // cityを選べるようにする
 // // hum, pressureもできるようにする (ない都市はその旨表示)
 
-var point = "44132" // Tokyo
-var point = "44116" // Fuchu
-var point = "46106" // Yokohama
-var point = "44166" // Haneda
+var point = "";
 
 const graphDays = 4;
 const colorTable = [
@@ -216,6 +216,7 @@ async function main() {
     temp = [];
     hum = [];
     pressure = [];
+    point = "44132" // Tokyo
     Promise.all([
 	downloadAmedas()
     ]).then(results => {
