@@ -1,6 +1,7 @@
 
-// XX loading imageを別positionをloadingするときに、doading imageを表示
+// // loading imageを別positionをloadingするときに、doading imageを表示
 // XX commentを入れる
+
 // XX 前の設定を覚える
 // XX Dynamicにボタンを追加、選べるようにする(pointと名前の対比表)
 // XX 気象庁がweb pageでもデーター欠落しているか確認
@@ -8,7 +9,7 @@
 // // cityを選べるようにする
 // // hum, pressureもできるようにする (ない都市はその旨表示)
 
-var point = "";
+var point = "44132" // Tokyo
 
 const graphDays = 4;
 const colorTable = [
@@ -206,6 +207,28 @@ function updateChart(draw_mode) {
     window.myChart.update();
 }
 
+function addLoading() {
+    let container = document.getElementById("container");
+
+    var loading1 = document.createElement("center");
+    loading1.setAttribute("id", "loading");
+    container.appendChild(loading1);
+
+    var loading2 = document.createElement("p");
+    loading2.setAttribute("class", "line-height");
+    loading1.appendChild(loading2);
+
+    var loading3 = document.createElement("i");
+    loading3.setAttribute("class", "fa fa-circle-o-notch fa-spin fa-4x fa-fw");
+    loading3.setAttribute("style", "color: cornflowerblue");
+    loading2.appendChild(loading3);
+
+    var loading4 = document.createElement("div");
+    loading4.innerHTML = "loading data from Japan Meteorological Agency...";
+    loading2.appendChild(loading4);
+}
+
+
 var temp = [];
 var hum  = [];
 var pressure = [];
@@ -216,7 +239,11 @@ async function main() {
     temp = [];
     hum = [];
     pressure = [];
-    point = "44132" // Tokyo
+    let loadingId = document.getElementById("loading");
+    if (loadingId == undefined) {
+	await addLoading();
+    }
+    
     Promise.all([
 	downloadAmedas()
     ]).then(results => {
