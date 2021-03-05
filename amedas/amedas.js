@@ -4,6 +4,8 @@
 
 // XX 前の設定を覚える
 // XX Dynamicにボタンを追加、選べるようにする(pointと名前の対比表)
+//  https://www.jma.go.jp/jma/kishou/know/amedas/ame_master.zip
+// awk -F, '{print "{location:\""$5 "\",id:\"" $2"\"},"}' < ameda-point.csv >/tmp/44
 // XX 気象庁がweb pageでもデーター欠落しているか確認
 
 // // cityを選べるようにする
@@ -76,12 +78,16 @@ function downloadAmedasbyDate(date) {
 		if (request.status === 200) {
 		    const downloadData = JSON.parse(request.responseText);
 		    Object.keys(downloadData).forEach(function (key) {
-			temp[key] = downloadData[key].temp[0];
-			if (downloadData[key].humidity != undefined) {
-			    hum[key] = downloadData[key].humidity[0];
-			}
-			if(downloadData[key].pressure != undefined) {
-			    pressure[key] = downloadData[key].pressure[0];
+			if(downloadData[key] != undefined) {
+			    if(downloadData[key].temp != undefined) {
+				temp[key] = downloadData[key].temp[0];
+			    }
+			    if (downloadData[key].humidity != undefined) {
+				hum[key] = downloadData[key].humidity[0];
+			    }
+			    if(downloadData[key].pressure != undefined) {
+				pressure[key] = downloadData[key].pressure[0];
+			    }
 			}
 		    });
 		} else {
