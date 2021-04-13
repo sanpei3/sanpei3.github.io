@@ -55,7 +55,15 @@ const graphTable = ["daily_new_cases", // 0
 //		    "total_cases_per_100000",
 		   ];
 
-
+window.chartColors = {
+    red: 'rgb(255, 99, 132)',
+    orange: 'rgb(255, 159, 64)',
+    yellow: 'rgb(255, 205, 86)',
+    green: 'rgb(75, 192, 192)',
+    blue: 'rgb(54, 162, 235)',
+    purple: 'rgb(153, 102, 255)',
+    grey: 'rgb(201, 203, 207)'
+};
 //
 // create table
 const pref_table = 
@@ -187,7 +195,7 @@ function createButton(pref, gcolor) {
 	addButton.style.backgroundColor = 'white';
     }
     document.getElementById(buttonArea[pref]).appendChild(addButton);
-    document.getElementById(pref).addEventListener('click', ()=> {
+        document.getElementById(pref).addEventListener('click', ()=> {
 	const element = document.getElementById(pref);
 	showFlagAlreadySet = true;
 	updateLocationHash();
@@ -700,74 +708,6 @@ function normalizeVariable(i) {
     return Math.floor(i * 100) / 100;
 }
 
-function calculate(row, i, draw_mode) {
-    let c = 0;
-    if (draw_mode == 0 || draw_mode == 9 ) {
-	// Daily New cases
-	// XX add average graph
-	const j = data[row][i]- data[row][i- 1];
-	c = dataPopulation[data[row][0]];
-	if (draw_mode == 9 &&  c != 0) {
-	    return normalizeVariable(j / c * 100000);
-	} else {
-	    return j;
-	}
-    } else if (draw_mode == 1) {
-	// Double Days
-	let avgD = 0;
-	for (let j = 0; j >= -6; j--){
-	    const days = 6;
-	    let d = days * Math.log(2.0, 2.0) / Math.log((data[row][i + j] - data[row][start_day + j])/ (data[row][i - days + j]- data[row][start_day + j]), 2.0);
-	    avgD = avgD + d;
-	}
-	avgD = avgD / 7;
-	if (isNaN(avgD) || avgD == Infinity) {
-	    return 0;
-	} else {
-	    return normalizeVariable(avgD);
-	}
-    } else if (draw_mode == 2) {
-	// K value
-	const k = 1 - (data[row][i- 7] - data[row][start_day])/(data[row][i] - data[row][start_day]);
-	if (isNaN(k) || k == Infinity || i - 7 < start_day) {
-	    return 0;
-	} else {
-	    return k
-	}
-    } else if (draw_mode == 3) {
-	// Total cases
-	return data[row][i] - data[row][start_day];
-    } else if (draw_mode == 4) {
-	// Total cases
-	return data[row][i]- data[row][i- 1];
-    } else if (draw_mode == 5) {
-	// Total cases
-	return data[row][i] - data[row][start_day];
-    } else if (draw_mode == 6) {
-	// Total cases
-	return data[row][i]- data[row][i- 1];
-    } else if (draw_mode == 7) {
-	// Total cases
-	return data[row][i] - data[row][start_day];
-    } else if (draw_mode == 8) {
-	// Total cases
-	if (rowForDataDeath != 0 && rowForDataRecoverd != 0) {
-	    return dataCases[row][i] - dataDeath[rowForDataDeath][i] - dataRecoverd[rowForDataRecoverd][i];
-	} else {
-	    return 0;
-	}
-    } else if (draw_mode == 10) {
-	// Effective Reproduction Number
-	const r = normalizeVariable(((data[row][i] - data[row][i - 6]) /
-				   (data[row][i - 7] - data[row][i - 7 - 6])) ** (5.0/7.0));
-	if (isNaN(r) || r == Infinity || i - 7 - 6 < start_day) {
-	    return 0;
-	} else {
-	    return r
-	}
-    }
-
-}
 
 
 
@@ -862,7 +802,75 @@ function updateData(draw_mode) {
 		}
 		let c = 0;
 		for (let i = start_i; i < data[row].length; i++) {
-		    const a = calculate(row, i, draw_mode);
+		    var a;
+    let c = 0;
+    if (draw_mode == 0 || draw_mode == 9 ) {
+	// Daily New cases
+	// XX add average graph
+	const j = data[row][i]- data[row][i- 1];
+	c = dataPopulation[data[row][0]];
+	if (draw_mode == 9 &&  c != 0) {
+	    a = normalizeVariable(j / c * 100000);
+	} else {
+	    a = j;
+	}
+    } else if (draw_mode == 1) {
+	// Double Days
+	let avgD = 0;
+	for (let j = 0; j >= -6; j--){
+	    const days = 6;
+	    let d = days * Math.log(2.0, 2.0) / Math.log((data[row][i + j] - data[row][start_day + j])/ (data[row][i - days + j]- data[row][start_day + j]), 2.0);
+	    avgD = avgD + d;
+	}
+	avgD = avgD / 7;
+	if (isNaN(avgD) || avgD == Infinity) {
+	    a = 0;
+	} else {
+	    a = normalizeVariable(avgD);
+	}
+    } else if (draw_mode == 2) {
+	// K value
+	const k = 1 - (data[row][i- 7] - data[row][start_day])/(data[row][i] - data[row][start_day]);
+	if (isNaN(k) || k == Infinity || i - 7 < start_day) {
+	    a = 0;
+	} else {
+	    a = k
+	}
+    } else if (draw_mode == 3) {
+	// Total cases
+	a = data[row][i] - data[row][start_day];
+    } else if (draw_mode == 4) {
+	// Total cases
+	a = data[row][i]- data[row][i- 1];
+    } else if (draw_mode == 5) {
+	// Total cases
+	a = data[row][i] - data[row][start_day];
+    } else if (draw_mode == 6) {
+	// Total cases
+	a = data[row][i]- data[row][i- 1];
+    } else if (draw_mode == 7) {
+	// Total cases
+	a = data[row][i] - data[row][start_day];
+    } else if (draw_mode == 8) {
+	// Total cases
+	if (rowForDataDeath != 0 && rowForDataRecoverd != 0) {
+	    a = dataCases[row][i] - dataDeath[rowForDataDeath][i] - dataRecoverd[rowForDataRecoverd][i];
+	} else {
+	    a = 0;
+	}
+    } else if (draw_mode == 10) {
+	// Effective Reproduction Number
+	const r = normalizeVariable(((data[row][i] - data[row][i - 6]) /
+				   (data[row][i - 7] - data[row][i - 7 - 6])) ** (5.0/7.0));
+	if (isNaN(r) || r == Infinity || i - 7 - 6 < start_day) {
+	    a = 0;
+	} else {
+	    a = r
+	}
+    }
+		    
+
+
 		    if (draw_mode == 3) {
 			if (doubleDaysGraphOffset != 0 && a < doubleInitial) {
 			    continue;
