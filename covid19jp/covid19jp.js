@@ -1300,7 +1300,7 @@ const urlGlobalConfirmed = 'https://raw.githubusercontent.com/CSSEGISandData/COV
 const urlGlobalDeath = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv';
 const urlGlobalRecoverd = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv';
 
-const urlToyoKeizai = 'https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/data/data.json';
+const urlToyoKeizai = 'https://raw.githubusercontent.com/sanpei3/toyokeizai-covid19jp/main/data.json';
 
 const urlTokyoConfirmed = 'https://oku.edu.mie-u.ac.jp/~okumura/python/data/COVID-tokyo.csv';
 
