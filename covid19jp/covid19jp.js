@@ -383,7 +383,7 @@ function csv2ArrayPopulation(str) {
 	    worker: true,
 	    step: function(row) {
 		const cells = row.data;
-		if (cells == undefined) {
+		if (cells[1] == undefined) {
 		    return;
 		}
 		dataPopulation[cells[0]] = cells[1].replace(",", "");
