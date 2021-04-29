@@ -7,9 +7,11 @@ var data = [];
 var dataCases = {};
 var dataCasesJAG = [];
 var dataCasesToyokeizai = [];
+var dataCasesNHK = [];
 var dataDeath = [];
 var dataRecoverd = [];
 var dataCasesTokyo = [];
+var NHKOrgData = {};
 var yaxesType = "Logarithmic";
 var draw_mode = 0;
 var start_day = 130;
@@ -24,7 +26,8 @@ var psccKeys = [];
 var dataPopulation = [];
 var loadFiles = 0;
 var doubleInitial = 100;
-const maxFiles = 9;
+var prefTable = [];
+const maxFiles = 10;
 const loadingFilesElement = document.getElementById("loadingFiles");
 
 const colorTable = [
@@ -428,6 +431,7 @@ function csv2ArrayGlobal(str) {
 		    }
 		    dataCasesJAG.push(cells);
 		    dataCasesToyokeizai.push(cells);
+		    dataCasesNHK.push(cells);
 		    psccKeys.push(cells[0]);
 		    buttonArea[cells[0]] = "country";
 		} else {
@@ -457,6 +461,7 @@ function csv2ArrayGlobal(str) {
 		    const c = specialCountries[k];
 		    dataCasesJAG.push(cellTmp[c]);
 		    dataCasesToyokeizai.push(cellTmp[c]);
+		    dataCasesNHK.push(cellTmp[c]);
 		    psccKeys.push(c);
 		    buttonArea[c] = "country";
 		}
@@ -557,6 +562,7 @@ function csv2ArrayUSCounty(str) {
 		}
 		dataCasesJAG.push(cells);
 		dataCasesToyokeizai.push(cells);
+		dataCasesNHK.push(cells);
 		if (states[s] == undefined) {
 		    let c = cells.slice();
 		    c[0] = s;
@@ -577,6 +583,7 @@ function csv2ArrayUSCounty(str) {
 		for (let c in states) {
 		    dataCasesJAG.push(cellTmp[c]);
 		    dataCasesToyokeizai.push(cellTmp[c]);
+		    dataCasesNHK.push(cellTmp[c]);
 		}
 		loadFiles++;
 		loadingFilesElement.innerHTML = loadFiles;
@@ -1148,17 +1155,42 @@ function reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, type) {
     return a;
 }
 
+function reformatNHKData2CSSEGISandData(tdata, pref, a) {
+    let s = 0;
+    for (let l = 0; l < a.length; l++) {
+	a[l] = parseInt(a[l]) + s;
+	s = a[l];
+    }
+    const targetStartDay = tdata["category"][1];
+    const offsetdays = calculateOffsetDays(targetStartDay,
+					   dataStartDay);
+    for (let j = 1; j < offsetdays; j++) {
+	a.splice(0, 0, 0);
+    }
+    a.splice(0, 0, 0);
+    a.splice(0, 0, 0);
+    a.splice(0, 0, 0);
+    a.splice(0, 0, pref);
+    return a;
+}
+
 function parseToyoKeizaiData(data) {
     const tdata = JSON.parse(data);
     for (let j in tdata["prefectures-map"]) {
 	const p = tdata["prefectures-map"][j];
 	const pref = p["en"];
 	const i = p["code"] - 1;
+	prefTable[p["ja"]] = p["en"];
 	dataDeath.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "deaths"));
 	dataRecoverd.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "discharged"));
 	dataCasesToyokeizai.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "carriers"));
     }
 }
+
+function parseNHKData(data) {
+    NHKOrgData = data;
+}
+
 
 function parseTokyo(str) {
     let targetStartDay = "";
@@ -1228,7 +1260,7 @@ function getUpdateDate(url, elementId) {
     req.send(null);
 }
 
-function getUpdateDateTokyo(url, elementId) {
+function getUpdateDateByHead(url, elementId) {
     let req = new XMLHttpRequest();
     req.open("HEAD", url, true);
     req.onreadystatechange = function() {
@@ -1250,7 +1282,7 @@ function rawUrl2UpdateDate(url) {
 }
 
 function readCsv(filePath, csvFunc) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(async function (resolve, reject) {
 	let req = new XMLHttpRequest();
 	req.open("GET", filePath, true);
 	req.onload = async function() {
@@ -1301,11 +1333,12 @@ const urlGlobalDeath = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-1
 const urlGlobalRecoverd = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv';
 
 const urlToyoKeizai = 'https://raw.githubusercontent.com/sanpei3/toyokeizai-covid19jp/main/data.json';
+const urlNHK = 'https://www3.nhk.or.jp/news/special/coronavirus/data/47newpatients-data.json';
 
 const urlTokyoConfirmed = 'https://oku.edu.mie-u.ac.jp/~okumura/python/data/COVID-tokyo.csv';
 
 async function main() {
-  Promise.all([
+    Promise.all([
 	csv2Array(urlJapanConfirmed),
 	csv2ArrayUSCounty(urlUSConfiremed),
 	csv2ArrayUSCountyDeath(urlUSDeath),
@@ -1313,56 +1346,67 @@ async function main() {
 	csv2ArrayGlobalDeath(urlGlobalDeath),
 	csv2ArrayGlobalRecoverd(urlGlobalRecoverd),
 	csv2ArrayPopulation('https://sanpei3.github.io/covid19jp/polulation.csv'),
-
 	readCsv(urlToyoKeizai,
 		parseToyoKeizaiData),
 	readCsv(urlTokyoConfirmed,
 		parseTokyo),
-    ])
-	.then(results => {
-	    // copy header field from dataCaseJAG to dataCasesToyokeizai
-	    for (let row in dataCasesJAG) {
-		if (dataCasesJAG[row][0] == "Province/State") {
-		    // add dataCasesTokyo's date
-		    const dataEndDayJAG = mmddyy2yyyymmdd(dataCasesJAG[row][dataCasesJAG[row].length - 1]);
-		    const offsetdays = calculateOffsetDays(dataEndDayTokyo,
-						     dataEndDayJAG);
-		    for (let j = 1; j <= offsetdays; j++) {
-			let d = new Date(dateParse(dataEndDayJAG));
-			d.setDate(d.getDate() + j);
-			const s = (d.getMonth() + 1) +"/" + d.getDate() +"/" +(parseInt(d.getFullYear()) - 2000);
-			dataCasesJAG[row].push(s);
-		    }
-		    dataCasesToyokeizai.unshift(dataCasesJAG[row]);
-		    break;
+	readCsv(urlNHK,
+		parseNHKData),
+    ]).then(results => {
+	// copy header field from dataCaseJAG to dataCasesToyokeizai and dataCasesNHK
+	for (let row in dataCasesJAG) {
+	    if (dataCasesJAG[row][0] == "Province/State") {
+		// add dataCasesTokyo's date
+		const dataEndDayJAG = mmddyy2yyyymmdd(dataCasesJAG[row][dataCasesJAG[row].length - 1]);
+		const offsetdays = calculateOffsetDays(dataEndDayTokyo,
+						       dataEndDayJAG);
+		for (let j = 1; j <= offsetdays; j++) {
+		    let d = new Date(dateParse(dataEndDayJAG));
+		    d.setDate(d.getDate() + j);
+		    const s = (d.getMonth() + 1) +"/" + d.getDate() +"/" +(parseInt(d.getFullYear()) - 2000);
+		    dataCasesJAG[row].push(s);
 		}
+		dataCasesToyokeizai.unshift(dataCasesJAG[row]);
+		dataCasesNHK.unshift(dataCasesJAG[row]);
+		break;
 	    }
-	    // replace Tokyo data by Okumura's data
-	    for (let row in dataCasesJAG) {
-		if (dataCasesJAG[row][0] == "Tokyo") {
-		    dataCasesJAG[row] = dataCasesTokyo;
-		    break;
-		}
+	}
+	// replace Tokyo data by Okumura's data
+	for (let row in dataCasesJAG) {
+	    if (dataCasesJAG[row][0] == "Tokyo") {
+		dataCasesJAG[row] = dataCasesTokyo;
+		break;
 	    }
-	    for (let row in dataCasesToyokeizai) {
-		if (dataCasesToyokeizai[row][0] == "Tokyo") {
-		    dataCasesToyokeizai[row] = dataCasesTokyo;
-		    break;
-		}
+	}
+	for (let row in dataCasesToyokeizai) {
+	    if (dataCasesToyokeizai[row][0] == "Tokyo") {
+		dataCasesToyokeizai[row] = dataCasesTokyo;
+		break;
 	    }
-	    dataCases = dataCasesJAG;
-	    updateStartDay();
-	}).then(results => {
-	    initialize();
-	}).then(results => {
-	    let loadingId = document.getElementById("loading");
-	    loadingId.remove();
-	    drawBarChart(draw_mode);
-	    getUpdateDate(urlGlobalConfirmed, "update_date_global");
-	    getUpdateDate(urlJapanConfirmed, "update_date_jp");
-	    getUpdateDate(urlToyoKeizai, "toyokeizai_data");
-	    getUpdateDateTokyo(urlTokyoConfirmed,  "Tokyo_data");
-	});
+	}
+	dataCases = dataCasesJAG;
+	updateStartDay();
+    }).then(results => {
+	const tdataNHK = JSON.parse(NHKOrgData);
+	for (let j in tdataNHK["data47"]) {
+	    const p = tdataNHK["data47"][j];
+	    const pref = prefTable[p["name"]];
+	    if (pref != undefined) {
+		const i = p["data"];
+		dataCasesNHK.push(reformatNHKData2CSSEGISandData(tdataNHK, pref, i));
+	    }
+	}
+	initialize();
+    }).then(results => {
+	let loadingId = document.getElementById("loading");
+	loadingId.remove();
+	drawBarChart(draw_mode);
+	getUpdateDate(urlGlobalConfirmed, "update_date_global");
+	getUpdateDate(urlJapanConfirmed, "update_date_jp");
+	getUpdateDate(urlToyoKeizai, "toyokeizai_data");
+	getUpdateDateByHead(urlNHK, "NHK_data");
+	getUpdateDateByHead(urlTokyoConfirmed,  "Tokyo_data");
+    });
 }
 
 
@@ -1589,14 +1633,22 @@ document.getElementById('logarithmic').addEventListener('click', function() {
 function updateDataSourceButtons() {
     const elementJAG = document.getElementById("JAG");
     const elementToyo = document.getElementById("ToyoKeizai");
+    const elementNHK = document.getElementById("NHK");
     if (JapanDataSource == "JAG") {
 	elementJAG.style.backgroundColor = 'skyblue';
 	elementToyo.style.backgroundColor = 'white';
+	elementNHK.style.backgroundColor = 'white';
 	dataCases = dataCasesJAG;
-    } else {
+    } else if (JapanDataSource == "ToyoKeizai") {
 	elementJAG.style.backgroundColor = 'white';
 	elementToyo.style.backgroundColor = 'skyblue';
+	elementNHK.style.backgroundColor = 'white';
 	dataCases = dataCasesToyokeizai;
+    } else if (JapanDataSource == "NHK") {
+	elementJAG.style.backgroundColor = 'white';
+	elementToyo.style.backgroundColor = 'white';
+	elementNHK.style.backgroundColor =  'skyblue';
+	dataCases = dataCasesNHK;
     }
 }
 
@@ -1616,6 +1668,16 @@ document.getElementById('ToyoKeizai').addEventListener('click', function() {
 	myChart.destroy();
 	JapanDataSource = "ToyoKeizai";
 	dataCases = dataCasesToyokeizai;
+	updateLocationHash();
+	updateDataSourceButtons();
+	drawBarChart(draw_mode);
+    }
+});
+document.getElementById('NHK').addEventListener('click', function() {
+    if (JapanDataSource != "NHK") {
+	myChart.destroy();
+	JapanDataSource = "NHK";
+	dataCases = dataCasesNHK;
 	updateLocationHash();
 	updateDataSourceButtons();
 	drawBarChart(draw_mode);
