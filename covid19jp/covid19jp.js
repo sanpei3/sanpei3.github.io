@@ -9,9 +9,10 @@ var dataCasesJAG = [];
 var dataCasesToyokeizai = [];
 var dataCasesNHK = [];
 var dataDeath = [];
+var dataDeathToyokeizai = [];
+var dataDeathNHK = [];
 var dataRecoverd = [];
 var dataCasesTokyo = [];
-var NHKOrgData = {};
 var yaxesType = "Logarithmic";
 var draw_mode = 0;
 var start_day = 130;
@@ -555,7 +556,8 @@ function csv2ArrayGlobalDeath(str) {
 		    for (let j = 1; j <= offsetdays; j++) {
 			cells.splice(4, 0, 0);
 		    }
-		    dataDeath.push(cells);
+		    dataDeathToyokeizai.push(cells);
+		    dataDeathNHK.push(cells);
 		} else {
 		    for (let k in specialCountries) {
 			const c = specialCountries[k];
@@ -581,7 +583,8 @@ function csv2ArrayGlobalDeath(str) {
 	    complete: function() {
 		for (let k in specialCountries) {
 		    const c = specialCountries[k];
-		    dataDeath.push(cellTmp[c]);
+		    dataDeathToyokeizai.push(cellTmp[c]);
+		    dataDeathNHK.push(cellTmp[c]);
 		}
 		loadFiles++;
 		loadingFilesElement.innerHTML = loadFiles;
@@ -678,7 +681,8 @@ function csv2ArrayUSCountyDeath(str) {
 		for (let j = 1; j <= offsetdays; j++) {
 		    cells.splice(4, 0, 0);
 		}
-		dataDeath.push(cells);
+		dataDeathToyokeizai.push(cells);
+		dataDeathNHK.push(cells);
 		if (states[s] == undefined) {
 		    let c = cells.slice();
 		    c[0] = s;
@@ -695,7 +699,8 @@ function csv2ArrayUSCountyDeath(str) {
 	    },
 	    complete: function() {
 		for (let c in states) {
-		    dataDeath.push(cellTmp[c]);
+		    dataDeathToyokeizai.push(cellTmp[c]);
+		    dataDeathNHK.push(cellTmp[c]);
 		}
 		loadFiles++;
 		loadingFilesElement.innerHTML = loadFiles;
@@ -1221,7 +1226,7 @@ function parseToyoKeizaiData(data) {
 	const pref = p["en"];
 	const i = p["code"] - 1;
 	prefTable[p["ja"]] = p["en"];
-	dataDeath.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "deaths"));
+	dataDeathToyokeizai.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "deaths"));
 	dataRecoverd.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "discharged"));
 	dataCasesToyokeizai.push(reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, "carriers"));
     }
@@ -1232,7 +1237,8 @@ function parseNHKData(str) {
     let offsetdays;
     let lines = str.split("\n");
     let s = 0;
-    let a = [];
+    let newcase = [];
+    let death = [];
     let pref = "";
     let prev_pref = "";
     for (let i = 0; i < lines.length; ++i) {
@@ -1249,18 +1255,24 @@ function parseNHKData(str) {
 					     dataStartDay);
 	}
 	pref = prefJp2EnTable[cells[2]];
-	if (prev_pref != pref && a != []) {
-	    dataCasesNHK.push(a);
+	if (prev_pref != pref && newcase != []) {
+	    dataCasesNHK.push(newcase);
+	    dataDeathNHK.push(death);
 	    prev_pref = pref;
-	    a = [pref, "Japan", 0, 0];
+	    newcase = [pref, "Japan", 0, 0];
+	    death = [pref, "Japan", 0, 0];
 	    for (let j = 1; j <= offsetdays; j++) {
-		a.push(0);
+		newcase.push(0);
+		death.push(0);
 	    }
 	}
 	s = parseInt(cells[4]);
-	a.push(s);
+	newcase.push(s);
+	d = parseInt(cells[6]);
+	death.push(d);
     }
-    dataCasesNHK.push(a);
+    dataCasesNHK.push(newcase);
+    dataDeathNHK.push(death);
 };
 
 
@@ -1702,16 +1714,19 @@ function updateDataSourceButtons() {
 	elementToyo.style.backgroundColor = 'white';
 	elementNHK.style.backgroundColor = 'white';
 	dataCases = dataCasesJAG;
+	dataDeath = dataDeathToyokeizai;
     } else if (JapanDataSource == "ToyoKeizai") {
 	elementJAG.style.backgroundColor = 'white';
 	elementToyo.style.backgroundColor = 'skyblue';
 	elementNHK.style.backgroundColor = 'white';
 	dataCases = dataCasesToyokeizai;
+	dataDeath = dataDeathToyokeizai;
     } else if (JapanDataSource == "NHK") {
 	elementJAG.style.backgroundColor = 'white';
 	elementToyo.style.backgroundColor = 'white';
 	elementNHK.style.backgroundColor =  'skyblue';
 	dataCases = dataCasesNHK;
+	dataDeath = dataDeathNHK;
     }
 }
 
