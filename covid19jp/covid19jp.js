@@ -97,8 +97,12 @@ const pref_table =
 	    pref: "Osaka",
 	    defaultenable: false,
 	},
-		{
+	{
 	    pref: "Aichi",
+	    defaultenable: false,
+	},
+	{
+	    pref: "Okinawa",
 	    defaultenable: false,
 	},
 	{
@@ -139,6 +143,10 @@ const pref_table =
 	},
 	{
 	    pref: "Philippines",
+	    defaultenable: false,
+	},
+	{
+	    pref: "United Kingdom",
 	    defaultenable: false,
 	},
 	{
