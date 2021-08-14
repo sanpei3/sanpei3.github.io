@@ -118,7 +118,7 @@ var myChartOptions;
 var labels = [], graphData = [];
 
 var timesConst = [];
-for (let h = 0; h < 23; h++) {
+for (let h = 0; h <= 23; h++) {
     for (let m = 0; m < 59; m = m + 10) {
 	hh = h;
 	if ( hh < 10) {
@@ -192,7 +192,7 @@ function updateData(draw_mode) {
 	  borderWidth: 1,
 	  data: graphData});
     labels =[];
-    for (let h = 0; h < 23; h++) {
+    for (let h = 0; h <= 23; h++) {
 	for (let m = 0; m < 59; m = m + 10) {
 	    hh = h;
 	    if ( hh < 10) {
@@ -207,7 +207,7 @@ function updateData(draw_mode) {
 		labels.push(hhmm);
 	    } else{
 		//tmpLabels.push(hhmm);
-		labels.push("");
+		labels.push(hhmm);
 	    }
 		
 	}
@@ -229,6 +229,13 @@ function drawBarChart(draw_mode) {
 	data: myChartData,
 	options: {
 	    maintainAspectRatio: false,
+	    scales: {
+		xAxes: [{
+		    ticks: {
+			maxTicksLimit:28,
+		    }
+		}]
+	    }
 	}
     });
 }
