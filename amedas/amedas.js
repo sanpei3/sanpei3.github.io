@@ -192,6 +192,7 @@ function updateData(draw_mode) {
 	  borderWidth: 1,
 	  data: graphData});
     labels =[];
+    myChartData.datasets = myChartData.datasets.reverse();
     for (let h = 0; h <= 23; h++) {
 	for (let m = 0; m < 59; m = m + 10) {
 	    hh = h;
