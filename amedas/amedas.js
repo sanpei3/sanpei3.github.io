@@ -11,7 +11,7 @@
 // // cityを選べるようにする
 // // hum, pressureもできるようにする (ない都市はその旨表示)
 
-var point = "44132" // default point, Tokyo
+var point = "44116" // default point, Fuchu
 
 const graphDays = 4;
 
