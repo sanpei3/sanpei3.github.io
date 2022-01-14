@@ -1316,14 +1316,6 @@ function updateBarChart(draw_mode) {
     window.myChart.update();
 }
 
-flatpickr('#calendar', {
-//    mode: "range",
-    minDate: dataStartDay,
-    maxDate: "today",
-    dateFormat: "Y-m-d",
-    defaultDate: start_date,
-}
-	 );
 
 function getUpdateDate(url, elementId) {
     let req = new XMLHttpRequest();
@@ -1469,9 +1461,18 @@ async function main() {
 	    }
 	}
 	dataCases = dataCasesJAG;
-	updateStartDay();
     }).then(results => {
 	initialize();
+	flatpickr('#calendar', {
+	    //    mode: "range",
+	    minDate: dataStartDay,
+	    maxDate: "today",
+	    dateFormat: "Y-m-d",
+	    defaultDate: start_date,
+	}
+		 );
+
+	updateStartDay();
     }).then(results => {
 	let loadingId = document.getElementById("loading");
 	loadingId.remove();
