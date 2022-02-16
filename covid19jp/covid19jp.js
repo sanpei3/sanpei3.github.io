@@ -1,4 +1,7 @@
-// 2) CSVから２次元配列に変換
+// XX ボタン追加
+// XX Chart.js scatterのグラフ
+// 正方形にする
+// 2/3 1/2減少線追加
 
 var dataStartDay = "2020-01-15";
 var dataEndDayTokyo = "";
@@ -107,6 +110,7 @@ const graphTable = ["daily_new_cases", // 0
 		    "current_number_of_patients",  // 8
 		    "daily_new_cases_per_100000",  // 9
 		    "E_R_number",                  // 10
+		    "EARL_graph",                  // 11
 //		    "total_cases_per_100000",
 		   ];
 
@@ -827,7 +831,7 @@ function updateData(draw_mode) {
 	    headerFlag = true;
 	}
     }
-    if (draw_mode <= 3) {
+    if (draw_mode <= 3 || draw_mode == 11) {
 	data = dataCases;
     } else if (draw_mode >= 4 && draw_mode <= 5) {
 	data = dataDeath;
@@ -874,74 +878,83 @@ function updateData(draw_mode) {
 		let c = 0;
 		for (let i = start_i; i < data[row].length; i++) {
 		    var a;
-    let c = 0;
-    if (draw_mode == 0 || draw_mode == 9 ) {
-	// Daily New cases
-	// XX add average graph
-	const j = data[row][i]- data[row][i- 1];
-	c = dataPopulation[data[row][0]];
-	if (draw_mode == 9 &&  c != 0) {
-	    a = normalizeVariable(j / c * 100000);
-	} else {
-	    a = j;
-	}
-    } else if (draw_mode == 1) {
-	// Double Days
-	let avgD = 0;
-	for (let j = 0; j >= -6; j--){
-	    const days = 6;
-	    let d = days * Math.log(2.0, 2.0) / Math.log((data[row][i + j] - data[row][start_day + j])/ (data[row][i - days + j]- data[row][start_day + j]), 2.0);
-	    avgD = avgD + d;
-	}
-	avgD = avgD / 7;
-	if (isNaN(avgD) || avgD == Infinity) {
-	    a = 0;
-	} else {
-	    a = normalizeVariable(avgD);
-	}
-    } else if (draw_mode == 2) {
-	// K value
-	const k = 1 - (data[row][i- 7] - data[row][start_day])/(data[row][i] - data[row][start_day]);
-	if (isNaN(k) || k == Infinity || i - 7 < start_day) {
-	    a = 0;
-	} else {
-	    a = k
-	}
-    } else if (draw_mode == 3) {
-	// Total cases
-	a = data[row][i] - data[row][start_day];
-    } else if (draw_mode == 4) {
-	// Total cases
-	a = data[row][i]- data[row][i- 1];
-    } else if (draw_mode == 5) {
-	// Total cases
-	a = data[row][i] - data[row][start_day];
-    } else if (draw_mode == 6) {
-	// Total cases
-	a = data[row][i]- data[row][i- 1];
-    } else if (draw_mode == 7) {
-	// Total cases
-	a = data[row][i] - data[row][start_day];
-    } else if (draw_mode == 8) {
-	// Total cases
-	if (rowForDataDeath != 0 && rowForDataRecoverd != 0) {
-	    a = dataCases[row][i] - dataDeath[rowForDataDeath][i] - dataRecoverd[rowForDataRecoverd][i];
-	} else {
-	    a = 0;
-	}
-    } else if (draw_mode == 10) {
-	// Effective Reproduction Number
-	const r = normalizeVariable(((data[row][i] - data[row][i - 6]) /
-				   (data[row][i - 7] - data[row][i - 7 - 6])) ** (5.0/7.0));
-	if (isNaN(r) || r == Infinity || i - 7 - 6 < start_day) {
-	    a = 0;
-	} else {
-	    a = r
-	}
-    }
-		    
-
-
+		    let c = 0;
+		    if (draw_mode == 0 || draw_mode == 9 ) {
+			// Daily New cases
+			// XX add average graph
+			const j = data[row][i]- data[row][i- 1];
+			c = dataPopulation[data[row][0]];
+			if (draw_mode == 9 &&  c != 0) {
+			    a = normalizeVariable(j / c * 100000);
+			} else {
+			    a = j;
+			}
+		    } else if (draw_mode == 1) {
+			// Double Days
+			let avgD = 0;
+			for (let j = 0; j >= -6; j--){
+			    const days = 6;
+			    let d = days * Math.log(2.0, 2.0) / Math.log((data[row][i + j] - data[row][start_day + j])/ (data[row][i - days + j]- data[row][start_day + j]), 2.0);
+			    avgD = avgD + d;
+			}
+			avgD = avgD / 7;
+			if (isNaN(avgD) || avgD == Infinity) {
+			    a = 0;
+			} else {
+			    a = normalizeVariable(avgD);
+			}
+		    } else if (draw_mode == 2) {
+			// K value
+			const k = 1 - (data[row][i- 7] - data[row][start_day])/(data[row][i] - data[row][start_day]);
+			if (isNaN(k) || k == Infinity || i - 7 < start_day) {
+			    a = 0;
+			} else {
+			    a = k
+			}
+		    } else if (draw_mode == 3) {
+			// Total cases
+			a = data[row][i] - data[row][start_day];
+		    } else if (draw_mode == 4) {
+			// Total cases
+			a = data[row][i]- data[row][i- 1];
+		    } else if (draw_mode == 5) {
+			// Total cases
+			a = data[row][i] - data[row][start_day];
+		    } else if (draw_mode == 6) {
+			// Total cases
+			a = data[row][i]- data[row][i- 1];
+		    } else if (draw_mode == 7) {
+			// Total cases
+			a = data[row][i] - data[row][start_day];
+		    } else if (draw_mode == 8) {
+			// Total cases
+			if (rowForDataDeath != 0 && rowForDataRecoverd != 0) {
+			    a = dataCases[row][i] - dataDeath[rowForDataDeath][i] - dataRecoverd[rowForDataRecoverd][i];
+			} else {
+			    a = 0;
+			}
+		    } else if (draw_mode == 10) {
+			// Effective Reproduction Number
+			const r = normalizeVariable(((data[row][i] - data[row][i - 6]) /
+						     (data[row][i - 7] - data[row][i - 7 - 6])) ** (5.0/7.0));
+			if (isNaN(r) || r == Infinity || i - 7 - 6 < start_day) {
+			    a = 0;
+			} else {
+			    a = r
+			}
+		    } else if (draw_mode == 11) {
+			var thisNewCases = 0;
+			var lastNewCases = 0;
+			//  10 10-8 = 2--> 10 と 2 の間-->
+			// 10 9 8 7 6 5 4 3 2
+			thisNewCases = data[row][i] - data[row][i - 7];
+			lastNewCases = data[row][i - 7] - data[row][i - 14];
+			a = { x: lastNewCases, y: thisNewCases};
+			if (maxY < thisNewCases) {
+			    maxY = thisNewCases;
+			}
+			tmpData.push(a);
+		    }
 		    if (draw_mode == 3) {
 			if (doubleDaysGraphOffset != 0 && a < doubleInitial) {
 			    continue;
@@ -949,11 +962,13 @@ function updateData(draw_mode) {
 			    continue;
 //			    a = doubleInitial;
 			}
-		    }		   
-		    if (a >= 0) {
-			tmpData.push(a)
-		    } else {
-			tmpData.push(0)
+		    }
+		    if (draw_mode != 11) {
+			if (a >= 0) {
+			    tmpData.push(a)
+			} else {
+			    tmpData.push(0)
+			}
 		    }
 		    if (draw_mode == 3 && doubleInitial < (data[row][i] - data[row][start_day]) && doubleDaysGraphOffset == 0) {
 			doubleDaysGraphOffset = i;
@@ -1057,6 +1072,60 @@ function updateData(draw_mode) {
 	      type: "line",
 	      borderColor: window.chartColors.gray});
     }
+    if (draw_mode == 11) {
+
+	let tmp5OneWeek =[];
+	tmp5OneWeek.push({ x: 0, y: 0});
+	tmp5OneWeek.push({ x: maxY/5, y: maxY});
+	myChartData.datasets.push(
+	    { label: "CASES 5times/ 1 Week", data: tmp5OneWeek,fill: false,
+	      type: "line",
+	      borderColor: window.chartColors.gray});
+	let tmp3OneWeek =[];
+	tmp3OneWeek.push({ x: 0, y: 0});
+	tmp3OneWeek.push({ x: maxY/3, y: maxY});
+	myChartData.datasets.push(
+	    { label: "CASES 3times/1 Week", data: tmp3OneWeek,fill: false,
+	      type: "line",
+	      borderColor: window.chartColors.gray});
+
+	tmpDoubleOneWeek.push({ x: 0, y: 0});
+	tmpDoubleOneWeek.push({ x: maxY/2, y: maxY});
+	myChartData.datasets.push(
+	    { label: "CASES DOUBLE 1 Week", data: tmpDoubleOneWeek,fill: false,
+	      type: "line",
+	      borderColor: window.chartColors.gray});
+
+	let tmp1_5OneWeek =[];
+	tmp1_5OneWeek.push({ x: 0, y: 0});
+	tmp1_5OneWeek.push({ x: maxY/1.5, y: maxY});
+	myChartData.datasets.push(
+	    { label: "CASES 1.5times/ 1 Week", data: tmp1_5OneWeek,fill: false,
+	      type: "line",
+	      borderColor: window.chartColors.gray});
+
+	let tmpOneWeek =[];
+	tmpOneWeek.push({ x: 0, y: 0});
+	tmpOneWeek.push({ x: maxY, y: maxY});
+	myChartData.datasets.push(
+	    { label: "CASES 1times/ 1 Week", data: tmpOneWeek,fill: false,
+	      type: "line",
+	      borderColor: window.chartColors.gray});
+	let tmp2_3OneWeek =[];
+	tmp2_3OneWeek.push({ x: 0, y: 0});
+	tmp2_3OneWeek.push({ x: maxY*3/2, y: maxY});
+	myChartData.datasets.push(
+	    { label: "CASES (2/3)times/ 1 Week", data: tmp2_3OneWeek,fill: false,
+	      type: "line",
+	      borderColor: window.chartColors.gray});
+	let tmp1_2OneWeek =[];
+	tmp1_2OneWeek.push({ x: 0, y: 0});
+	tmp1_2OneWeek.push({ x: maxY*2, y: maxY});
+	myChartData.datasets.push(
+	    { label: "CASES (1/2)times/ 1 Week", data: tmp1_2OneWeek,fill: false,
+	      type: "line",
+	      borderColor: window.chartColors.gray});
+    }	
 }
 const  myChartOptionsLogarithmicTotalCases =
       {
@@ -1169,33 +1238,63 @@ function drawBarChart(draw_mode) {
 	    datasets: []
 	};
     updateData(draw_mode)
-    let animationFlag = {};
-//    let animationFlag = false;
-    if (yaxesType == "Logarithmic") {
-	if (draw_mode == 3) {
-	    myChartOptions = {
-		animation: animationFlag,
-		scales: myChartOptionsLogarithmicTotalCases,
-	    };
+    if (draw_mode != 11) {
+	let animationFlag = {};
+	//    let animationFlag = false;
+	if (yaxesType == "Logarithmic") {
+	    if (draw_mode == 3) {
+		myChartOptions = {
+		    animation: animationFlag,
+		    scales: myChartOptionsLogarithmicTotalCases,
+		};
+	    } else {
+		myChartOptions = {
+		    animation: animationFlag,
+		    scales: myChartOptionsLogarithmic,
+		};
+	    }
 	} else {
 	    myChartOptions = {
 		animation: animationFlag,
-		scales: myChartOptionsLogarithmic,
+		scales: myChartOptionsLinear,
 	    };
 	}
+	// 4)chart.jsで描画
+	const ctx = document.getElementById("myChart").getContext("2d");
+	window.myChart = new Chart(ctx, {
+	    type: 'bar',
+	    data: myChartData,
+	    options: myChartOptions,
+	});
     } else {
+	// EARL graph
+	const  myChartOptionsEARL =
+	      {
+		  yAxes: [{
+		      type: 'linear',
+		      ticks: {
+			  beginAtZero: true,
+			  min: 0,
+		      }
+		  }],
+		  xAxes: [{
+		      type: 'linear',
+		      ticks: {
+			  beginAtZero: true,
+			  min: 0,
+		      }
+		  }],
+	      };
 	myChartOptions = {
-	    animation: animationFlag,
-	    scales: myChartOptionsLinear,
+	    scales: myChartOptionsEARL
 	};
-    }
-    // 4)chart.jsで描画
-    const ctx = document.getElementById("myChart").getContext("2d");
-    window.myChart = new Chart(ctx, {
-	type: 'bar',
-	data: myChartData,
-	options: myChartOptions,
-    });
+	const ctx = document.getElementById("myChart").getContext("2d");
+	window.myChart = new Chart(ctx, {
+	    type: 'scatter',
+	    data: myChartData,
+	    options: myChartOptions,
+	});
+    }	
 }
 
 function reformatToyoKeizaiData2CSSEGISandData(tdata, pref, i, type) {
@@ -1531,6 +1630,10 @@ graphTable.forEach(function(val) {
 			myChart.destroy();
 			destroyFlag = true;
 		    }
+		    if (draw_mode == 11 || i == 11) {
+			myChart.destroy();
+			destroyFlag = true;
+		    }			
 		    updateGraphButtons(draw_mode, i)
 		    draw_mode = i;
 		    if (destroyFlag) {
