@@ -1288,6 +1288,24 @@ function drawBarChart(draw_mode) {
 	myChartOptions = {
 	    scales: myChartOptionsEARL
 	};
+	myChartOptions.tooltips = {
+	    // 吹き出しの背景色
+	    backgroundColor: "rgba(19, 56, 95, 0.9)",
+	    // 吹き出し内の余白
+	    xPadding: 12,
+	    yPadding: 10,
+	    // マーカーによって変更するもの
+	    callbacks: {
+		// ツールチップの表示内容
+		label: function(tooltipItem, data) {
+		    // グループ名
+		    var groupName = data.datasets[tooltipItem.datasetIndex].label;
+		    var index = data.labels[tooltipItem.index];
+
+		    return ` ${groupName} | ${index}`;
+		}
+	    }
+	};
 	const ctx = document.getElementById("myChart").getContext("2d");
 	window.myChart = new Chart(ctx, {
 	    type: 'scatter',
@@ -1867,3 +1885,4 @@ document.getElementById('NHK').addEventListener('click', function() {
 });
 
 main();
+
