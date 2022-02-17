@@ -1110,7 +1110,7 @@ function updateData(draw_mode) {
 	myChartData.datasets.push(
 	    { label: "CASES 1times/ 1 Week", data: tmpOneWeek,fill: false,
 	      type: "line",
-	      borderColor: window.chartColors.gray});
+	      borderColor: window.chartColors.red});
 	let tmp2_3OneWeek =[];
 	tmp2_3OneWeek.push({ x: 0, y: 0});
 	tmp2_3OneWeek.push({ x: maxY*3/2, y: maxY});
