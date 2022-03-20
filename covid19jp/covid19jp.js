@@ -1528,7 +1528,7 @@ const urlGlobalRecoverd = 'https://raw.githubusercontent.com/CSSEGISandData/COVI
 const urlToyoKeizai = 'https://raw.githubusercontent.com/sanpei3/toyokeizai-covid19jp/main/data.json';
 const urlNHK = 'https://www3.nhk.or.jp/n-data/opendata/coronavirus/nhk_news_covid19_prefectures_daily_data.csv';
 
-const urlTokyoConfirmed = 'https://oku.edu.mie-u.ac.jp/~okumura/python/data/COVID-tokyo.csv';
+const urlTokyoConfirmed = 'https://okumuralab.org/~okumura/python/data/COVID-tokyo.csv';
 
 async function main() {
     Promise.all([
