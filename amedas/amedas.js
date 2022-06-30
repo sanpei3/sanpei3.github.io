@@ -26,12 +26,20 @@ const points =
 	      id: "44116"
 	  },
 	  {
+	      location: "Hachioji",
+	      id: "44112"
+	  },
+	  {
 	      location: "Yokohama",
 	      id: "46106"
 	  },
 	  {
 	      location: "Haneda",
 	      id: "44166"
+	  },
+	  {
+	      location: "Miura",
+	      id: "46211"
 	  },
       ];
 
