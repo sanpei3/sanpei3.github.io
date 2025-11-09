@@ -96,6 +96,9 @@ function downloadAmedasbyDate(date) {
 			    if(downloadData[key].pressure != undefined) {
 				pressure[key] = downloadData[key].pressure[0];
 			    }
+			    if(downloadData[key].wind != undefined) {
+				windspeed[key] = downloadData[key].wind[0];
+			    }
 			}
 		    });
 		} else {
@@ -111,6 +114,10 @@ function downloadAmedasbyDate(date) {
     });
 }
 ///////////////////////////////////////////////////////////////////////
+
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 async function downloadAmedas() {
     // // 3時間おきのデータを取得する(0)まで
     // // 今の所 downloadAmedas は url hard codeなのでそれをなくす
@@ -278,6 +285,7 @@ function addLoading() {
 var temp = [];
 var hum  = [];
 var pressure = [];
+var windspeed = [];
 var data = [];
 var dataMode = "temp";
 
@@ -285,6 +293,7 @@ async function main() {
     temp = [];
     hum = [];
     pressure = [];
+    windspeed = [];
     let loadingId = document.getElementById("loading");
     if (loadingId == undefined) {
 	await addLoading();
@@ -306,20 +315,30 @@ function updateDataModeButtons() {
     const elementTemp = document.getElementById("temp");
     const elementHum = document.getElementById("hum");
     const elementPressure = document.getElementById("pressure");
+    const elementWindspeed = document.getElementById("windspeed");
     if (dataMode == "temp") {
 	elementTemp.style.backgroundColor = 'red';
 	elementHum.style.backgroundColor = 'white';
 	elementPressure.style.backgroundColor = 'white';
+	elementWindspeed.style.backgroundColor = 'white';
 	data = Object.assign({}, temp);
     } else if (dataMode == "hum") {
 	elementTemp.style.backgroundColor = 'white';
 	elementHum.style.backgroundColor = 'red';
 	elementPressure.style.backgroundColor = 'white';
+	elementWindspeed.style.backgroundColor = 'white';
 	data = Object.assign({}, hum);
+    } else if (dataMode == "windspeed") {
+	elementTemp.style.backgroundColor = 'white';
+	elementHum.style.backgroundColor = 'white';
+	elementPressure.style.backgroundColor = 'white';
+	elementWindspeed.style.backgroundColor = 'red';
+	data = Object.assign({}, windspeed);
     } else {
 	elementTemp.style.backgroundColor = 'white';
 	elementHum.style.backgroundColor = 'white';
 	elementPressure.style.backgroundColor = 'red';
+	elementWindspeed.style.backgroundColor = 'white';
 	data = Object.assign({}, pressure);
     }
 }
@@ -352,9 +371,9 @@ document.getElementById('pressure').addEventListener('click', function() {
     }
 });
 
-document.getElementById('pressure').addEventListener('click', function() {
-    if (dataMode != "pressure" && pressure != []) {
-	dataMode = "pressure";
+document.getElementById('windspeed').addEventListener('click', function() {
+    if (dataMode != "windspeed" && windspeed != []) {
+	dataMode = "windspeed";
 	myChart.destroy();
 	updateDataModeButtons();
 	drawBarChart();
